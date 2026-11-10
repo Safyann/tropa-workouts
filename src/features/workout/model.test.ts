@@ -1,14 +1,14 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { createWorkout, recordSet, remaining, summarize, toggleTimer } from './model';
+import { createWorkout, recordSet, remaining, replaceExercise, selectExercise, summarize, toggleSkip, toggleTimer } from './model';
 
 afterEach(() => vi.useRealTimers());
 
 describe('workout', () => {
   it('uses one set each for two exercises in the short strength workout', () => {
     expect(createWorkout(0, 0, false)).toMatchObject({
-      moves: ['squat', 'squat', 'press', 'press', 'row', 'row']
+      plan: [{ exercise: 'squat', target: 2 }, { exercise: 'press', target: 2 }, { exercise: 'row', target: 2 }]
     });
-    expect(createWorkout(0, 0, true)).toMatchObject({ moves: ['squat', 'press'] });
+    expect(createWorkout(0, 0, true)).toMatchObject({ plan: [{ exercise: 'squat', target: 1 }, { exercise: 'press', target: 1 }] });
   });
 
   it('records the actual set and starts a 60-second rest', () => {
@@ -17,13 +17,44 @@ describe('workout', () => {
     const workout = createWorkout(0, 1, true);
     if (workout.kind !== 'strength') throw new Error('Expected a strength workout');
     const set = { exercise: 'squat', weight: 5.5, reps: 8 } as const;
-    const updated = recordSet(workout, set);
+    const updated = recordSet(workout, { weight: set.weight, reps: set.reps });
 
     expect(workout.sets).toEqual([]);
     expect(updated.timer).toEqual({ remaining: 60, end: 61_000 });
     expect(summarize(updated)).toEqual({
       date: 1_000, stop: 0, round: 1, short: true, sets: [set], elapsed: null
     });
+  });
+
+  it('records the selected exercise out of order', () => {
+    const workout = createWorkout(0, 0, false);
+    if (workout.kind !== 'strength') throw new Error('Expected a strength workout');
+    const updated = recordSet(selectExercise(workout, 2), { weight: 4, reps: 7 });
+    expect(updated.plan.map(item => item.completed)).toEqual([0, 0, 1]);
+    expect(updated.sets[0]).toEqual({ exercise: 'row', weight: 4, reps: 7 });
+  });
+
+  it('keeps recorded sets and applies a same-group replacement only to remaining sets', () => {
+    const workout = createWorkout(0, 0, false);
+    if (workout.kind !== 'strength') throw new Error('Expected a strength workout');
+    const recorded = recordSet(selectExercise(workout, 1), { weight: 4, reps: 8 });
+    expect(replaceExercise(recorded, 1, 'freeRow')).toBe(recorded);
+    const replaced = replaceExercise(recorded, 1, 'floorPress');
+    expect(replaced.plan[1]).toMatchObject({ exercise: 'floorPress', completed: 1, target: 2 });
+    const finished = recordSet(selectExercise(replaced, 1), { weight: 4, reps: 8 });
+    expect(finished.sets.map(set => set.exercise)).toEqual(['press', 'floorPress']);
+    expect(replaceExercise(finished, 1, 'press')).toBe(finished);
+  });
+
+  it('skips remaining work without recording a set and supports undo', () => {
+    const workout = createWorkout(0, 0, true);
+    if (workout.kind !== 'strength') throw new Error('Expected a strength workout');
+    const recorded = recordSet(workout, { weight: null, reps: 8 });
+    const skipped = toggleSkip(recorded, 1);
+    expect(skipped.timer).toBeNull();
+    expect(selectExercise(skipped, 1)).toBe(skipped);
+    expect(summarize(skipped)).toMatchObject({ skipped: ['press'], sets: [{ exercise: 'squat' }] });
+    expect(selectExercise(toggleSkip(skipped, 1), 1).selected).toBe(1);
   });
 
   it('pauses, resumes and finishes the cardio countdown', () => {

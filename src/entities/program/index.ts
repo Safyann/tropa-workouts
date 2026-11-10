@@ -1,2 +1,2 @@
-export { exercises, route, workoutDetail } from './model';
+export { exerciseAlternatives, exercises, route, strengthPlan, workoutDetail } from './model';
 export type { Exercise, ExerciseId, Stop } from './model';

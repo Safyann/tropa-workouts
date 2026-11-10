@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
-import { createWorkout, type Workout } from '../../features/workout';
+import { createWorkout, replaceExercise, selectExercise, toggleSkip, type Workout } from '../../features/workout';
 import { WorkoutPage } from './index';
 
 function InteractiveWorkout({ initial }: { initial: Workout }) {
@@ -26,4 +26,12 @@ export const Strength: Story = {
 export const Cardio: Story = {
   name: 'Таймер эллипса',
   args: { initial: createWorkout(1, 0, true) }
+};
+
+const original = createWorkout(0, 0, false);
+export const AdjustedPlan: Story = {
+  name: 'Поменяли порядок, заменили и пропустили',
+  args: { initial: original.kind === 'strength'
+    ? selectExercise(toggleSkip(replaceExercise(original, 1, 'wallPress'), 0), 1)
+    : original }
 };

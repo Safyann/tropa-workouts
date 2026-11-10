@@ -15,6 +15,7 @@ export interface Session {
   short: boolean;
   sets: SetRecord[];
   elapsed: number | null;
+  skipped?: ExerciseId[];
 }
 
 export interface Progress {

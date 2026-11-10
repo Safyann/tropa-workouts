@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { searchExercises } from './exerciseDb';
+import { browseExercises, searchExercises } from './exerciseDb';
 
 afterEach(() => vi.unstubAllGlobals());
 
@@ -26,5 +26,17 @@ describe('ExerciseDB', () => {
     const signal = new AbortController().signal;
     await expect(searchExercises('row', signal)).rejects.toThrow('429');
     await expect(searchExercises('row', signal)).rejects.toThrow('Unexpected ExerciseDB response');
+  });
+
+  it('browses the full catalog with the provider’s after cursor', async () => {
+    const fetchMock = vi.fn<typeof fetch>()
+      .mockResolvedValueOnce(Response.json({ success: true, data: [], meta: { nextCursor: 'first' } }))
+      .mockResolvedValueOnce(Response.json({ success: true, data: [], meta: { nextCursor: 'first' } }));
+    vi.stubGlobal('fetch', fetchMock);
+    const signal = new AbortController().signal;
+
+    expect(await browseExercises(null, signal)).toEqual({ items: [], next: 'first' });
+    expect(await browseExercises('first', signal)).toEqual({ items: [], next: null });
+    expect(String(fetchMock.mock.calls[1][0])).toBe('https://oss.exercisedb.dev/api/v1/exercises?limit=12&after=first');
   });
 });

@@ -19,12 +19,13 @@ export function HistoryPage({ sessions }: { sessions: Session[] }) {
           </summary>
           <div className="history-detail">{entry.elapsed !== null
             ? <>Время на эллипсе: {formatTime(entry.elapsed)}</>
-            : <ul>{stop.icon === 'strength' && stop.moves.map(id => {
+            : <><ul>{[...new Set(entry.sets.map(set => set.exercise))].map(id => {
               const sets = entry.sets.filter(set => set.exercise === id);
-              return sets.length > 0 && <li key={id}>{exercises[id].title} <span>{sets.map(set =>
+              return <li key={id}>{exercises[id].title} <span>{sets.map(set =>
                 [set.reps === null ? '' : `${set.reps} повт.`, set.weight === null ? '' : `${set.weight} кг`]
                   .filter(Boolean).join(' · ') || 'Подход').join(' / ')}</span></li>;
-            })}</ul>}
+            })}</ul>
+            {!!entry.skipped?.length && <p className="hint">Пропущены подходы: {entry.skipped.map(id => exercises[id].title).join(', ')}.</p>}</>}
           </div>
         </details>;
       })}

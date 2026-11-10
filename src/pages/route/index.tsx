@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react';
-import { route, workoutDetail } from '../../entities/program';
+import { exercises, route, strengthPlan, workoutDetail, type Stop } from '../../entities/program';
 import { nextStop, weekCount, type Progress } from '../../entities/progress';
 import { Icon } from '../../shared/ui/Icon';
 
@@ -52,6 +52,7 @@ export function RoutePage({ progress, inWorkout, offlineReady, start, restart }:
         {stop ? <>
           <p className="session-type">{stop.type} · {stop.gear}</p>
           <p className="session-detail">{workoutDetail(stop)}</p>
+          {!inWorkout && <DayPreview key={next} stop={stop}/>}
           <div className="card-actions">
             <button className="primary" onClick={() => start(false)}>{inWorkout ? 'Продолжить занятие' : 'Начать занятие'} <Icon name="arrow"/></button>
             {!inWorkout && <button className="secondary" onClick={() => start(true)}>Короткий вариант</button>}
@@ -67,4 +68,17 @@ export function RoutePage({ progress, inWorkout, offlineReady, start, restart }:
       <span>{offlineReady ? 'Маршрут доступен без сети · история в этом браузере' : 'Прогресс хранится в этом браузере'}</span>
     </footer>
   </>;
+}
+
+function DayPreview({ stop }: { stop: Stop }) {
+  return <details className="day-preview">
+    <summary>Вся тренировка</summary>
+    {stop.icon === 'strength' ? <>
+      <ul className="plan-list">{strengthPlan(stop, false).map(item => {
+        const exercise = exercises[item.exercise];
+        return <li key={item.exercise}><strong>{exercise.title}</strong><small>{item.target === 1 ? '1 подход' : `${item.target} подхода`} · {exercise.group}</small></li>;
+      })}</ul>
+      <p className="hint">В коротком варианте — первые два упражнения по одному подходу.</p>
+    </> : <p className="hint">Эллипс · {workoutDetail(stop)}. Короткий вариант · {workoutDetail(stop, true)}.</p>}
+  </details>;
 }

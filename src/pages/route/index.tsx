@@ -31,6 +31,7 @@ export function RoutePage({ progress, inWorkout, offlineReady, start, restart, c
         <span className="week-dots" aria-hidden="true">
           {Array.from({ length: goal }, (_, index) => <i key={index} className={count > index ? 'filled' : ''}/>)}
         </span>
+        <a className="week-settings" href="#settings">Уровень и цель</a>
       </div>
     </div>
     <div className="dashboard">
@@ -60,8 +61,8 @@ export function RoutePage({ progress, inWorkout, offlineReady, start, restart, c
         <h2>{stop?.title ?? 'Все костры горят'}</h2>
         {stop ? <>
           <p className="session-type">{stop.type} · {stop.gear}</p>
-          <p className="session-detail">{workoutDetail(stop, false, preferences)} · {levels[preferences.level].title}</p>
           {!inWorkout && <>
+            <p className="session-detail">{workoutDetail(stop, false, preferences)} · {levels[preferences.level].title}</p>
             <WorkoutSettings preferences={preferences} change={changePreferences}/>
             <DayPreview key={next} stop={stop} preferences={preferences}/>
           </>}

@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { route, type WorkoutPreferences } from '../entities/program';
+import { defaultPreferences, route, type WorkoutPreferences } from '../entities/program';
 import { nextStop, readProgress, saveProgress, type Progress } from '../entities/progress';
 import { createWorkout, summarize, type Workout } from '../features/workout';
 import { CatalogPage } from '../pages/catalog';
 import { HistoryPage } from '../pages/history';
 import { RoutePage } from '../pages/route';
+import { SettingsPage } from '../pages/settings';
 import { WorkoutPage } from '../pages/workout';
 import './styles.css';
 
@@ -101,7 +102,9 @@ function App() {
   const historyMatch = /^history\/(\d+)$/.exec(view);
   const requestedStop = historyMatch ? Number(historyMatch[1]) - 1 : -1;
   const historyStop = route[requestedStop] ? requestedStop : undefined;
-  const tab = view === 'history' || historyStop !== undefined ? 'history' : view === 'catalog' ? 'catalog' : 'map';
+  const tab = view === 'history' || historyStop !== undefined ? 'history'
+    : view === 'catalog' || view === 'settings' ? view : 'map';
+  const screenKey = view === 'workout' && workout ? 'workout' : tab === 'history' ? view : tab;
   return <>
     <header className="bar"><div className="bar-inner">
       <a className="brand" href="#map" aria-label="Тропа, на карту">
@@ -112,12 +115,15 @@ function App() {
     </div></header>
     <main className="page" ref={screen}>
       {storageFailed && <p role="status" className="notice">Браузер не сохранил изменения. Прогресс доступен до закрытия страницы.</p>}
-      {view === 'workout' && workout
-        ? <WorkoutPage workout={workout} history={progress.sessions} update={setWorkout} finish={finish}/>
-        : tab === 'history' ? <HistoryPage sessions={progress.sessions} stopIndex={historyStop}/>
-        : tab === 'catalog' ? <CatalogPage/>
-        : <RoutePage progress={progress} inWorkout={workout !== null} offlineReady={offlineReady}
-            start={start} restart={restart} changePreferences={changePreferences}/>}
+      <div className="screen-enter" key={screenKey}>
+        {view === 'workout' && workout
+          ? <WorkoutPage workout={workout} history={progress.sessions} update={setWorkout} finish={finish}/>
+          : tab === 'history' ? <HistoryPage sessions={progress.sessions} stopIndex={historyStop}/>
+          : tab === 'catalog' ? <CatalogPage/>
+          : tab === 'settings' ? <SettingsPage preferences={progress.preferences ?? defaultPreferences} change={changePreferences}/>
+          : <RoutePage progress={progress} inWorkout={workout !== null} offlineReady={offlineReady}
+              start={start} restart={restart} changePreferences={changePreferences}/>}
+      </div>
     </main>
   </>;
 }

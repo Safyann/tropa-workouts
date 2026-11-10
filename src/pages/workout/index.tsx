@@ -76,7 +76,7 @@ export function WorkoutPage({ workout, history, update, finish }: Props) {
   return <section className="narrow">
     <a className="back" href="#map">← К карте</a>
     <p className="eyebrow">ОСТАНОВКА 0{workout.index + 1} / 04</p><h1 tabIndex={-1}>{stop.title}<span>.</span></h1>
-    {workout.block ? <div className="workout-card">
+    {workout.block ? <div className="workout-card workout-step" key={workout.block.type}>
       <h2>{warmup ? 'Разминка' : 'Заминка'}</h2>
       <p className="subtitle">{warmup
         ? 'Начни с лёгкой ходьбы на месте или спокойного темпа на эллипсе.'
@@ -87,7 +87,7 @@ export function WorkoutPage({ workout, history, update, finish }: Props) {
       </button>
     </div> : workout.kind === 'cardio' ? <>
       <p className="subtitle">Эллипс · {workout.mainMinutes} мин</p>
-      <div className="workout-card">{timerView('ТАЙМЕР ЗАНЯТИЯ')}
+      <div className="workout-card workout-step">{timerView('ТАЙМЕР ЗАНЯТИЯ')}
         <button className="primary" onClick={() => finishMain(workout)} disabled={left === workout.seconds}>
           {endLabel} <Icon name="check"/>
         </button>
@@ -95,7 +95,7 @@ export function WorkoutPage({ workout, history, update, finish }: Props) {
     </> : <>
       <p className="subtitle">Основная часть · ориентир {workout.mainMinutes} мин</p>
       <WorkoutPlan workout={workout} update={update} choose={choose}/>
-      {workout.timer ? <div className="workout-card">{timerView('ОТДЫХ МЕЖДУ ПОДХОДАМИ')}
+      {workout.timer ? <div className="workout-card workout-step">{timerView('ОТДЫХ МЕЖДУ ПОДХОДАМИ')}
         <button className="primary" onClick={() => choose(workout.selected ?? workout.plan.findIndex(isPending))}>
           Следующий подход <Icon name="arrow"/>
         </button>
@@ -103,7 +103,7 @@ export function WorkoutPage({ workout, history, update, finish }: Props) {
         ? <StrengthSet key={`${workout.plan[workout.selected].id}-${workout.plan[workout.selected].exercise}-${workout.sets.length}`}
             itemIndex={workout.selected} workout={workout} history={history} update={update} finish={finishMain}
             headingRef={exerciseHeading} endLabel={endLabel}/>
-        : !workout.plan.some(isPending) && <div className="workout-card">
+        : !workout.plan.some(isPending) && <div className="workout-card workout-step">
           {workout.sets.length > 0
             ? <button className="primary" onClick={() => finishMain(workout)}>{workout.cooldownMinutes ? endLabel : 'Сохранить занятие'} <Icon name="check"/></button>
             : <p className="subtitle">Все упражнения пропущены. Можно вернуться к карте или вернуть упражнение в план.</p>}
@@ -135,7 +135,7 @@ function StrengthSet({ workout, history, update, finish, itemIndex, headingRef, 
   }
 
   return <>
-    <div className="workout-card">
+    <div className="workout-card workout-step">
       <p className="eyebrow">ПОДХОД {item.completed + 1} ИЗ {item.target}</p>
       <h2 tabIndex={-1} ref={headingRef}>{exercise.title}</h2><Demonstration exercise={exercise}/>
       {exercise.gifId && <WorkoutGif id={exercise.gifId} title={exercise.title}/>}

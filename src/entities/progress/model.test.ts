@@ -34,6 +34,14 @@ describe('progress', () => {
     expect(nextStop({ version: 1, round: 1, sessions }, 4)).toBe(0);
   });
 
+  it('persists workout preferences alongside existing session history', () => {
+    const previous = { ...readProgress(), sessions: [entry(0)] };
+    saveProgress(previous);
+    const preferences = { minutes: 60, level: 'experienced', warmup: true, cooldown: false, weeklyGoal: 3 } as const;
+    expect(saveProgress({ ...readProgress(), preferences })).toBe(true);
+    expect(readProgress()).toEqual({ ...previous, preferences });
+  });
+
   it('counts sessions starting at local Monday midnight', () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date(2026, 10, 11, 12));

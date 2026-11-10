@@ -10,7 +10,8 @@ const meta = {
     inWorkout: false,
     offlineReady: false,
     start: () => {},
-    restart: () => {}
+    restart: () => {},
+    changePreferences: () => {}
   }
 } satisfies Meta<typeof RoutePage>;
 
@@ -31,4 +32,11 @@ export const InProgress: Story = {
 export const Completed: Story = {
   name: 'Маршрут завершён',
   args: { progress: { version: 1, round: 0, sessions: [0, 1, 2, 3].map(session) } }
+};
+
+export const Hour: Story = {
+  name: 'Час с разминкой и заминкой',
+  args: { progress: { version: 1, round: 0, sessions: [], preferences: {
+    minutes: 60, level: 'experienced', warmup: true, cooldown: true
+  } } }
 };

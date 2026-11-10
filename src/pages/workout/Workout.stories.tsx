@@ -35,3 +35,10 @@ export const AdjustedPlan: Story = {
     ? selectExercise(toggleSkip(replaceExercise(original, 1, 'wallPress'), 0), 1)
     : original }
 };
+
+export const Warmup: Story = {
+  name: 'Разминка перед тренировкой',
+  args: { initial: createWorkout(0, 0, false, {
+    minutes: 60, level: 'beginner', warmup: true, cooldown: true
+  }) }
+};

@@ -1,2 +1,2 @@
-export { createWorkout, isPending, recordSet, remaining, replaceExercise, selectExercise, summarize, toggleSkip, toggleTimer } from './model';
-export type { StrengthWorkout, Workout } from './model';
+export { createWorkout, isPending, moveExercise, recordSet, remaining, replaceExercise, selectExercise, startCooldown, summarize, toggleSkip, toggleTimer } from './model';
+export type { PlanExercise, StrengthWorkout, Workout } from './model';

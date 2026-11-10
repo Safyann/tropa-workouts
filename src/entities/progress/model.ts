@@ -1,4 +1,4 @@
-import type { ExerciseId } from '../program/@x/progress';
+import type { ExerciseId, WorkoutPreferences } from '../program/@x/progress';
 
 const key = 'tropa-workouts-v1';
 
@@ -15,6 +15,7 @@ export interface Session {
   short: boolean;
   sets: SetRecord[];
   elapsed: number | null;
+  durationSeconds?: number;
   skipped?: ExerciseId[];
 }
 
@@ -22,6 +23,7 @@ export interface Progress {
   version: 1;
   round: number;
   sessions: Session[];
+  preferences?: WorkoutPreferences;
 }
 
 export function readProgress(): Progress {

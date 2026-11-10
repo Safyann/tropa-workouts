@@ -4,20 +4,27 @@ import { Icon } from '../../shared/ui/Icon';
 
 const dateFormat = new Intl.DateTimeFormat('ru', { day: 'numeric', month: 'short' });
 
-export function HistoryPage({ sessions }: { sessions: Session[] }) {
-  return <section className="narrow"><p className="eyebrow">ТВОЙ МАРШРУТ</p>
-    <h1 tabIndex={-1}>История<span>.</span></h1>
-    <p className="subtitle">Занятия, которые ты прошёл.</p>
-    <div className="history-list">{sessions.length === 0
+export function HistoryPage({ sessions, stopIndex }: { sessions: Session[]; stopIndex?: number }) {
+  const stop = stopIndex === undefined ? undefined : route[stopIndex];
+  const entries = stopIndex === undefined ? sessions : sessions.filter(entry => entry.stop === stopIndex);
+  return <section className="narrow">
+    {stop && <a className="back" href="#map">← К карте</a>}
+    <p className="eyebrow">{stop ? 'ИСТОРИЯ ОСТАНОВКИ' : 'ТВОЙ МАРШРУТ'}</p>
+    <h1 tabIndex={-1}>{stop?.title ?? 'История'}<span>.</span></h1>
+    <p className="subtitle">{stop ? `Занятий на этой остановке: ${entries.length}` : 'Занятия, которые ты прошёл.'}</p>
+    <div className="history-list">{entries.length === 0
       ? <div className="empty"><h2>Здесь пока тихо</h2><p>Первая тренировка появится после того, как зажжёшь костёр.</p><a className="secondary" href="#map">К карте</a></div>
-      : [...sessions].reverse().map(entry => {
-        const stop = route[entry.stop];
-        return <details className="history-row" key={`${entry.round}-${entry.stop}`}>
-          <summary><span className="type-icon"><Icon name={stop.icon}/></span>
-            <span><strong>{stop.title}</strong><small>{stop.type} · {entry.short ? 'Короткое занятие' : 'Обычное занятие'}</small></span>
+      : [...entries].reverse().map((entry, index) => {
+        const entryStop = route[entry.stop];
+        return <details className="history-row" key={`${entry.round}-${entry.stop}`} open={stop && index === 0 ? true : undefined}>
+          <summary><span className="type-icon"><Icon name={entryStop.icon}/></span>
+            <span><strong>{entryStop.title}</strong><small>{entryStop.type} · {entry.short ? 'Короткое занятие' : 'Обычное занятие'}
+              {entry.durationSeconds !== undefined && ` · ${formatTime(entry.durationSeconds)}`}</small></span>
             <time dateTime={new Date(entry.date).toISOString()}>{dateFormat.format(entry.date)}</time>
           </summary>
-          <div className="history-detail">{entry.elapsed !== null
+          <div className="history-detail">
+            {entry.durationSeconds !== undefined && <p className="history-duration">Всё занятие · {formatTime(entry.durationSeconds)}</p>}
+            {entry.elapsed !== null
             ? <>Время на эллипсе: {formatTime(entry.elapsed)}</>
             : <><ul>{[...new Set(entry.sets.map(set => set.exercise))].map(id => {
               const sets = entry.sets.filter(set => set.exercise === id);

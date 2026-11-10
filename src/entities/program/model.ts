@@ -1,9 +1,11 @@
+import { defaultPreferences, mainBudget, optionalBlockMinutes, type WorkoutPreferences } from './preferences';
+
 type Point = [number, number];
 type Pose = Point[];
 
 export interface Exercise {
   title: string;
-  group: 'Ноги и ягодицы' | 'Грудь и трицепсы' | 'Спина';
+  group: 'Ноги и ягодицы' | 'Грудь и трицепсы' | 'Спина' | 'Задняя поверхность бедра и ягодицы' | 'Плечи' | 'Мышцы корпуса';
   gear: string;
   weighted: boolean;
   perSide?: boolean;
@@ -12,10 +14,12 @@ export interface Exercise {
   poses?: [Pose, Pose];
   gifId?: string;
   support?: string;
-  reference: string;
+  reference?: string;
 }
 
-export type ExerciseId = 'squat' | 'press' | 'row' | 'bodySquat' | 'gobletSquat' | 'floorPress' | 'wallPress' | 'pushup' | 'freeRow' | 'singleFreeRow';
+export type ExerciseId =
+  | 'squat' | 'press' | 'row' | 'bodySquat' | 'gobletSquat' | 'floorPress' | 'wallPress' | 'pushup' | 'freeRow' | 'singleFreeRow'
+  | 'rdl' | 'gluteBridge' | 'shoulderPress' | 'standingPress' | 'deadBug' | 'birdDog';
 
 export const exercises: Record<ExerciseId, Exercise> = {
   squat: {
@@ -100,6 +104,41 @@ export const exercises: Record<ExerciseId, Exercise> = {
     gifId: 'v2DfH14',
     reference: 'https://oss.exercisedb.dev/api/v1/exercises/v2DfH14',
     cues: ['Наклони корпус и сохраняй устойчивое положение.', 'Подтяни гантель к боку, удерживая корпус неподвижно. Повтори другой рукой.']
+  },
+  rdl: {
+    title: 'Румынская тяга с гантелями',
+    group: 'Задняя поверхность бедра и ягодицы', gear: 'Гантели', weighted: true,
+    gifId: 'rR0LJzx',
+    cues: ['Слегка согни колени и отведи таз назад, держа гантели близко к ногам.', 'Выпрямись, сохраняя контроль и устойчивое положение корпуса.']
+  },
+  gluteBridge: {
+    title: 'Ягодичный мост на полу',
+    group: 'Задняя поверхность бедра и ягодицы', gear: 'Без инвентаря', weighted: false,
+    gifId: 'u0cNiij',
+    cues: ['Ляг на спину, согни колени и поставь стопы на пол.', 'Подними таз и плавно опусти его, сохраняя контроль.']
+  },
+  shoulderPress: {
+    title: 'Жим гантелей сидя',
+    group: 'Плечи', gear: 'Гантели · скамья или устойчивый стул', weighted: true,
+    gifId: 'znQUdHY',
+    cues: ['Сядь устойчиво и держи гантели у плеч.', 'Плавно выжми гантели вверх и верни их к плечам.']
+  },
+  standingPress: {
+    title: 'Жим гантелей стоя',
+    group: 'Плечи', gear: 'Гантели', weighted: true,
+    cues: ['Встань устойчиво и подними гантели к плечам.', 'Жми вверх плавно, удерживая корпус неподвижным.']
+  },
+  deadBug: {
+    title: 'Мёртвый жук',
+    group: 'Мышцы корпуса', gear: 'Без инвентаря', weighted: false, perSide: true,
+    gifId: 'iny3m5y',
+    cues: ['Ляг на спину, подними руки и согнутые ноги.', 'Плавно отводи противоположные руку и ногу, сохраняя корпус неподвижным. Чередуй стороны.']
+  },
+  birdDog: {
+    title: 'Рука и нога на четвереньках',
+    group: 'Мышцы корпуса', gear: 'Без инвентаря', weighted: false, perSide: true,
+    reference: 'https://www.acefitness.org/resources/everyone/exercise-library/14/bird-dog/',
+    cues: ['Встань на четвереньки, ладони под плечами, колени под тазом.', 'Плавно вытяни противоположные руку и ногу, затем вернись и поменяй стороны.']
   }
 };
 
@@ -118,23 +157,46 @@ interface StopInfo {
 
 export type Stop = StopInfo & (
   | { icon: 'strength'; moves: ExerciseId[]; sets: number }
-  | { icon: 'cardio'; minutes: number; shortMinutes: number }
+  | { icon: 'cardio'; shortMinutes: number }
 );
 
 export const route: Stop[] = [
   { title: 'Первый костёр', type: 'Силовая', icon: 'strength', gear: 'Гантели · скамья', moves: ['squat', 'press', 'row'], sets: 2, x: 15.3, y: 76.4 },
-  { title: 'Лесная тропа', type: 'Эллипс', icon: 'cardio', gear: 'Эллиптический тренажёр', minutes: 10, shortMinutes: 5, x: 38.1, y: 53.6 },
+  { title: 'Лесная тропа', type: 'Эллипс', icon: 'cardio', gear: 'Эллиптический тренажёр', shortMinutes: 5, x: 38.1, y: 53.6 },
   { title: 'Тихий подъём', type: 'Силовая', icon: 'strength', gear: 'Гантели · скамья', moves: ['row', 'squat', 'press'], sets: 2, x: 61.9, y: 60 },
-  { title: 'Большая поляна', type: 'Эллипс', icon: 'cardio', gear: 'Эллиптический тренажёр', minutes: 12, shortMinutes: 6, x: 81.9, y: 25.1 }
+  { title: 'Большая поляна', type: 'Эллипс', icon: 'cardio', gear: 'Эллиптический тренажёр', shortMinutes: 6, x: 81.9, y: 25.1 }
 ];
 
-export function strengthPlan(stop: Extract<Stop, { icon: 'strength' }>, short: boolean) {
-  return (short ? stop.moves.slice(0, 2) : stop.moves).map(exercise => ({
-    exercise, target: short ? 1 : stop.sets
-  }));
+const extendedMoves: ExerciseId[] = ['rdl', 'shoulderPress', 'deadBug'];
+
+export function workoutTiming(stop: Stop, short: boolean, preferences = defaultPreferences) {
+  const warmup = preferences.warmup ? optionalBlockMinutes : 0;
+  const cooldown = preferences.cooldown ? optionalBlockMinutes : 0;
+  const budget = mainBudget(preferences);
+  const main = short ? Math.min(budget, stop.icon === 'cardio' ? stop.shortMinutes : 10) : budget;
+  return { warmup, main, cooldown, total: warmup + main + cooldown };
 }
 
-export function workoutDetail(stop: Stop, short = false) {
-  if (stop.icon === 'cardio') return `${short ? stop.shortMinutes : stop.minutes} мин`;
-  return short ? '2 упражнения · по 1 подходу' : `${stop.moves.length} упражнения · по ${stop.sets} подхода`;
+export function strengthPlan(stop: Extract<Stop, { icon: 'strength' }>, short: boolean, preferences = defaultPreferences) {
+  if (short) return stop.moves.slice(0, 2).map(exercise => ({ exercise, target: 1 }));
+
+  const budget = mainBudget(preferences);
+  const extraCount = budget >= 45 ? 3 : budget >= 30 ? 2 : 0;
+  const moves = [...stop.moves, ...extendedMoves.slice(0, extraCount)];
+  const extraSets = {
+    beginner: Number(budget >= 45),
+    basic: Number(budget >= 30),
+    experienced: 1 + Number(budget >= 45),
+    advanced: 1 + Number(budget >= 30)
+  }[preferences.level];
+  const target = budget < 15 ? 1 : stop.sets + extraSets;
+  return moves.map(exercise => ({ exercise, target }));
+}
+
+export function workoutDetail(stop: Stop, short = false, preferences = defaultPreferences) {
+  const { total } = workoutTiming(stop, short, preferences);
+  if (stop.icon === 'cardio') return `${total} мин`;
+  const plan = strengthPlan(stop, short, preferences);
+  const noun = plan.length < 5 ? 'упражнения' : 'упражнений';
+  return `${plan.length} ${noun} · до ${total} мин`;
 }

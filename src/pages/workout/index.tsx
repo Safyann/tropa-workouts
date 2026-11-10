@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
-import { exercises, route, workoutDetail } from '../../entities/program';
+import { exercises, route } from '../../entities/program';
 import { formatTime, type Session } from '../../entities/progress';
-import { isPending, recordSet, remaining, selectExercise, toggleTimer, type StrengthWorkout, type Workout } from '../../features/workout';
+import { isPending, recordSet, remaining, selectExercise, startCooldown, toggleTimer, type StrengthWorkout, type Workout } from '../../features/workout';
 import { Icon } from '../../shared/ui/Icon';
 import { ExerciseGif } from '../../shared/ui/ExerciseGif';
 import { exerciseGifUrl } from '../../shared/api/exerciseDb';
@@ -30,7 +30,7 @@ export function WorkoutPage({ workout, history, update, finish }: Props) {
   const [now, setNow] = useState(Date.now);
   const exerciseHeading = useRef<HTMLHeadingElement>(null);
   const focusExercise = useRef(false);
-  const timer = workout.timer;
+  const timer = workout.block?.timer ?? workout.timer;
   useEffect(() => {
     if (!timer || timer.end === null) return;
     const tick = () => {
@@ -55,7 +55,9 @@ export function WorkoutPage({ workout, history, update, finish }: Props) {
     if (!timer) return;
     const timestamp = Date.now();
     setNow(timestamp);
-    update({ ...workout, timer: toggleTimer(timer, timestamp) });
+    const nextTimer = toggleTimer(timer, timestamp);
+    if (workout.block) update({ ...workout, block: { ...workout.block, timer: nextTimer } });
+    else update({ ...workout, timer: nextTimer });
   };
   const timerView = (label: string) => <Timer seconds={left} running={timer?.end != null} label={label} toggle={toggle}/>;
   const choose = (index: number) => {
@@ -63,40 +65,58 @@ export function WorkoutPage({ workout, history, update, finish }: Props) {
     focusExercise.current = true;
     update(selectExercise(workout, index));
   };
+  const finishMain = (completed: Workout) => {
+    const cooldown = startCooldown(completed);
+    if (cooldown) update(cooldown);
+    else finish(completed);
+  };
+  const warmup = workout.block?.type === 'warmup';
+  const endLabel = workout.cooldownMinutes ? 'Перейти к заминке' : 'Завершить занятие';
 
   return <section className="narrow">
     <a className="back" href="#map">← К карте</a>
     <p className="eyebrow">ОСТАНОВКА 0{workout.index + 1} / 04</p><h1 tabIndex={-1}>{stop.title}<span>.</span></h1>
-    {workout.kind === 'cardio' ? <>
-      <p className="subtitle">Эллипс · {workoutDetail(stop, workout.short)}</p>
+    {workout.block ? <div className="workout-card">
+      <h2>{warmup ? 'Разминка' : 'Заминка'}</h2>
+      <p className="subtitle">{warmup
+        ? 'Начни с лёгкой ходьбы на месте или спокойного темпа на эллипсе.'
+        : 'Постепенно сбавь темп и закончи спокойной ходьбой.'}</p>
+      {timerView(warmup ? 'ТАЙМЕР РАЗМИНКИ' : 'ТАЙМЕР ЗАМИНКИ')}
+      <button className="primary" onClick={() => warmup ? update({ ...workout, block: null }) : finish(workout)}>
+        {warmup ? 'К основной части' : 'Сохранить занятие'} <Icon name={warmup ? 'arrow' : 'check'}/>
+      </button>
+    </div> : workout.kind === 'cardio' ? <>
+      <p className="subtitle">Эллипс · {workout.mainMinutes} мин</p>
       <div className="workout-card">{timerView('ТАЙМЕР ЗАНЯТИЯ')}
-        <button className="primary" onClick={() => finish(workout)} disabled={left === workout.seconds}>
-          Завершить занятие <Icon name="check"/>
+        <button className="primary" onClick={() => finishMain(workout)} disabled={left === workout.seconds}>
+          {endLabel} <Icon name="check"/>
         </button>
       </div>
     </> : <>
+      <p className="subtitle">Основная часть · ориентир {workout.mainMinutes} мин</p>
       <WorkoutPlan workout={workout} update={update} choose={choose}/>
       {workout.timer ? <div className="workout-card">{timerView('ОТДЫХ МЕЖДУ ПОДХОДАМИ')}
         <button className="primary" onClick={() => choose(workout.selected ?? workout.plan.findIndex(isPending))}>
           Следующий подход <Icon name="arrow"/>
         </button>
       </div> : workout.selected !== null
-        ? <StrengthSet key={`${workout.selected}-${workout.plan[workout.selected].exercise}-${workout.sets.length}`}
-            itemIndex={workout.selected} workout={workout} history={history} update={update} finish={finish}
-            headingRef={exerciseHeading}/>
+        ? <StrengthSet key={`${workout.plan[workout.selected].id}-${workout.plan[workout.selected].exercise}-${workout.sets.length}`}
+            itemIndex={workout.selected} workout={workout} history={history} update={update} finish={finishMain}
+            headingRef={exerciseHeading} endLabel={endLabel}/>
         : !workout.plan.some(isPending) && <div className="workout-card">
           {workout.sets.length > 0
-            ? <button className="primary" onClick={() => finish(workout)}>Сохранить занятие <Icon name="check"/></button>
+            ? <button className="primary" onClick={() => finishMain(workout)}>{workout.cooldownMinutes ? endLabel : 'Сохранить занятие'} <Icon name="check"/></button>
             : <p className="subtitle">Все упражнения пропущены. Можно вернуться к карте или вернуть упражнение в план.</p>}
         </div>}
     </>}
   </section>;
 }
 
-function StrengthSet({ workout, history, update, finish, itemIndex, headingRef }: Props & {
+function StrengthSet({ workout, history, update, finish, itemIndex, headingRef, endLabel }: Props & {
   workout: StrengthWorkout;
   itemIndex: number;
   headingRef: React.Ref<HTMLHeadingElement>;
+  endLabel: string;
 }) {
   const item = workout.plan[itemIndex];
   const id = item.exercise;
@@ -120,14 +140,14 @@ function StrengthSet({ workout, history, update, finish, itemIndex, headingRef }
       <h2 tabIndex={-1} ref={headingRef}>{exercise.title}</h2><Demonstration exercise={exercise}/>
       {exercise.gifId && <WorkoutGif id={exercise.gifId} title={exercise.title}/>}
       <ul className="cues">{exercise.cues.map(cue => <li key={cue}>{cue}</li>)}</ul>
-      <a className="reference" href={exercise.reference} target="_blank" rel="noreferrer">Техника подробно ↗</a>
+      {exercise.reference && <a className="reference" href={exercise.reference} target="_blank" rel="noreferrer">Техника подробно ↗</a>}
       <form onSubmit={submit}>
         <div className="fields">
           {exercise.weighted && <label>Вес одной гантели, кг<input name="weight" type="number" inputMode="decimal" min="0" step="any" placeholder={String(prior?.weight ?? 0)}/></label>}
-          <label>Повторы{exercise.perSide ? ' на руку' : ''}<input name="reps" type="number" inputMode="numeric" min="1" step="1" placeholder="8"/></label>
+          <label>Повторы{exercise.perSide ? ' на сторону' : ''}<input name="reps" type="number" inputMode="numeric" min="1" step="1" placeholder="8"/></label>
         </div>
         <p className="hint">Ориентир — 8 повторов. {prior ? `Прошлый вес: ${prior.weight} кг.` : 'Можно записать фактический результат или оставить поля пустыми.'}</p>
-        <button className="primary" type="submit">{finalSet ? 'Завершить занятие' : 'Записать подход'} <Icon name="check"/></button>
+        <button className="primary" type="submit">{finalSet ? endLabel : 'Записать подход'} <Icon name="check"/></button>
       </form>
     </div>
   </>;

@@ -1,4 +1,4 @@
-import { exerciseAlternatives, route, strengthPlan, type ExerciseId } from '../../entities/program';
+import { defaultPreferences, exerciseAlternatives, levels, route, strengthPlan, workoutTiming, type ExerciseId } from '../../entities/program';
 import type { Session, SetRecord } from '../../entities/progress';
 
 interface Timer {
@@ -10,9 +10,19 @@ interface WorkoutInfo {
   index: number;
   round: number;
   short: boolean;
+  startedAt: number;
+  mainMinutes: number;
+  cooldownMinutes: number;
+  block: WorkoutBlock | null;
+}
+
+interface WorkoutBlock {
+  type: 'warmup' | 'cooldown';
+  timer: Timer;
 }
 
 export interface PlanExercise {
+  id: number;
   exercise: ExerciseId;
   target: number;
   completed: number;
@@ -25,19 +35,41 @@ export type StrengthWorkout = WorkoutInfo & {
   selected: number | null;
   sets: SetRecord[];
   timer: Timer | null;
+  restSeconds: number;
 };
 
 export type Workout = StrengthWorkout | (WorkoutInfo & { kind: 'cardio'; seconds: number; timer: Timer });
 
-export function createWorkout(index: number, round: number, short: boolean): Workout {
+export function createWorkout(index: number, round: number, short: boolean, preferences = defaultPreferences): Workout {
   const stop = route[index];
-  const info = { index, round, short };
+  const timing = workoutTiming(stop, short, preferences);
+  const info: WorkoutInfo = {
+    index, round, short,
+    startedAt: Date.now(),
+    mainMinutes: timing.main,
+    cooldownMinutes: timing.cooldown,
+    block: timing.warmup ? makeBlock('warmup', timing.warmup) : null
+  };
   if (stop.icon === 'cardio') {
-    const seconds = (short ? stop.shortMinutes : stop.minutes) * 60;
+    const seconds = timing.main * 60;
     return { ...info, kind: 'cardio', seconds, timer: { remaining: seconds, end: null } };
   }
-  const plan = strengthPlan(stop, short).map(item => ({ ...item, completed: 0, skipped: false }));
-  return { ...info, kind: 'strength', plan, selected: 0, sets: [], timer: null };
+  const plan = strengthPlan(stop, short, preferences).map((item, id) => ({ ...item, id, completed: 0, skipped: false }));
+  const restSeconds = levels[preferences.level].rest;
+  return { ...info, kind: 'strength', plan, selected: 0, sets: [], timer: null, restSeconds };
+}
+
+function makeBlock(type: WorkoutBlock['type'], minutes: number): WorkoutBlock {
+  return { type, timer: { remaining: minutes * 60, end: null } };
+}
+
+export function startCooldown(workout: Workout, now = Date.now()): Workout | null {
+  if (!workout.cooldownMinutes || workout.block) return null;
+  const block = makeBlock('cooldown', workout.cooldownMinutes);
+  if (workout.kind === 'cardio') {
+    return { ...workout, block, timer: { remaining: remaining(workout.timer, now), end: null } };
+  }
+  return { ...workout, block, timer: null };
 }
 
 export function remaining(timer: Timer, now: number) {
@@ -56,6 +88,15 @@ export function isPending(item: PlanExercise) {
 export function selectExercise(workout: StrengthWorkout, index: number): StrengthWorkout {
   if (!workout.plan[index] || !isPending(workout.plan[index])) return workout;
   return { ...workout, selected: index, timer: null };
+}
+
+export function moveExercise(workout: StrengthWorkout, from: number, to: number): StrengthWorkout {
+  if (!workout.plan[from] || !workout.plan[to] || from === to) return workout;
+  const activeId = workout.selected === null ? null : workout.plan[workout.selected].id;
+  const plan = [...workout.plan];
+  const [moved] = plan.splice(from, 1);
+  plan.splice(to, 0, moved);
+  return { ...workout, plan, selected: activeId === null ? null : plan.findIndex(item => item.id === activeId) };
 }
 
 function updateExercise(workout: StrengthWorkout, index: number, item: PlanExercise) {
@@ -79,13 +120,15 @@ export function toggleSkip(workout: StrengthWorkout, index: number): StrengthWor
 
 export function recordSet(workout: StrengthWorkout, values: Omit<SetRecord, 'exercise'>): StrengthWorkout {
   const index = workout.selected;
-  if (index === null || workout.timer) return workout;
+  if (index === null || workout.timer || workout.block) return workout;
   const item = workout.plan[index];
   if (!isPending(item)) return workout;
   const updated = { ...item, completed: item.completed + 1 };
   const plan = updateExercise(workout, index, updated);
   const selected = isPending(updated) ? index : null;
-  const timer = plan.some(isPending) ? { remaining: 60, end: Date.now() + 60000 } : null;
+  const timer = plan.some(isPending)
+    ? { remaining: workout.restSeconds, end: Date.now() + workout.restSeconds * 1000 }
+    : null;
   return { ...workout, plan, selected, sets: [...workout.sets, { ...values, exercise: item.exercise }], timer };
 }
 
@@ -94,6 +137,7 @@ export function summarize(workout: Workout): Session {
   const skipped = workout.kind === 'strength' ? workout.plan.filter(item => item.skipped).map(item => item.exercise) : [];
   return {
     date, stop: workout.index, round: workout.round, short: workout.short,
+    durationSeconds: Math.max(0, Math.floor((date - workout.startedAt) / 1000)),
     sets: workout.kind === 'strength' ? workout.sets : [],
     elapsed: workout.kind === 'cardio' ? workout.seconds - remaining(workout.timer, date) : null,
     ...(skipped.length ? { skipped } : {})

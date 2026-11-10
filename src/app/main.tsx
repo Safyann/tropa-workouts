@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { route } from '../entities/program';
+import { route, type WorkoutPreferences } from '../entities/program';
 import { nextStop, readProgress, saveProgress, type Progress } from '../entities/progress';
 import { createWorkout, summarize, type Workout } from '../features/workout';
 import { CatalogPage } from '../pages/catalog';
@@ -69,7 +69,7 @@ function App() {
       const latest = latestProgress();
       const index = nextStop(latest, route.length);
       if (index === -1) return;
-      setWorkout(createWorkout(index, latest.round, short));
+      setWorkout(createWorkout(index, latest.round, short, latest.preferences));
     }
     location.hash = 'workout';
     setView('workout');
@@ -94,7 +94,14 @@ function App() {
     else setProgress(latest);
   }
 
-  const tab = view === 'history' || view === 'catalog' ? view : 'map';
+  function changePreferences(preferences: WorkoutPreferences) {
+    storeProgress({ ...latestProgress(), preferences });
+  }
+
+  const historyMatch = /^history\/(\d+)$/.exec(view);
+  const requestedStop = historyMatch ? Number(historyMatch[1]) - 1 : -1;
+  const historyStop = route[requestedStop] ? requestedStop : undefined;
+  const tab = view === 'history' || historyStop !== undefined ? 'history' : view === 'catalog' ? 'catalog' : 'map';
   return <>
     <header className="bar"><div className="bar-inner">
       <a className="brand" href="#map" aria-label="Тропа, на карту">
@@ -107,9 +114,10 @@ function App() {
       {storageFailed && <p role="status" className="notice">Браузер не сохранил изменения. Прогресс доступен до закрытия страницы.</p>}
       {view === 'workout' && workout
         ? <WorkoutPage workout={workout} history={progress.sessions} update={setWorkout} finish={finish}/>
-        : tab === 'history' ? <HistoryPage sessions={progress.sessions}/>
+        : tab === 'history' ? <HistoryPage sessions={progress.sessions} stopIndex={historyStop}/>
         : tab === 'catalog' ? <CatalogPage/>
-        : <RoutePage progress={progress} inWorkout={workout !== null} offlineReady={offlineReady} start={start} restart={restart}/>}
+        : <RoutePage progress={progress} inWorkout={workout !== null} offlineReady={offlineReady}
+            start={start} restart={restart} changePreferences={changePreferences}/>}
     </main>
   </>;
 }

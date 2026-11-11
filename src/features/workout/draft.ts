@@ -7,7 +7,9 @@ import {
 } from '../../entities/program';
 import {
   isExerciseNote,
+  isFreeSessionId,
   nextStop,
+  readSavedProgress,
   routeLength,
   type Progress,
   type SetRecord,
@@ -15,6 +17,13 @@ import {
 import { isPending, type PlanExercise, type Workout } from './model';
 
 export const workoutDraftKey = 'tropa-workout-draft-v1';
+export const freeStrengthDraftKey = 'tropa-free-strength-draft-v1';
+
+export interface FreeStrengthDraft {
+  id: string;
+  sets: SetRecord[];
+  minutes: string;
+}
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null;
@@ -66,6 +75,48 @@ function isSetRecord(value: unknown): value is SetRecord {
       (typeof value.weight === 'number' && Number.isFinite(value.weight) && value.weight >= 0)) &&
     (value.reps === null || (isCount(value.reps) && value.reps > 0))
   );
+}
+
+export function readFreeStrengthDraft(): FreeStrengthDraft | null {
+  try {
+    const draft: unknown = JSON.parse(localStorage.getItem(freeStrengthDraftKey) ?? 'null');
+    if (
+      !isRecord(draft) ||
+      typeof draft.id !== 'string' ||
+      !isFreeSessionId(draft.id) ||
+      !Array.isArray(draft.sets) ||
+      !draft.sets.every(isSetRecord) ||
+      typeof draft.minutes !== 'string' ||
+      readSavedProgress()?.sessions.some(({ freeId }) => freeId === draft.id)
+    )
+      return null;
+    return { id: draft.id, sets: draft.sets, minutes: draft.minutes };
+  } catch {
+    return null;
+  }
+}
+
+export function saveFreeStrengthDraft(draft: FreeStrengthDraft): boolean {
+  try {
+    if (draft.sets.length || draft.minutes) {
+      localStorage.setItem(freeStrengthDraftKey, JSON.stringify(draft));
+    } else {
+      localStorage.removeItem(freeStrengthDraftKey);
+    }
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export function clearFreeStrengthDraft(id: string) {
+  try {
+    // Проверяем сырой черновик: после записи результата чтение черновика его уже скрывает.
+    const draft: unknown = JSON.parse(localStorage.getItem(freeStrengthDraftKey) ?? 'null');
+    if (isRecord(draft) && draft.id === id) localStorage.removeItem(freeStrengthDraftKey);
+  } catch {
+    // Сохранённый результат не позволит восстановить этот черновик.
+  }
 }
 
 function isCurrentWorkoutDraft(draft: Workout, progress: Progress): boolean {

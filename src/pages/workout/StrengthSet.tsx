@@ -1,4 +1,4 @@
-import { useRef, type FormEvent, type Ref } from 'react';
+import { useId, useRef, type FormEvent, type Ref, type RefObject } from 'react';
 import { ExerciseInstructions, exercises } from '../../entities/program';
 import {
   effortLabels,
@@ -22,6 +22,69 @@ import { Demonstration } from './Demonstration';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './Workout.module.css';
 
+function SetField({
+  label,
+  name,
+  minimum,
+  placeholder,
+  inputRef,
+  increment,
+}: {
+  label: string;
+  name: 'weight' | 'reps';
+  minimum: number;
+  placeholder: number;
+  inputRef: RefObject<HTMLInputElement | null>;
+  increment: number;
+}) {
+  const inputId = useId();
+  const isWeight = name === 'weight';
+
+  function adjust(direction: number) {
+    const input = inputRef.current;
+    if (!input) return;
+    const current = Number.isFinite(input.valueAsNumber) ? input.valueAsNumber : placeholder;
+    const maximum = isWeight ? Number.MAX_VALUE : Number.MAX_SAFE_INTEGER;
+    const next = Math.min(maximum, Math.max(minimum, current + direction * increment));
+    input.value = String(isWeight ? Number(next.toFixed(10)) : next);
+  }
+
+  return (
+    <div className={styles.setField}>
+      <label htmlFor={inputId}>{label}</label>
+      <div className={styles.setFieldControls}>
+        <button
+          className={ui.secondary}
+          type="button"
+          aria-label={`Уменьшить: ${label}`}
+          onClick={() => adjust(-1)}
+        >
+          −
+        </button>
+        <input
+          id={inputId}
+          ref={inputRef}
+          name={name}
+          type="number"
+          inputMode={isWeight ? 'decimal' : 'numeric'}
+          min={minimum}
+          max={isWeight ? undefined : Number.MAX_SAFE_INTEGER}
+          step={isWeight ? 'any' : '1'}
+          placeholder={String(placeholder)}
+        />
+        <button
+          className={ui.secondary}
+          type="button"
+          aria-label={`Увеличить: ${label}`}
+          onClick={() => adjust(1)}
+        >
+          +
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export function StrengthSet({
   workout,
   history,
@@ -32,6 +95,8 @@ export function StrengthSet({
   endLabel,
   restSound,
   targetReps = 8,
+  weightStep,
+  setWeightStep,
 }: {
   workout: StrengthWorkout;
   history: Session[];
@@ -42,6 +107,8 @@ export function StrengthSet({
   endLabel: string;
   restSound?: boolean;
   targetReps?: number;
+  weightStep: number;
+  setWeightStep: (step: number) => void;
 }) {
   const weightInput = useRef<HTMLInputElement>(null);
   const repsInput = useRef<HTMLInputElement>(null);
@@ -149,33 +216,40 @@ export function StrengthSet({
               )}
             </div>
           )}
-          <div className={styles.fields}>
+          <div className={styles.setFields}>
             {canAddWeight && (
-              <label>
-                {weightLabel}
-                <input
-                  ref={weightInput}
+              <>
+                <SetField
+                  label={weightLabel}
                   name="weight"
-                  type="number"
-                  inputMode="decimal"
-                  min="0"
-                  step="any"
-                  placeholder={String(prior?.weight ?? 0)}
+                  minimum={0}
+                  placeholder={prior?.weight ?? 0}
+                  inputRef={weightInput}
+                  increment={weightStep}
                 />
-              </label>
+                <label className={styles.weightStep}>
+                  Шаг веса, кг
+                  <select
+                    value={weightStep}
+                    onChange={(event) => setWeightStep(Number(event.target.value))}
+                  >
+                    <option value="0.25">0,25</option>
+                    <option value="0.5">0,5</option>
+                    <option value="1">1</option>
+                    <option value="2.5">2,5</option>
+                    <option value="5">5</option>
+                  </select>
+                </label>
+              </>
             )}
-            <label>
-              Повторы{exercise.perSide ? ' на сторону' : ''}
-              <input
-                ref={repsInput}
-                name="reps"
-                type="number"
-                inputMode="numeric"
-                min="1"
-                step="1"
-                placeholder={String(targetReps)}
-              />
-            </label>
+            <SetField
+              label={exercise.perSide ? 'Повторы на сторону' : 'Повторы'}
+              name="reps"
+              minimum={1}
+              placeholder={targetReps}
+              inputRef={repsInput}
+              increment={1}
+            />
           </div>
           {repeat && (
             <button

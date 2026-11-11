@@ -1,7 +1,16 @@
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { defaultPreferences } from '../../entities/program';
-import type { Progress } from '../../entities/progress';
-import { readWorkoutDraft, saveWorkoutDraft, syncWorkoutDraft, workoutDraftKey } from './draft';
+import { saveProgress, type Progress } from '../../entities/progress';
+import {
+  clearFreeStrengthDraft,
+  freeStrengthDraftKey,
+  readFreeStrengthDraft,
+  readWorkoutDraft,
+  saveFreeStrengthDraft,
+  saveWorkoutDraft,
+  syncWorkoutDraft,
+  workoutDraftKey,
+} from './draft';
 import {
   createWorkout,
   moveExercise,
@@ -24,6 +33,52 @@ beforeEach(() => {
 });
 
 afterEach(() => vi.unstubAllGlobals());
+
+const freeDraft = {
+  id: '7cb4ba2b-88dd-4e05-8d7b-df310d61e0d1',
+  sets: [{ exercise: 'squat', weight: 8, reps: 10 }],
+  minutes: '25',
+} as const;
+
+it('restores a free strength draft independently and keeps it on a mismatched clear', () => {
+  const draft = { ...freeDraft, sets: [...freeDraft.sets] };
+  saveWorkoutDraft(createWorkout(0, 0, false));
+  expect(saveFreeStrengthDraft(draft)).toBe(true);
+  clearFreeStrengthDraft('another-draft');
+  expect(readFreeStrengthDraft()).toEqual(draft);
+  clearFreeStrengthDraft(draft.id);
+  expect(readFreeStrengthDraft()).toBeNull();
+  expect(readWorkoutDraft(progress)).not.toBeNull();
+});
+
+it('does not restore a completed free session if its draft is still in storage', () => {
+  const draft = { ...freeDraft, sets: [...freeDraft.sets] };
+  saveFreeStrengthDraft(draft);
+  saveProgress({
+    ...progress,
+    sessions: [
+      {
+        freeId: draft.id,
+        date: Date.now(),
+        stop: 0,
+        round: 0,
+        short: false,
+        sets: draft.sets,
+        elapsed: null,
+        durationSeconds: 1500,
+      },
+    ],
+  });
+  expect(localStorage.getItem(freeStrengthDraftKey)).not.toBeNull();
+  expect(readFreeStrengthDraft()).toBeNull();
+});
+
+it('ignores damaged free drafts and removes empty ones', () => {
+  localStorage.setItem(freeStrengthDraftKey, '{');
+  expect(readFreeStrengthDraft()).toBeNull();
+  expect(saveFreeStrengthDraft({ id: freeDraft.id, sets: [], minutes: '' })).toBe(true);
+  expect(localStorage.getItem(freeStrengthDraftKey)).toBeNull();
+});
 
 it('resumes a Kinetic plan with stretching options and recorded sets', () => {
   const workout = createWorkout(0, 0, true, {

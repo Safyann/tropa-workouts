@@ -51,6 +51,7 @@ export function WorkoutPage({
   discard,
 }: Props & { discard: () => void }) {
   const [now, setNow] = useState(Date.now);
+  const [weightStep, setWeightStep] = useState(0.5);
   const exerciseHeading = useRef<HTMLHeadingElement>(null);
   const focusExercise = useRef(false);
   const timer = workout.block?.timer ?? workout.timer;
@@ -203,6 +204,8 @@ export function WorkoutPage({
               headingRef={exerciseHeading}
               endLabel={endLabel}
               targetReps={stop.icon === 'strength' ? stop.targetReps : undefined}
+              weightStep={weightStep}
+              setWeightStep={setWeightStep}
             />
           ) : (
             !workout.plan.some(isPending) && (

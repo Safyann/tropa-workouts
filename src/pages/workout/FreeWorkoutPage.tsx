@@ -1,4 +1,4 @@
-import { useRef, useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { exercises } from '../../entities/program';
 import {
   formatSet,
@@ -6,6 +6,13 @@ import {
   type SetRecord,
   type WorkoutTemplate,
 } from '../../entities/progress';
+import {
+  clearFreeStrengthDraft,
+  freeStrengthDraftKey,
+  readFreeStrengthDraft,
+  saveFreeStrengthDraft,
+  type FreeStrengthDraft,
+} from '../../features/workout/draft';
 import { ExercisePicker, useExerciseChoice } from './ExercisePicker';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './Workout.module.css';
@@ -21,12 +28,34 @@ export function FreeWorkoutPage({
 }) {
   const [mode, setMode] = useState<'strength' | 'walking'>('strength');
   const [templateId, setTemplateId] = useState('');
-  const [sets, setSets] = useState<SetRecord[]>([]);
-  const freeId = useRef<string | undefined>(undefined);
+  const [draftState, setDraftState] = useState(() => ({
+    draft: readFreeStrengthDraft(),
+    saveFailed: false,
+  }));
+  const { draft, saveFailed } = draftState;
+  const walkingId = useRef<string | undefined>(undefined);
+  const sets = draft?.sets ?? [];
   const template = templates?.find(({ id }) => id === templateId);
   const choice = useExerciseChoice(template?.exercises);
   const { selected } = choice;
   const exercise = selected ? exercises[selected] : undefined;
+
+  useEffect(() => {
+    function syncDraft(event: StorageEvent) {
+      if (event.key !== null && event.key !== freeStrengthDraftKey) return;
+      const saved = readFreeStrengthDraft();
+      setDraftState((current) =>
+        current.saveFailed ? current : { draft: saved, saveFailed: false },
+      );
+    }
+    window.addEventListener('storage', syncDraft);
+    return () => window.removeEventListener('storage', syncDraft);
+  }, []);
+
+  function updateDraft(changes: Partial<Pick<FreeStrengthDraft, 'sets' | 'minutes'>>) {
+    const next = { ...(draft ?? { id: crypto.randomUUID(), sets: [], minutes: '' }), ...changes };
+    setDraftState({ draft: next, saveFailed: !saveFreeStrengthDraft(next) });
+  }
 
   function addSet(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -34,28 +63,34 @@ export function FreeWorkoutPage({
     const data = new FormData(event.currentTarget);
     const weight = data.get('weight');
     const reps = data.get('reps');
-    setSets((current) => [
-      ...current,
-      {
-        exercise: selected,
-        weight: typeof weight === 'string' && weight !== '' ? Number(weight) : null,
-        reps: typeof reps === 'string' && reps !== '' ? Number(reps) : null,
-      },
-    ]);
+    const set: SetRecord = {
+      exercise: selected,
+      weight: typeof weight === 'string' && weight !== '' ? Number(weight) : null,
+      reps: typeof reps === 'string' && reps !== '' ? Number(reps) : null,
+    };
+    updateDraft({ sets: [...sets, set] });
     event.currentTarget.reset();
   }
 
-  function saveWorkout(durationSeconds?: number) {
-    freeId.current ??= crypto.randomUUID();
-    save({
-      freeId: freeId.current,
+  function saveWorkout(minutes?: number) {
+    const walking = mode === 'walking';
+    if (walking ? minutes === undefined : !draft?.sets.length) return;
+    if (minutes !== undefined && (!Number.isInteger(minutes) || minutes < 1 || minutes > 1440))
+      return;
+    const durationSeconds = minutes === undefined ? undefined : minutes * 60;
+    const freeId = walking ? (walkingId.current ??= crypto.randomUUID()) : draft?.id;
+    if (!freeId) return;
+    const saved = save({
+      freeId,
       date: Date.now(),
-      stop: mode === 'walking' ? 1 : 0,
+      stop: walking ? 1 : 0,
       short: false,
-      sets: mode === 'walking' ? [] : sets,
-      elapsed: durationSeconds ?? null,
-      ...(durationSeconds !== undefined && { durationSeconds, cardioActivity: 'walking' }),
+      sets: walking ? [] : sets,
+      elapsed: walking ? (durationSeconds ?? null) : null,
+      ...(durationSeconds !== undefined && { durationSeconds }),
+      ...(walking && { cardioActivity: 'walking' }),
     });
+    if (saved && !walking) clearFreeStrengthDraft(freeId);
   }
 
   return (
@@ -89,7 +124,7 @@ export function FreeWorkoutPage({
               event.preventDefault();
               const minutes = Number(new FormData(event.currentTarget).get('minutes'));
               if (Number.isInteger(minutes) && minutes >= 1 && minutes <= 1440)
-                saveWorkout(minutes * 60);
+                saveWorkout(minutes);
             }}
           >
             <label>
@@ -150,7 +185,13 @@ export function FreeWorkoutPage({
                 )}
                 <label>
                   Повторы{exercise?.perSide ? ' на сторону' : ''}
-                  <input type="number" inputMode="numeric" name="reps" min="1" />
+                  <input
+                    type="number"
+                    inputMode="numeric"
+                    name="reps"
+                    min="1"
+                    max={Number.MAX_SAFE_INTEGER}
+                  />
                 </label>
               </div>
               <button className={ui.secondary} type="submit" disabled={!selected}>
@@ -169,7 +210,7 @@ export function FreeWorkoutPage({
                       type="button"
                       aria-label={`Удалить подход ${index + 1}`}
                       onClick={() =>
-                        setSets((current) => current.filter((_, position) => position !== index))
+                        updateDraft({ sets: sets.filter((_, position) => position !== index) })
                       }
                     >
                       Удалить
@@ -178,14 +219,34 @@ export function FreeWorkoutPage({
                 ))}
               </ol>
             )}
-            <button
-              className={styles.stepAction}
-              type="button"
-              disabled={!sets.length}
-              onClick={() => saveWorkout()}
+            {saveFailed && (
+              <p role="alert">
+                Черновик не сохранился в браузере. Попробуй сохранить занятие перед выходом.
+              </p>
+            )}
+            <form
+              className={styles.freeFields}
+              onSubmit={(event) => {
+                event.preventDefault();
+                saveWorkout(draft?.minutes ? Number(draft.minutes) : undefined);
+              }}
             >
-              Сохранить тренировку
-            </button>
+              <label>
+                Длительность, мин (необязательно)
+                <input
+                  type="number"
+                  inputMode="numeric"
+                  name="minutes"
+                  min="1"
+                  max="1440"
+                  value={draft?.minutes ?? ''}
+                  onChange={(event) => updateDraft({ minutes: event.target.value })}
+                />
+              </label>
+              <button className={styles.stepAction} type="submit" disabled={!sets.length}>
+                Сохранить тренировку
+              </button>
+            </form>
           </>
         )}
       </div>

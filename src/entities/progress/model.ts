@@ -42,6 +42,14 @@ export interface Progress {
   preferences?: WorkoutPreferences;
 }
 
+export function previousExerciseSets(sessions: readonly Session[], exercise: ExerciseId) {
+  for (let index = sessions.length - 1; index >= 0; index--) {
+    const sets = sessions[index].sets.filter((set) => set.exercise === exercise);
+    if (sets.some(({ weight, reps }) => weight !== null || reps !== null)) return sets;
+  }
+  return [];
+}
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }

@@ -2,6 +2,7 @@ export {
   estimatedCalories,
   formatTime,
   nextStop,
+  previousExerciseSets,
   readProgress,
   saveProgress,
   weekCount,

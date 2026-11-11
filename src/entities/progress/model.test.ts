@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   nextStop,
+  previousExerciseSets,
   progressStorageKey,
   readProgress,
   saveProgress,
@@ -26,6 +27,22 @@ afterEach(() => {
 });
 
 describe('progress', () => {
+  it('uses the latest session with recorded values for the exercise', () => {
+    const first = { exercise: 'squat', weight: 10, reps: 8 } as const;
+    const last = { exercise: 'squat', weight: 0, reps: 9 } as const;
+    const blank = { exercise: 'squat', weight: null, reps: null } as const;
+    const other = { exercise: 'row', weight: 5, reps: 6 } as const;
+    const sessions = [
+      { ...entry(0), sets: [first] },
+      { ...entry(2), sets: [last, other, blank] },
+      { ...entry(0, 1), sets: [blank] },
+    ];
+
+    expect(previousExerciseSets(sessions, 'squat')).toEqual([last, blank]);
+    expect(previousExerciseSets(sessions, 'row')).toEqual([other]);
+    expect(previousExerciseSets(sessions, 'press')).toEqual([]);
+  });
+
   it('restores saved history and opens the next stop', () => {
     expect(nextStop(readProgress(), 4)).toBe(0);
     const progress = { version: 1, round: 0, sessions: [entry(0), entry(1)] } as const;

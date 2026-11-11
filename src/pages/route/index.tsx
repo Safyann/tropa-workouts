@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react';
-import { defaultPreferences, defaultWeeklyGoal, exercises, levels, route, strengthPlan, workoutDetail, workoutTiming, type Stop, type WorkoutPreferences } from '../../entities/program';
+import { cardioActivity, cardioTitles, defaultPreferences, defaultWeeklyGoal, equipmentLabels, exercises, homeEquipment, levels, route, strengthPlan, workoutDetail, workoutTiming, type Stop, type WorkoutPreferences } from '../../entities/program';
 import { nextStop, weekCount, type Progress } from '../../entities/progress';
 import { Icon } from '../../shared/ui/Icon';
 import { WorkoutSettings } from './WorkoutSettings';
@@ -20,6 +20,7 @@ export function RoutePage({ progress, inWorkout, offlineReady, start, restart, c
   const count = weekCount(progress.sessions);
   const preferences = progress.preferences ?? defaultPreferences;
   const goal = preferences.weeklyGoal ?? defaultWeeklyGoal;
+  const equipment = (preferences.equipment ?? homeEquipment).map(item => equipmentLabels[item]);
   return <>
     <div className="intro">
       <div><p className="eyebrow"><span className="signal"/> ПРОГРАММА 01 / ДОМА</p>
@@ -31,7 +32,7 @@ export function RoutePage({ progress, inWorkout, offlineReady, start, restart, c
         <span className="week-dots" aria-hidden="true">
           {Array.from({ length: goal }, (_, index) => <i key={index} className={count > index ? 'filled' : ''}/>)}
         </span>
-        <a className="week-settings" href="#settings">Уровень и цель</a>
+        <a className="week-settings" href="#settings">Настройки профиля</a>
       </div>
     </div>
     <div className="dashboard">
@@ -60,8 +61,8 @@ export function RoutePage({ progress, inWorkout, offlineReady, start, restart, c
         <span className="type-icon"><Icon name={stop?.icon ?? 'check'}/></span>
         <h2>{stop?.title ?? 'Все костры горят'}</h2>
         {stop ? <>
-          <p className="session-type">{stop.type} · {stop.gear}</p>
           {!inWorkout && <>
+            <p className="session-type">{stop.icon === 'cardio' ? cardioTitles[cardioActivity(preferences.equipment)] : stop.type}</p>
             <p className="session-detail">{workoutDetail(stop, false, preferences)} · {levels[preferences.level].title}</p>
             <WorkoutSettings preferences={preferences} change={changePreferences}/>
             <DayPreview key={next} stop={stop} preferences={preferences}/>
@@ -77,7 +78,7 @@ export function RoutePage({ progress, inWorkout, offlineReady, start, restart, c
       </section>
     </div>
     <footer className="foot">
-      <span>Гантели <b>·</b> скамья <b>·</b> эллипс</span>
+      <span>{equipment.join(' · ') || 'Без инвентаря'}</span>
       <span>{offlineReady ? 'Маршрут доступен без сети · история в этом браузере' : 'Прогресс хранится в этом браузере'}</span>
     </footer>
   </>;
@@ -94,7 +95,7 @@ function DayPreview({ stop, preferences }: { stop: Stop; preferences: WorkoutPre
         return <li key={item.exercise}><strong>{exercise.title}</strong><small>{item.target === 1 ? '1 подход' : `${item.target} подхода`} · {exercise.group}</small></li>;
       })}</ul>
       <p className="hint">Ориентир для основной части — {timing.main} мин. В коротком варианте — первые два упражнения по одному подходу.</p>
-    </> : <p className="hint">Эллипс · {timing.main} мин. Короткий вариант целиком · {workoutDetail(stop, true, preferences)}.</p>}
+    </> : <p className="hint">{cardioTitles[cardioActivity(preferences.equipment)]} · {timing.main} мин. Короткий вариант целиком · {workoutDetail(stop, true, preferences)}.</p>}
     {timing.cooldown > 0 && <p className="hint">Заминка · {timing.cooldown} мин</p>}
   </details>;
 }

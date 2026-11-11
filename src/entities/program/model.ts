@@ -1,4 +1,4 @@
-import { defaultPreferences, mainBudget, optionalBlockMinutes, type WorkoutPreferences } from './preferences';
+import { defaultPreferences, homeEquipment, mainBudget, optionalBlockMinutes, type HomeEquipment } from './preferences';
 
 type Point = [number, number];
 type Pose = Point[];
@@ -7,6 +7,7 @@ export interface Exercise {
   title: string;
   group: 'Ноги и ягодицы' | 'Грудь и трицепсы' | 'Спина' | 'Задняя поверхность бедра и ягодицы' | 'Плечи' | 'Мышцы корпуса';
   gear: string;
+  needs?: readonly HomeEquipment[];
   weighted: boolean;
   perSide?: boolean;
   cues: string[];
@@ -23,6 +24,7 @@ export type ExerciseId =
 
 export const exercises: Record<ExerciseId, Exercise> = {
   squat: {
+    needs: ['bench'],
     title: 'Присед к скамье',
     group: 'Ноги и ягодицы', gear: 'Скамья · гантель по желанию', weighted: true,
     reference: 'https://www.nhs.uk/live-well/exercise/strength-exercises/',
@@ -34,6 +36,7 @@ export const exercises: Record<ExerciseId, Exercise> = {
     ]
   },
   press: {
+    needs: ['bench', 'dumbbells'],
     title: 'Жим гантелей лёжа',
     group: 'Грудь и трицепсы', gear: 'Скамья · гантели', weighted: true,
     gifId: 'SpYC0Kp',
@@ -46,6 +49,7 @@ export const exercises: Record<ExerciseId, Exercise> = {
     ]
   },
   row: {
+    needs: ['bench', 'dumbbells'],
     title: 'Тяга гантели с опорой',
     group: 'Спина', gear: 'Скамья · гантель', weighted: true, perSide: true,
     reference: 'https://www.acefitness.org/resources/everyone/exercise-library/126/single-arm-row/',
@@ -65,6 +69,7 @@ export const exercises: Record<ExerciseId, Exercise> = {
     cues: ['Упрись всей стопой в пол и отведи таз назад.', 'Плавно опустись на удобную глубину, затем выпрямись.']
   },
   gobletSquat: {
+    needs: ['dumbbells'],
     title: 'Присед с гантелью у груди',
     group: 'Ноги и ягодицы', gear: 'Одна гантель', weighted: true,
     gifId: 'yn8yg1r',
@@ -72,6 +77,7 @@ export const exercises: Record<ExerciseId, Exercise> = {
     cues: ['Держи гантель двумя руками перед грудью.', 'Опускайся плавно и держи стопы на полу.']
   },
   floorPress: {
+    needs: ['dumbbells'],
     title: 'Жим гантелей на полу',
     group: 'Грудь и трицепсы', gear: 'Гантели', weighted: true,
     reference: 'https://www.mayoclinic.org/healthy-lifestyle/fitness/multimedia/chest-press/vid-20084677',
@@ -92,6 +98,7 @@ export const exercises: Record<ExerciseId, Exercise> = {
     cues: ['Упрись ладонями в пол и удерживай корпус ровно.', 'Плавно согни руки, затем оттолкнись от пола.']
   },
   freeRow: {
+    needs: ['dumbbells'],
     title: 'Тяга двух гантелей в наклоне',
     group: 'Спина', gear: 'Гантели', weighted: true,
     gifId: 'BJ0Hz5L',
@@ -99,6 +106,7 @@ export const exercises: Record<ExerciseId, Exercise> = {
     cues: ['Слегка согни колени и наклони корпус за счёт движения в тазу.', 'Подтяни гантели к корпусу, удерживая его неподвижно, затем плавно опусти.']
   },
   singleFreeRow: {
+    needs: ['dumbbells'],
     title: 'Тяга одной гантели в наклоне без скамьи',
     group: 'Спина', gear: 'Одна гантель', weighted: true, perSide: true,
     gifId: 'v2DfH14',
@@ -106,6 +114,7 @@ export const exercises: Record<ExerciseId, Exercise> = {
     cues: ['Наклони корпус и сохраняй устойчивое положение.', 'Подтяни гантель к боку, удерживая корпус неподвижно. Повтори другой рукой.']
   },
   rdl: {
+    needs: ['dumbbells'],
     title: 'Румынская тяга с гантелями',
     group: 'Задняя поверхность бедра и ягодицы', gear: 'Гантели', weighted: true,
     gifId: 'rR0LJzx',
@@ -118,12 +127,14 @@ export const exercises: Record<ExerciseId, Exercise> = {
     cues: ['Ляг на спину, согни колени и поставь стопы на пол.', 'Подними таз и плавно опусти его, сохраняя контроль.']
   },
   shoulderPress: {
+    needs: ['dumbbells'],
     title: 'Жим гантелей сидя',
     group: 'Плечи', gear: 'Гантели · скамья или устойчивый стул', weighted: true,
     gifId: 'znQUdHY',
     cues: ['Сядь устойчиво и держи гантели у плеч.', 'Плавно выжми гантели вверх и верни их к плечам.']
   },
   standingPress: {
+    needs: ['dumbbells'],
     title: 'Жим гантелей стоя',
     group: 'Плечи', gear: 'Гантели', weighted: true,
     cues: ['Встань устойчиво и подними гантели к плечам.', 'Жми вверх плавно, удерживая корпус неподвижным.']
@@ -142,15 +153,18 @@ export const exercises: Record<ExerciseId, Exercise> = {
   }
 };
 
-export function exerciseAlternatives(id: ExerciseId): ExerciseId[] {
+function hasEquipment(id: ExerciseId, equipment: readonly HomeEquipment[]) {
+  return exercises[id].needs?.every(item => equipment.includes(item)) ?? true;
+}
+
+export function exerciseAlternatives(id: ExerciseId, equipment: readonly HomeEquipment[] = homeEquipment): ExerciseId[] {
   return (Object.keys(exercises) as ExerciseId[]).filter(candidate =>
-    candidate !== id && exercises[candidate].group === exercises[id].group);
+    candidate !== id && exercises[candidate].group === exercises[id].group && hasEquipment(candidate, equipment));
 }
 
 interface StopInfo {
   title: string;
   type: string;
-  gear: string;
   x: number;
   y: number;
 }
@@ -161,10 +175,10 @@ export type Stop = StopInfo & (
 );
 
 export const route: Stop[] = [
-  { title: 'Первый костёр', type: 'Силовая', icon: 'strength', gear: 'Гантели · скамья', moves: ['squat', 'press', 'row'], sets: 2, x: 15.3, y: 76.4 },
-  { title: 'Лесная тропа', type: 'Эллипс', icon: 'cardio', gear: 'Эллиптический тренажёр', shortMinutes: 5, x: 38.1, y: 53.6 },
-  { title: 'Тихий подъём', type: 'Силовая', icon: 'strength', gear: 'Гантели · скамья', moves: ['row', 'squat', 'press'], sets: 2, x: 61.9, y: 60 },
-  { title: 'Большая поляна', type: 'Эллипс', icon: 'cardio', gear: 'Эллиптический тренажёр', shortMinutes: 6, x: 81.9, y: 25.1 }
+  { title: 'Первый костёр', type: 'Силовая', icon: 'strength', moves: ['squat', 'press', 'row'], sets: 2, x: 15.3, y: 76.4 },
+  { title: 'Лесная тропа', type: 'Эллипс', icon: 'cardio', shortMinutes: 5, x: 38.1, y: 53.6 },
+  { title: 'Тихий подъём', type: 'Силовая', icon: 'strength', moves: ['row', 'squat', 'press'], sets: 2, x: 61.9, y: 60 },
+  { title: 'Большая поляна', type: 'Эллипс', icon: 'cardio', shortMinutes: 6, x: 81.9, y: 25.1 }
 ];
 
 const extendedMoves: ExerciseId[] = ['rdl', 'shoulderPress', 'deadBug'];
@@ -178,11 +192,15 @@ export function workoutTiming(stop: Stop, short: boolean, preferences = defaultP
 }
 
 export function strengthPlan(stop: Extract<Stop, { icon: 'strength' }>, short: boolean, preferences = defaultPreferences) {
-  if (short) return stop.moves.slice(0, 2).map(exercise => ({ exercise, target: 1 }));
-
   const budget = mainBudget(preferences);
   const extraCount = budget >= 45 ? 3 : budget >= 30 ? 2 : 0;
   const moves = [...stop.moves, ...extendedMoves.slice(0, extraCount)];
+  const equipment = preferences.equipment ?? homeEquipment;
+  const available = moves.flatMap(exercise => {
+    if (hasEquipment(exercise, equipment)) return [exercise];
+    return exerciseAlternatives(exercise, equipment).slice(0, 1);
+  });
+  if (short) return available.slice(0, 2).map(exercise => ({ exercise, target: 1 }));
   const extraSets = {
     beginner: Number(budget >= 45),
     basic: Number(budget >= 30),
@@ -190,7 +208,7 @@ export function strengthPlan(stop: Extract<Stop, { icon: 'strength' }>, short: b
     advanced: 1 + Number(budget >= 30)
   }[preferences.level];
   const target = budget < 15 ? 1 : stop.sets + extraSets;
-  return moves.map(exercise => ({ exercise, target }));
+  return available.map(exercise => ({ exercise, target }));
 }
 
 export function workoutDetail(stop: Stop, short = false, preferences = defaultPreferences) {

@@ -1,4 +1,4 @@
-import type { ExerciseId, WorkoutPreferences } from '../program/@x/progress';
+import type { CardioActivity, ExerciseId, WorkoutPreferences } from '../program/@x/progress';
 
 const key = 'tropa-workouts-v1';
 
@@ -15,6 +15,7 @@ export interface Session {
   short: boolean;
   sets: SetRecord[];
   elapsed: number | null;
+  cardioActivity?: CardioActivity;
   durationSeconds?: number;
   skipped?: ExerciseId[];
 }

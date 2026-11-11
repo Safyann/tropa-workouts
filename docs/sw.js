@@ -1,5 +1,5 @@
-const version = "86ac60c7e6c9f016";
-const assets = ["assets/index-BwIpFrck.css","assets/index-DXt9khHU.js","icon-192.png","icon-512.png","icon.svg","index.html","manifest.webmanifest","map.svg"];
+const version = "626b8a365e2f4cee";
+const assets = ["assets/index-B-o43REp.js","assets/index-CIRDGwau.css","icon-192.png","icon-512.png","icon.svg","index.html","manifest.webmanifest","map.svg"];
 const scope = self.registration.scope;
 const prefix = `tropa-shell:${scope}:`;
 const cacheName = prefix + version;

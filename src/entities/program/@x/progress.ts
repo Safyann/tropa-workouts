@@ -1,2 +1,2 @@
 export type { ExerciseId } from '../model';
-export type { WorkoutPreferences } from '../preferences';
+export type { CardioActivity, WorkoutPreferences } from '../preferences';

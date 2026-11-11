@@ -4,7 +4,7 @@ import {
 } from '@dnd-kit/core';
 import { SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { exerciseAlternatives, exercises, type ExerciseId } from '../../entities/program';
+import { exerciseAlternatives, exercises, type ExerciseId, type HomeEquipment } from '../../entities/program';
 import { isPending, moveExercise, replaceExercise, toggleSkip, type PlanExercise, type StrengthWorkout } from '../../features/workout';
 
 export function WorkoutPlan({ workout, update, choose }: {
@@ -40,6 +40,7 @@ export function WorkoutPlan({ workout, update, choose }: {
       <SortableContext items={workout.plan.map(item => item.id)} strategy={verticalListSortingStrategy}>
         <ul className="plan-list">{workout.plan.map((item, index) =>
           <SortableExercise key={item.id} item={item} selected={workout.selected === index && !workout.timer}
+            equipment={workout.equipment}
             choose={() => choose(index)} replace={id => update(replaceExercise(workout, index, id))}
             skip={() => update(toggleSkip(workout, index))}/>)}</ul>
       </SortableContext>
@@ -47,9 +48,10 @@ export function WorkoutPlan({ workout, update, choose }: {
   </section>;
 }
 
-function SortableExercise({ item, selected, choose, replace, skip }: {
+function SortableExercise({ item, selected, equipment, choose, replace, skip }: {
   item: PlanExercise;
   selected: boolean;
+  equipment: readonly HomeEquipment[];
   choose: () => void;
   replace: (id: ExerciseId) => void;
   skip: () => void;
@@ -57,6 +59,7 @@ function SortableExercise({ item, selected, choose, replace, skip }: {
   const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition, isDragging } = useSortable({ id: item.id });
   const exercise = exercises[item.exercise];
   const pending = isPending(item);
+  const alternatives = exerciseAlternatives(item.exercise, equipment);
   const status = item.skipped ? 'Пропуск' : item.completed === item.target ? 'Готово' : selected ? 'Сейчас' : '';
   return <li ref={setNodeRef} style={{ transform: CSS.Transform.toString(transform), transition }}
     className={`plan-item${selected ? ' selected' : ''}${isDragging ? ' dragging' : ''}`}>
@@ -74,12 +77,12 @@ function SortableExercise({ item, selected, choose, replace, skip }: {
     </div>
     <small>{exercise.group} · {exercise.gear}</small>
     {pending && <details className="plan-options">
-      <summary>Замена или пропуск</summary>
-      <p className="hint">Если снаряд занят, выбери вариант для оставшихся подходов.</p>
-      <div className="plan-alternatives">{exerciseAlternatives(item.exercise).map(id =>
+      <summary>{alternatives.length ? 'Замена или пропуск' : 'Пропуск'}</summary>
+      {alternatives.length > 0 && <p className="hint">Если снаряд занят, выбери вариант для оставшихся подходов.</p>}
+      {alternatives.length > 0 && <div className="plan-alternatives">{alternatives.map(id =>
         <button key={id} className="secondary" onClick={() => replace(id)}>
           {exercises[id].title}<small>{exercises[id].gear}</small>
-        </button>)}</div>
+        </button>)}</div>}
       <button className="secondary" onClick={skip}>Больно · пропустить</button>
     </details>}
     {item.skipped && <button className="plan-pick" onClick={skip}>Вернуть в план</button>}

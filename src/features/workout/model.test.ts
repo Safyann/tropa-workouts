@@ -1,9 +1,24 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createWorkout, moveExercise, recordSet, remaining, replaceExercise, selectExercise, startCooldown, summarize, toggleSkip, toggleTimer } from './model';
+import { defaultPreferences } from '../../entities/program';
 
 afterEach(() => vi.useRealTimers());
 
 describe('workout', () => {
+  it('plans both strength stops without equipment and rejects unavailable replacements', () => {
+    const preferences = { ...defaultPreferences, equipment: [] };
+    const workout = createWorkout(2, 0, true, preferences);
+    if (workout.kind !== 'strength') throw new Error('Expected a strength workout');
+    expect(workout.plan.map(item => item.exercise)).toEqual(['bodySquat', 'wallPress']);
+    expect(replaceExercise(workout, 1, 'floorPress')).toBe(workout);
+    expect(replaceExercise(workout, 1, 'pushup').plan[1].exercise).toBe('pushup');
+  });
+
+  it('uses the existing cardio timer for walking and records the activity', () => {
+    const workout = createWorkout(1, 0, true, { ...defaultPreferences, equipment: ['dumbbells'] });
+    expect(workout).toMatchObject({ kind: 'cardio', activity: 'walking', seconds: 300 });
+    expect(summarize(workout).cardioActivity).toBe('walking');
+  });
   it('uses one set each for two exercises in the short strength workout', () => {
     expect(createWorkout(0, 0, false)).toMatchObject({
       plan: [{ exercise: 'squat', target: 2 }, { exercise: 'press', target: 2 }, { exercise: 'row', target: 2 }]

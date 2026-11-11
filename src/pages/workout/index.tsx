@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
-import { exercises, route } from '../../entities/program';
+import { cardioTitles, exercises, route } from '../../entities/program';
 import { formatTime, type Session } from '../../entities/progress';
 import { isPending, recordSet, remaining, selectExercise, startCooldown, toggleTimer, type StrengthWorkout, type Workout } from '../../features/workout';
 import { Icon } from '../../shared/ui/Icon';
@@ -79,14 +79,14 @@ export function WorkoutPage({ workout, history, update, finish }: Props) {
     {workout.block ? <div className="workout-card workout-step" key={workout.block.type}>
       <h2>{warmup ? 'Разминка' : 'Заминка'}</h2>
       <p className="subtitle">{warmup
-        ? 'Начни с лёгкой ходьбы на месте или спокойного темпа на эллипсе.'
+        ? 'Начни с лёгкой ходьбы на месте.'
         : 'Постепенно сбавь темп и закончи спокойной ходьбой.'}</p>
       {timerView(warmup ? 'ТАЙМЕР РАЗМИНКИ' : 'ТАЙМЕР ЗАМИНКИ')}
       <button className="primary" onClick={() => warmup ? update({ ...workout, block: null }) : finish(workout)}>
         {warmup ? 'К основной части' : 'Сохранить занятие'} <Icon name={warmup ? 'arrow' : 'check'}/>
       </button>
     </div> : workout.kind === 'cardio' ? <>
-      <p className="subtitle">Эллипс · {workout.mainMinutes} мин</p>
+      <p className="subtitle">{cardioTitles[workout.activity]} · {workout.mainMinutes} мин</p>
       <div className="workout-card workout-step">{timerView('ТАЙМЕР ЗАНЯТИЯ')}
         <button className="primary" onClick={() => finishMain(workout)} disabled={left === workout.seconds}>
           {endLabel} <Icon name="check"/>
@@ -121,6 +121,7 @@ function StrengthSet({ workout, history, update, finish, itemIndex, headingRef, 
   const item = workout.plan[itemIndex];
   const id = item.exercise;
   const exercise = exercises[id];
+  const canAddWeight = exercise.weighted && workout.equipment.includes('dumbbells');
   const finalSet = item.completed + 1 === item.target && workout.plan.filter(isPending).length === 1;
   const prior = [...workout.sets].reverse().find(set => set.exercise === id && set.weight !== null)
     ?? [...history].reverse().flatMap(entry => [...entry.sets].reverse()).find(set => set.exercise === id && set.weight !== null);
@@ -129,7 +130,7 @@ function StrengthSet({ workout, history, update, finish, itemIndex, headingRef, 
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const number = (name: string) => data.get(name) === '' ? null : Number(data.get(name));
-    const updated = recordSet(workout, { weight: exercise.weighted ? number('weight') : null, reps: number('reps') });
+    const updated = recordSet(workout, { weight: canAddWeight ? number('weight') : null, reps: number('reps') });
     if (finalSet) finish(updated);
     else update(updated);
   }
@@ -143,7 +144,7 @@ function StrengthSet({ workout, history, update, finish, itemIndex, headingRef, 
       {exercise.reference && <a className="reference" href={exercise.reference} target="_blank" rel="noreferrer">Техника подробно ↗</a>}
       <form onSubmit={submit}>
         <div className="fields">
-          {exercise.weighted && <label>Вес одной гантели, кг<input name="weight" type="number" inputMode="decimal" min="0" step="any" placeholder={String(prior?.weight ?? 0)}/></label>}
+          {canAddWeight && <label>Вес одной гантели, кг<input name="weight" type="number" inputMode="decimal" min="0" step="any" placeholder={String(prior?.weight ?? 0)}/></label>}
           <label>Повторы{exercise.perSide ? ' на сторону' : ''}<input name="reps" type="number" inputMode="numeric" min="1" step="1" placeholder="8"/></label>
         </div>
         <p className="hint">Ориентир — 8 повторов. {prior ? `Прошлый вес: ${prior.weight} кг.` : 'Можно записать фактический результат или оставить поля пустыми.'}</p>

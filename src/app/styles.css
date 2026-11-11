@@ -105,6 +105,9 @@ h2 { font-weight: 800; font-size: clamp(1.375rem, 3.6vw, 2rem); letter-spacing: 
 .day-preview { width: 100%; margin-top: .875rem; font-size: .875rem; }
 .day-preview summary, .plan-options summary, .level-guide summary { cursor: pointer; font-weight: 700; }
 .profile-settings .level-guide { margin-top: 1rem; }
+.home-equipment { min-width: 0; margin-inline: 0; }
+.home-equipment legend { padding-inline: .375rem; font-weight: 750; }
+.home-equipment .hint { margin: 0; }
 .settings-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .625rem; margin-top: .75rem; }
 .settings-fields label { display: grid; grid-template-rows: 1fr auto; gap: .25rem; color: var(--muted); font-weight: 650; }
 .settings-fields select, .settings-fields input[type=number] { width: 100%; min-width: 0; height: 2.75rem; background: var(--surface); border: 1px solid var(--border); border-radius: .375rem; padding: .375rem .5rem; color: var(--ink); font: inherit; }

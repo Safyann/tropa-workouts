@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { defaultWeeklyGoal, levels, recommendLevel, weeklyGoals, type WorkoutLevel, type WorkoutPreferences } from '../../entities/program';
+import { defaultWeeklyGoal, equipmentLabels, homeEquipment, levels, recommendLevel, weeklyGoals, type WorkoutLevel, type WorkoutPreferences } from '../../entities/program';
 
 const levelOptions = Object.keys(levels) as WorkoutLevel[];
 
@@ -7,6 +7,7 @@ export function SettingsPage({ preferences, change }: {
   preferences: WorkoutPreferences;
   change: (preferences: WorkoutPreferences) => void;
 }) {
+  const equipment = preferences.equipment ?? homeEquipment;
   return <section className="narrow">
     <a className="back" href="#map">← К карте</a>
     <h1 tabIndex={-1}>Настройки профиля<span>.</span></h1>
@@ -32,6 +33,19 @@ export function SettingsPage({ preferences, change }: {
       </div>
       <LevelGuide apply={level => change({ ...preferences, level })}/>
     </div>
+    <fieldset className="workout-card home-equipment">
+      <legend>Инвентарь дома</legend>
+      <p className="hint">Отметь, чем можешь пользоваться. Если убрать всё, план подберёт упражнения с весом тела и ходьбу.</p>
+      <div className="settings-fields">
+        {homeEquipment.map(item => <label key={item} className="settings-toggle">
+          <input type="checkbox" checked={equipment.includes(item)} onChange={event => change({
+            ...preferences,
+            equipment: event.target.checked ? [...equipment, item] : equipment.filter(selected => selected !== item)
+          })}/>
+          {equipmentLabels[item]}
+        </label>)}
+      </div>
+    </fieldset>
   </section>;
 }
 

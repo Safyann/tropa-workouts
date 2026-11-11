@@ -1,4 +1,4 @@
-import { exercises, route } from '../../entities/program';
+import { cardioTitles, exercises, route } from '../../entities/program';
 import { formatTime, type Session } from '../../entities/progress';
 import { Icon } from '../../shared/ui/Icon';
 
@@ -16,16 +16,17 @@ export function HistoryPage({ sessions, stopIndex }: { sessions: Session[]; stop
       ? <div className="empty"><h2>Здесь пока тихо</h2><p>Первая тренировка появится после того, как зажжёшь костёр.</p><a className="secondary" href="#map">К карте</a></div>
       : [...entries].reverse().map((entry, index) => {
         const entryStop = route[entry.stop];
+        const activity = entry.cardioActivity ? cardioTitles[entry.cardioActivity] : entryStop.type;
         return <details className="history-row" key={`${entry.round}-${entry.stop}`} open={stop && index === 0 ? true : undefined}>
           <summary><span className="type-icon"><Icon name={entryStop.icon}/></span>
-            <span><strong>{entryStop.title}</strong><small>{entryStop.type} · {entry.short ? 'Короткое занятие' : 'Обычное занятие'}
+            <span><strong>{entryStop.title}</strong><small>{activity} · {entry.short ? 'Короткое занятие' : 'Обычное занятие'}
               {entry.durationSeconds !== undefined && ` · ${formatTime(entry.durationSeconds)}`}</small></span>
             <time dateTime={new Date(entry.date).toISOString()}>{dateFormat.format(entry.date)}</time>
           </summary>
           <div className="history-detail">
             {entry.durationSeconds !== undefined && <p className="history-duration">Всё занятие · {formatTime(entry.durationSeconds)}</p>}
             {entry.elapsed !== null
-            ? <>Время на эллипсе: {formatTime(entry.elapsed)}</>
+            ? <>Основная часть · {formatTime(entry.elapsed)}</>
             : <><ul>{[...new Set(entry.sets.map(set => set.exercise))].map(id => {
               const sets = entry.sets.filter(set => set.exercise === id);
               return <li key={id}>{exercises[id].title} <span>{sets.map(set =>

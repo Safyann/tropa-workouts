@@ -1,4 +1,4 @@
-import { defaultPreferences, exerciseAlternatives, levels, route, strengthPlan, workoutTiming, type ExerciseId } from '../../entities/program';
+import { cardioActivity, defaultPreferences, exerciseAlternatives, homeEquipment, levels, route, strengthPlan, workoutTiming, type CardioActivity, type ExerciseId, type HomeEquipment } from '../../entities/program';
 import type { Session, SetRecord } from '../../entities/progress';
 
 interface Timer {
@@ -36,9 +36,10 @@ export type StrengthWorkout = WorkoutInfo & {
   sets: SetRecord[];
   timer: Timer | null;
   restSeconds: number;
+  equipment: readonly HomeEquipment[];
 };
 
-export type Workout = StrengthWorkout | (WorkoutInfo & { kind: 'cardio'; seconds: number; timer: Timer });
+export type Workout = StrengthWorkout | (WorkoutInfo & { kind: 'cardio'; activity: CardioActivity; seconds: number; timer: Timer });
 
 export function createWorkout(index: number, round: number, short: boolean, preferences = defaultPreferences): Workout {
   const stop = route[index];
@@ -52,11 +53,11 @@ export function createWorkout(index: number, round: number, short: boolean, pref
   };
   if (stop.icon === 'cardio') {
     const seconds = timing.main * 60;
-    return { ...info, kind: 'cardio', seconds, timer: { remaining: seconds, end: null } };
+    return { ...info, kind: 'cardio', activity: cardioActivity(preferences.equipment), seconds, timer: { remaining: seconds, end: null } };
   }
   const plan = strengthPlan(stop, short, preferences).map((item, id) => ({ ...item, id, completed: 0, skipped: false }));
   const restSeconds = levels[preferences.level].rest;
-  return { ...info, kind: 'strength', plan, selected: 0, sets: [], timer: null, restSeconds };
+  return { ...info, kind: 'strength', plan, selected: 0, sets: [], timer: null, restSeconds, equipment: preferences.equipment ?? homeEquipment };
 }
 
 function makeBlock(type: WorkoutBlock['type'], minutes: number): WorkoutBlock {
@@ -105,7 +106,7 @@ function updateExercise(workout: StrengthWorkout, index: number, item: PlanExerc
 
 export function replaceExercise(workout: StrengthWorkout, index: number, alternative: ExerciseId): StrengthWorkout {
   const item = workout.plan[index];
-  if (!item || !isPending(item) || !exerciseAlternatives(item.exercise).includes(alternative)) return workout;
+  if (!item || !isPending(item) || !exerciseAlternatives(item.exercise, workout.equipment).includes(alternative)) return workout;
   return { ...workout, plan: updateExercise(workout, index, { ...item, exercise: alternative }) };
 }
 
@@ -140,6 +141,7 @@ export function summarize(workout: Workout): Session {
     durationSeconds: Math.max(0, Math.floor((date - workout.startedAt) / 1000)),
     sets: workout.kind === 'strength' ? workout.sets : [],
     elapsed: workout.kind === 'cardio' ? workout.seconds - remaining(workout.timer, date) : null,
+    ...(workout.kind === 'cardio' ? { cardioActivity: workout.activity } : {}),
     ...(skipped.length ? { skipped } : {})
   };
 }

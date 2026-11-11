@@ -126,7 +126,7 @@ function SortableExercise({
   } = useSortable({ id: item.id });
   const exercise = exercises[item.exercise];
   const pending = isPending(item);
-  const alternatives = exerciseAlternatives(item.exercise, equipment);
+  const alternatives = pending ? exerciseAlternatives(item.exercise, equipment, 6) : [];
   const status = item.skipped
     ? 'Пропуск'
     : item.completed === item.target
@@ -189,7 +189,7 @@ function SortableExercise({
             <div className={styles.planAlternatives}>
               {alternatives.map((id) => (
                 <button key={id} className={styles.alternative} onClick={() => replace(id)}>
-                  {exercises[id].title}
+                  <span>{exercises[id].title}</span>
                   <small>{exercises[id].gear}</small>
                 </button>
               ))}

@@ -78,7 +78,7 @@ export function HistoryPage({ sessions, stopIndex }: { sessions: Session[]; stop
                           const sets = entry.sets.filter((set) => set.exercise === id);
                           return (
                             <li key={id}>
-                              {exercises[id].title}{' '}
+                              <b>{exercises[id]?.title ?? 'Упражнение'}</b>{' '}
                               <span>
                                 {sets
                                   .map(
@@ -99,7 +99,10 @@ export function HistoryPage({ sessions, stopIndex }: { sessions: Session[]; stop
                       {!!entry.skipped?.length && (
                         <p className={ui.hint}>
                           Пропущены подходы:{' '}
-                          {entry.skipped.map((id) => exercises[id].title).join(', ')}.
+                          {entry.skipped
+                            .map((id) => exercises[id]?.title ?? 'Упражнение')
+                            .join(', ')}
+                          .
                         </p>
                       )}
                     </>

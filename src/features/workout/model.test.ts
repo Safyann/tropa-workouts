@@ -12,7 +12,7 @@ import {
   toggleSkip,
   toggleTimer,
 } from './model';
-import { defaultPreferences } from '../../entities/program';
+import { defaultPreferences, exercises } from '../../entities/program';
 
 afterEach(() => vi.useRealTimers());
 
@@ -45,6 +45,58 @@ describe('workout', () => {
         { exercise: 'press', target: 1 },
       ],
     });
+  });
+
+  it('builds a full workout for one selected muscle group', () => {
+    const workout = createWorkout(0, 0, false, {
+      ...defaultPreferences,
+      muscleGroups: ['Мышцы корпуса'],
+    });
+
+    if (workout.kind !== 'strength') throw new Error('Expected a strength workout');
+    expect(workout.plan).toHaveLength(1);
+    expect(workout.plan[0]).toMatchObject({
+      exercise: expect.stringMatching(/^kinetic:/),
+      target: 2,
+    });
+    expect(exercises[workout.plan[0].exercise].group).toBe('Мышцы корпуса');
+  });
+
+  it('covers every available selected group in a short workout without equipment', () => {
+    const workout = createWorkout(0, 0, true, {
+      ...defaultPreferences,
+      equipment: [],
+      muscleGroups: [
+        'Грудь и трицепсы',
+        'Спина',
+        'Задняя поверхность бедра и ягодицы',
+        'Плечи',
+        'Мышцы корпуса',
+      ],
+    });
+
+    if (workout.kind !== 'strength') throw new Error('Expected a strength workout');
+    expect(workout.plan.map(({ exercise }) => exercises[exercise].group)).toEqual([
+      'Грудь и трицепсы',
+      'Спина',
+      'Задняя поверхность бедра и ягодицы',
+      'Плечи',
+      'Мышцы корпуса',
+    ]);
+    for (const item of workout.plan) {
+      expect(item).toMatchObject({ exercise: expect.stringMatching(/^kinetic:/), target: 1 });
+      expect(exercises[item.exercise].needs).toEqual([]);
+    }
+  });
+
+  it('uses the route plan if no selected group has an exercise for the available equipment', () => {
+    const preferences = { ...defaultPreferences, equipment: [] };
+    const regular = createWorkout(0, 0, false, preferences);
+    const focused = createWorkout(0, 0, false, { ...preferences, muscleGroups: ['Бицепс'] });
+    if (regular.kind !== 'strength' || focused.kind !== 'strength')
+      throw new Error('Expected strength workouts');
+
+    expect(focused.plan).toEqual(regular.plan);
   });
 
   it('records the actual set and starts a 60-second rest', () => {

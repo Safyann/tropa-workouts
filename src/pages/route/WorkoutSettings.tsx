@@ -1,4 +1,10 @@
-import { durations, optionalBlockMinutes, type WorkoutPreferences } from '../../entities/program';
+import {
+  blockActivityLabel,
+  durations,
+  optionalBlockMinutes,
+  workoutBlockTitles,
+  type WorkoutPreferences,
+} from '../../entities/program';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './Route.module.css';
 import formStyles from '../../shared/ui/SettingsForm.module.css';
@@ -30,22 +36,31 @@ export function WorkoutSettings({
             ))}
           </select>
         </label>
-        <label className={formStyles.toggle}>
-          <input
-            type="checkbox"
-            checked={preferences.warmup}
-            onChange={(event) => change({ ...preferences, warmup: event.target.checked })}
-          />{' '}
-          Разминка · {optionalBlockMinutes} мин
-        </label>
-        <label className={formStyles.toggle}>
-          <input
-            type="checkbox"
-            checked={preferences.cooldown}
-            onChange={(event) => change({ ...preferences, cooldown: event.target.checked })}
-          />{' '}
-          Заминка · {optionalBlockMinutes} мин
-        </label>
+        {(['warmup', 'cooldown'] as const).map((type) => {
+          const activityKey = `${type}Activity` as const;
+          return (
+            <label className={formStyles.wide} key={type}>
+              {workoutBlockTitles[type]}
+              <select
+                value={preferences[type] ? (preferences[activityKey] ?? 'walking') : 'off'}
+                onChange={(event) => {
+                  const value = event.target.value;
+                  change({
+                    ...preferences,
+                    [type]: value !== 'off',
+                    [activityKey]: value === 'stretching' ? 'stretching' : 'walking',
+                  });
+                }}
+              >
+                <option value="off">Без {type === 'warmup' ? 'разминки' : 'заминки'}</option>
+                <option value="walking">Ходьба · {optionalBlockMinutes} мин</option>
+                <option value="stretching">
+                  {blockActivityLabel(type, 'stretching')} · {optionalBlockMinutes} мин
+                </option>
+              </select>
+            </label>
+          );
+        })}
       </div>
       <p className={ui.hint}>
         Разминка и заминка входят в выбранное время. Для силовой это ориентир.

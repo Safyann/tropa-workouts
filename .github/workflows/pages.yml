@@ -14,11 +14,7 @@ concurrency:
 
 jobs:
   build:
-    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      deployment: false
     env:
       HUSKY: '0'
     steps:
@@ -29,9 +25,6 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
-        env:
-          VITE_EXERCISE_DB_API_ORIGIN: ${{ vars.VITE_EXERCISE_DB_API_ORIGIN }}
-          VITE_EXERCISE_DB_MEDIA_ORIGIN: ${{ vars.VITE_EXERCISE_DB_MEDIA_ORIGIN }}
       - uses: actions/upload-pages-artifact@v4
         with:
           path: dist

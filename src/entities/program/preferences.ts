@@ -11,6 +11,31 @@ export const equipmentLabels: Record<HomeEquipment, string> = {
 export const cardioTitles = { elliptical: 'Эллипс', walking: 'Ходьба' } as const;
 export type CardioActivity = keyof typeof cardioTitles;
 
+export type WorkoutBlockActivity = 'walking' | 'stretching';
+export type WorkoutBlockType = 'warmup' | 'cooldown';
+export const workoutBlockTitles = { warmup: 'Разминка', cooldown: 'Заминка' } as const;
+
+export function blockActivityLabel(
+  type: WorkoutBlockType,
+  activity: WorkoutBlockActivity = 'walking',
+) {
+  if (activity === 'walking') return 'Ходьба';
+  return type === 'warmup' ? 'Динамическая растяжка' : 'Спокойная растяжка';
+}
+
+export const muscleGroups = [
+  'Ноги и ягодицы',
+  'Грудь и трицепсы',
+  'Спина',
+  'Задняя поверхность бедра и ягодицы',
+  'Плечи',
+  'Бицепс',
+  'Предплечья',
+  'Икры',
+  'Мышцы корпуса',
+] as const;
+export type MuscleGroup = (typeof muscleGroups)[number];
+
 export const levels = {
   beginner: {
     title: 'Новичок',
@@ -42,8 +67,11 @@ export interface WorkoutPreferences {
   minutes: (typeof durations)[number];
   warmup: boolean;
   cooldown: boolean;
+  warmupActivity?: WorkoutBlockActivity;
+  cooldownActivity?: WorkoutBlockActivity;
   weeklyGoal?: (typeof weeklyGoals)[number];
   equipment?: readonly HomeEquipment[];
+  muscleGroups?: readonly MuscleGroup[];
 }
 
 export function cardioActivity(

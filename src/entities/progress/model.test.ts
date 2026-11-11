@@ -1,5 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { nextStop, readProgress, saveProgress, weekCount, type Session } from './model';
+import {
+  nextStop,
+  progressStorageKey,
+  readProgress,
+  saveProgress,
+  weekCount,
+  type Session,
+} from './model';
 
 function entry(stop: number, round = 0, date = 0): Session {
   return { date, stop, round, short: true, sets: [], elapsed: null };
@@ -32,6 +39,39 @@ describe('progress', () => {
     const sessions = Array.from({ length: 4 }, (_, index) => entry(index));
     expect(nextStop({ version: 1, round: 0, sessions }, 4)).toBe(-1);
     expect(nextStop({ version: 1, round: 1, sessions }, 4)).toBe(0);
+  });
+
+  it('restores valid history even when other sessions and sets are damaged', () => {
+    const set = { exercise: 'retired-exercise', weight: 2.5, reps: 8 };
+    localStorage.setItem(
+      progressStorageKey,
+      JSON.stringify({
+        version: 1,
+        round: 0,
+        sessions: [
+          null,
+          { ...entry(0), sets: [null, set], skipped: 'squat' },
+          { ...entry(1), stop: 99 },
+          { ...entry(2), date: Number.MAX_SAFE_INTEGER },
+        ],
+        preferences: {
+          level: 'beginner',
+          minutes: 20,
+          warmup: true,
+          cooldown: false,
+          equipment: 42,
+        },
+      }),
+    );
+    const progress = readProgress();
+    expect(progress.sessions).toEqual([{ ...entry(0), sets: [set] }]);
+    expect(progress.preferences).toEqual({
+      level: 'beginner',
+      minutes: 20,
+      warmup: true,
+      cooldown: false,
+    });
+    expect(nextStop(progress, 4)).toBe(1);
   });
 
   it('persists workout preferences alongside existing session history', () => {

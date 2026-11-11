@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
+import { defaultPreferences } from '../../entities/program';
 import type { Progress } from '../../entities/progress';
 import { readWorkoutDraft, saveWorkoutDraft, syncWorkoutDraft, workoutDraftKey } from './draft';
 import {
@@ -7,6 +8,7 @@ import {
   recordSet,
   replaceExercise,
   selectExercise,
+  startCooldown,
   summarize,
 } from './model';
 
@@ -22,6 +24,37 @@ beforeEach(() => {
 });
 
 afterEach(() => vi.unstubAllGlobals());
+
+it('resumes a Kinetic plan with stretching options and recorded sets', () => {
+  const workout = createWorkout(0, 0, true, {
+    ...defaultPreferences,
+    muscleGroups: ['Спина'],
+    warmup: true,
+    warmupActivity: 'stretching',
+    cooldown: true,
+    cooldownActivity: 'stretching',
+  });
+  if (workout.kind !== 'strength') throw new Error('Expected a strength workout');
+  saveWorkoutDraft(workout);
+  expect(readWorkoutDraft(progress)?.block).toMatchObject({
+    type: 'warmup',
+    activity: 'stretching',
+    timer: { remaining: 300 },
+  });
+
+  const completed = recordSet({ ...workout, block: null }, { weight: null, reps: 8 });
+  saveWorkoutDraft(completed);
+  const resumed = readWorkoutDraft(progress);
+  if (!resumed) throw new Error('Expected a saved workout');
+  expect(startCooldown(resumed)?.block).toMatchObject({
+    type: 'cooldown',
+    activity: 'stretching',
+    timer: { remaining: 300 },
+  });
+  expect(summarize(resumed).sets).toEqual([
+    { exercise: expect.stringMatching(/^kinetic:/), weight: null, reps: 8 },
+  ]);
+});
 
 it('restores recorded sets, timer, order and exercise replacement after reload', () => {
   const workout = createWorkout(0, 0, false);

@@ -26,6 +26,10 @@ function isTimer(value: unknown): boolean {
   return isRecord(value) && isCount(value.remaining) && (value.end === null || isCount(value.end));
 }
 
+function isOptionalBlockActivity(value: unknown) {
+  return value === undefined || value === 'walking' || value === 'stretching';
+}
+
 function isPlanExercise(value: unknown): value is PlanExercise {
   return (
     isRecord(value) &&
@@ -65,6 +69,7 @@ function isWorkoutDraft(value: unknown): value is Workout {
     !isCount(value.startedAt) ||
     !isCount(value.mainMinutes) ||
     !isCount(value.cooldownMinutes) ||
+    !isOptionalBlockActivity(value.cooldownActivity) ||
     typeof value.short !== 'boolean'
   )
     return false;
@@ -73,6 +78,7 @@ function isWorkoutDraft(value: unknown): value is Workout {
     block !== null &&
     (!isRecord(block) ||
       (block.type !== 'warmup' && block.type !== 'cooldown') ||
+      !isOptionalBlockActivity(block.activity) ||
       !isTimer(block.timer))
   )
     return false;

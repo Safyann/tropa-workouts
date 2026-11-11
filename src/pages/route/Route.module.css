@@ -198,6 +198,12 @@
   margin-top: 0.875rem;
   font-size: 0.875rem;
 }
+.muscleGroups {
+  min-width: 0;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  border: 0;
+}
 .equipmentIntro {
   display: flex;
   align-items: center;

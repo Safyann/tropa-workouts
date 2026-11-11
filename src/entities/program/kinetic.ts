@@ -1,0 +1,113 @@
+import catalog from './kinetic.ru.json';
+import { equipmentLabels, type HomeEquipment, type MuscleGroup } from './preferences';
+import type { Exercise } from './model';
+
+export type KineticExerciseId = `kinetic:${string}`;
+
+const groupsByMuscle: Partial<Record<string, MuscleGroup>> = {
+  quadriceps: 'Ноги и ягодицы',
+  abductors: 'Ноги и ягодицы',
+  adductors: 'Ноги и ягодицы',
+  chest: 'Грудь и трицепсы',
+  triceps: 'Грудь и трицепсы',
+  lats: 'Спина',
+  'middle-back': 'Спина',
+  'lower-back': 'Спина',
+  traps: 'Спина',
+  hamstrings: 'Задняя поверхность бедра и ягодицы',
+  glutes: 'Задняя поверхность бедра и ягодицы',
+  shoulders: 'Плечи',
+  biceps: 'Бицепс',
+  forearms: 'Предплечья',
+  calves: 'Икры',
+  abdominals: 'Мышцы корпуса',
+};
+
+const gearLabels: Record<string, string> = {
+  'Ab Wheel': 'Ролик для пресса',
+  'Adjustable bench': 'Регулируемая скамья',
+  Bands: 'Эспандер',
+  Barbell: 'Штанга',
+  'Battle Ropes': 'Тренировочные канаты',
+  'Bench press station': 'Стойка для жима лёжа',
+  'Body Only': 'Без инвентаря',
+  Cable: 'Блочный тренажёр',
+  'Climbing Rope': 'Канат для лазания',
+  'Dip station': 'Брусья',
+  Dumbbell: 'Гантели',
+  'E-z Curl Bar': 'Гриф EZ',
+  'Exercise Ball': 'Фитбол',
+  'Flat bench': 'Горизонтальная скамья',
+  'Foam Roll': 'Массажный ролик',
+  'Gymnastic Rings': 'Гимнастические кольца',
+  'Jump rope': 'Скакалка',
+  Kettlebells: 'Гири',
+  Landmine: 'Штанга с упором',
+  Machine: 'Тренажёр',
+  'Medicine Ball': 'Медбол',
+  Other: 'Другой инвентарь',
+  'Plyo box': 'Тумба для прыжков',
+  'Preacher curl bench': 'Скамья Скотта',
+  'Pull-Up Bar': 'Турник',
+  Sandbag: 'Мешок с песком',
+  Sled: 'Тренировочные сани',
+  Sliders: 'Диски для скольжения',
+  'Squat rack': 'Стойка для приседаний',
+  'Suspension Trainer': 'Тренировочные петли',
+  Tire: 'Покрышка',
+  'Trap Bar': 'Трэп-гриф',
+  'Weight Plate': 'Диск для штанги',
+};
+
+export const kineticCatalog = catalog.map((item) => {
+  const { title, hasCues, videoId } = item;
+  const needs = item.needs as HomeEquipment[] | null;
+  const groups = item.muscles.flatMap((muscle) => groupsByMuscle[muscle] ?? []);
+  return {
+    id: `kinetic:${item.id}` as KineticExerciseId,
+    title,
+    slug: item.slug,
+    searchLabels: [item.originalTitle, ...item.muscles, ...item.equipment],
+    groups: [...new Set(groups)],
+    gear: needs
+      ? needs.map((item) => equipmentLabels[item]).join(', ') || 'Без инвентаря'
+      : item.equipment.map((name) => gearLabels[name] ?? 'Другой инвентарь').join(', ') ||
+        'Инвентарь не указан',
+    needs,
+    hasCues,
+    video:
+      videoId && /^[\w-]{11}$/.test(videoId)
+        ? `https://www.youtube.com/watch?v=${videoId}`
+        : undefined,
+    strength: item.strength,
+    difficulty: item.difficulty,
+  };
+});
+
+export function kineticVideo(slug: string) {
+  return kineticCatalog.find((exercise) => exercise.slug === slug)?.video;
+}
+
+export async function loadKineticCues(id: KineticExerciseId): Promise<readonly string[]> {
+  const { default: cues } = await import('./kinetic.cues.ru.json');
+  const byId: Record<string, string[]> = cues;
+  return byId[id.slice('kinetic:'.length)] ?? [];
+}
+
+export const kineticStrengthExercises = kineticCatalog.flatMap((item) => {
+  const [group] = item.groups;
+  if (!item.strength || item.needs === null || !group || !item.hasCues) return [];
+  return [
+    {
+      id: item.id,
+      title: item.title,
+      group,
+      gear: item.gear,
+      needs: item.needs,
+      weighted: item.needs.includes('dumbbells'),
+      cues: item.id,
+      video: item.video,
+      difficulty: item.difficulty,
+    } satisfies Exercise & { id: KineticExerciseId; difficulty: string | null },
+  ];
+});

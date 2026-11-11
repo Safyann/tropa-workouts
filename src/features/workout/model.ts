@@ -10,6 +10,8 @@ import {
   type CardioActivity,
   type ExerciseId,
   type HomeEquipment,
+  type WorkoutBlockActivity,
+  type WorkoutBlockType,
 } from '../../entities/program';
 import type { Session, SetRecord } from '../../entities/progress';
 
@@ -25,11 +27,13 @@ interface WorkoutInfo {
   startedAt: number;
   mainMinutes: number;
   cooldownMinutes: number;
+  cooldownActivity?: WorkoutBlockActivity;
   block: WorkoutBlock | null;
 }
 
 interface WorkoutBlock {
-  type: 'warmup' | 'cooldown';
+  type: WorkoutBlockType;
+  activity?: WorkoutBlockActivity;
   timer: Timer;
 }
 
@@ -70,7 +74,8 @@ export function createWorkout(
     startedAt: Date.now(),
     mainMinutes: timing.main,
     cooldownMinutes: timing.cooldown,
-    block: timing.warmup ? makeBlock('warmup', timing.warmup) : null,
+    cooldownActivity: preferences.cooldownActivity,
+    block: timing.warmup ? makeBlock('warmup', timing.warmup, preferences.warmupActivity) : null,
   };
   if (stop.icon === 'cardio') {
     const seconds = timing.main * 60;
@@ -101,13 +106,17 @@ export function createWorkout(
   };
 }
 
-function makeBlock(type: WorkoutBlock['type'], minutes: number): WorkoutBlock {
-  return { type, timer: { remaining: minutes * 60, end: null } };
+function makeBlock(
+  type: WorkoutBlockType,
+  minutes: number,
+  activity: WorkoutBlockActivity = 'walking',
+): WorkoutBlock {
+  return { type, activity, timer: { remaining: minutes * 60, end: null } };
 }
 
 export function startCooldown(workout: Workout, now = Date.now()): Workout | null {
   if (!workout.cooldownMinutes || workout.block) return null;
-  const block = makeBlock('cooldown', workout.cooldownMinutes);
+  const block = makeBlock('cooldown', workout.cooldownMinutes, workout.cooldownActivity);
   if (workout.kind === 'cardio') {
     return { ...workout, block, timer: { remaining: remaining(workout.timer, now), end: null } };
   }

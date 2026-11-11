@@ -1,5 +1,12 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
-import { cardioTitles, exercises, route } from '../../entities/program';
+import {
+  blockActivityLabel,
+  cardioTitles,
+  ExerciseInstructions,
+  exercises,
+  route,
+  workoutBlockTitles,
+} from '../../entities/program';
 import { formatTime, type Session } from '../../entities/progress';
 import {
   isLastSet,
@@ -13,13 +20,23 @@ import {
   type Workout,
 } from '../../features/workout';
 import { Icon } from '../../shared/ui/Icon';
-import { ExerciseGif } from '../../shared/ui/ExerciseGif';
-import gifStyles from '../../shared/ui/ExerciseGif.module.css';
-import { exerciseGifUrl } from '../../shared/api/exerciseDb';
 import { Demonstration } from './Demonstration';
 import { WorkoutPlan } from './WorkoutPlan';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './Workout.module.css';
+
+const blockInstructions = {
+  warmup: {
+    walking: 'Начни с лёгкой ходьбы на месте.',
+    stretching:
+      'Плавно повторяй движения для мышц, которые будут работать. Например, сделай круги плечами или неглубокие выпады.',
+  },
+  cooldown: {
+    walking: 'Постепенно сбавь темп и закончи спокойной ходьбой.',
+    stretching:
+      'Плавно растяни мышцы, которые работали. Задержись в удобном положении и дыши спокойно.',
+  },
+};
 
 interface Props {
   workout: Workout;
@@ -65,10 +82,15 @@ export function WorkoutPage({
   const timer = workout.block?.timer ?? workout.timer;
   useEffect(() => {
     if (!timer || timer.end === null) return;
+    let displayedSeconds: number | undefined;
     const tick = () => {
       const timestamp = Date.now();
-      setNow(timestamp);
-      if (timer.end !== null && timestamp >= timer.end) window.clearInterval(interval);
+      const seconds = remaining(timer, timestamp);
+      if (seconds !== displayedSeconds) {
+        displayedSeconds = seconds;
+        setNow(timestamp);
+      }
+      if (seconds === 0) window.clearInterval(interval);
     };
     const interval = window.setInterval(tick, 250);
     tick();
@@ -105,6 +127,7 @@ export function WorkoutPage({
     else finish(completed);
   };
   const warmup = workout.block?.type === 'warmup';
+  const blockActivity = workout.block?.activity ?? 'walking';
   const endLabel = workout.cooldownMinutes ? 'Перейти к заминке' : 'Завершить занятие';
 
   return (
@@ -119,11 +142,10 @@ export function WorkoutPage({
       </h1>
       {workout.block ? (
         <div className={styles.step} key={workout.block.type}>
-          <h2>{warmup ? 'Разминка' : 'Заминка'}</h2>
+          <h2>{workoutBlockTitles[workout.block.type]}</h2>
           <p className={styles.stepDescription}>
-            {warmup
-              ? 'Начни с лёгкой ходьбы на месте.'
-              : 'Постепенно сбавь темп и закончи спокойной ходьбой.'}
+            {blockActivityLabel(workout.block.type, blockActivity)}.{' '}
+            {blockInstructions[workout.block.type][blockActivity]}
           </p>
           {timerView(warmup ? 'ТАЙМЕР РАЗМИНКИ' : 'ТАЙМЕР ЗАМИНКИ')}
           <button
@@ -261,12 +283,12 @@ function StrengthSet({
           {exercise.title}
         </h2>
         <Demonstration exercise={exercise} />
-        {exercise.gifId && <WorkoutGif id={exercise.gifId} title={exercise.title} />}
-        <ul className={styles.cues}>
-          {exercise.cues.map((cue) => (
-            <li key={cue}>{cue}</li>
-          ))}
-        </ul>
+        <ExerciseInstructions source={exercise.cues} className={styles.cues} />
+        {exercise.video && (
+          <a className={styles.reference} href={exercise.video} target="_blank" rel="noreferrer">
+            Видео техники на YouTube ↗
+          </a>
+        )}
         {exercise.reference && (
           <a
             className={styles.reference}
@@ -316,27 +338,5 @@ function StrengthSet({
         </form>
       </div>
     </>
-  );
-}
-
-function WorkoutGif({ id, title }: { id: string; title: string }) {
-  const [visible, setVisible] = useState(false);
-  return (
-    <div className={gifStyles.container}>
-      <button className={ui.secondary} aria-expanded={visible} onClick={() => setVisible(!visible)}>
-        {visible ? 'Скрыть GIF' : 'Показать GIF'}
-      </button>
-      {visible && (
-        <>
-          <ExerciseGif src={exerciseGifUrl(id)} title={title} />
-          <small>
-            Источник:{' '}
-            <a href="https://exercisedb.dev/docs" target="_blank" rel="noreferrer">
-              ExerciseDB / AscendAPI
-            </a>
-          </small>
-        </>
-      )}
-    </div>
   );
 }

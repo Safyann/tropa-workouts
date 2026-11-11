@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react';
 import {
+  blockActivityLabel,
   cardioActivity,
   cardioTitles,
   defaultPreferences,
@@ -17,6 +18,7 @@ import {
 } from '../../entities/program';
 import { nextStop, weekCount, type Progress } from '../../entities/progress';
 import { Icon } from '../../shared/ui/Icon';
+import { MuscleGroupPicker } from './MuscleGroupPicker';
 import { WorkoutSettings } from './WorkoutSettings';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './Route.module.css';
@@ -93,6 +95,9 @@ export function RoutePage({
                     {workoutDetail(stop, false, preferences)} · {levels[preferences.level].title}
                   </p>
                 </>
+              )}
+              {!inWorkout && stop.icon === 'strength' && (
+                <MuscleGroupPicker preferences={preferences} change={changePreferences} />
               )}
               <div className={styles.cardActions}>
                 <button className={ui.primary} onClick={() => start(false)}>
@@ -199,7 +204,12 @@ function DayPreview({ stop, preferences }: { stop: Stop; preferences: WorkoutPre
   return (
     <details className={styles.dayPreview}>
       <summary>Вся тренировка</summary>
-      {timing.warmup > 0 && <p className={ui.hint}>Разминка · {timing.warmup} мин</p>}
+      {timing.warmup > 0 && (
+        <p className={ui.hint}>
+          Разминка · {blockActivityLabel('warmup', preferences.warmupActivity)} · {timing.warmup}{' '}
+          мин
+        </p>
+      )}
       {stop.icon === 'strength' ? (
         <>
           <ul className={styles.previewPlan}>
@@ -216,8 +226,8 @@ function DayPreview({ stop, preferences }: { stop: Stop; preferences: WorkoutPre
             })}
           </ul>
           <p className={ui.hint}>
-            Ориентир для основной части — {timing.main} мин. В коротком варианте — первые{' '}
-            {strengthPlan(stop, true, preferences).length} упражнения по одному подходу.
+            Ориентир для основной части — {timing.main} мин. Короткий вариант —{' '}
+            {workoutDetail(stop, true, preferences)}. По одному подходу на упражнение.
           </p>
         </>
       ) : (
@@ -226,7 +236,12 @@ function DayPreview({ stop, preferences }: { stop: Stop; preferences: WorkoutPre
           вариант целиком · {workoutDetail(stop, true, preferences)}.
         </p>
       )}
-      {timing.cooldown > 0 && <p className={ui.hint}>Заминка · {timing.cooldown} мин</p>}
+      {timing.cooldown > 0 && (
+        <p className={ui.hint}>
+          Заминка · {blockActivityLabel('cooldown', preferences.cooldownActivity)} ·{' '}
+          {timing.cooldown} мин
+        </p>
+      )}
     </details>
   );
 }

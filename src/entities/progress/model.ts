@@ -1,4 +1,15 @@
-import type { CardioActivity, ExerciseId, WorkoutPreferences } from '../program/@x/progress';
+import {
+  cardioTitles,
+  durations,
+  homeEquipment,
+  levels,
+  muscleGroups,
+  route,
+  weeklyGoals,
+  type CardioActivity,
+  type ExerciseId,
+  type WorkoutPreferences,
+} from '../program/@x/progress';
 
 export const progressStorageKey = 'tropa-workouts-v1';
 
@@ -28,11 +39,124 @@ export interface Progress {
   preferences?: WorkoutPreferences;
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function isCount(value: unknown): value is number {
+  return typeof value === 'number' && Number.isSafeInteger(value) && value >= 0;
+}
+
+function isOneOf<T>(values: readonly T[], value: unknown): value is T {
+  return values.some((item) => item === value);
+}
+
+function isKeyOf<T extends object>(values: T, value: unknown): value is keyof T {
+  return typeof value === 'string' && Object.hasOwn(values, value);
+}
+
+function isSetRecord(value: unknown): value is SetRecord {
+  // Keep old exercise IDs so that previous workouts still appear in history.
+  if (!isRecord(value) || typeof value.exercise !== 'string' || !value.exercise) return false;
+  const { reps, weight } = value;
+  return (
+    (reps === null || (isCount(reps) && reps > 0)) &&
+    (weight === null || (typeof weight === 'number' && Number.isFinite(weight) && weight >= 0))
+  );
+}
+
+function readSession(value: unknown): Session | null {
+  if (!isRecord(value)) return null;
+  const {
+    stop,
+    round,
+    date,
+    short,
+    sets,
+    elapsed,
+    cardioActivity,
+    durationSeconds,
+    skipped,
+    partial,
+  } = value;
+  if (
+    !isCount(stop) ||
+    stop >= route.length ||
+    !isCount(round) ||
+    !isCount(date) ||
+    !Number.isFinite(new Date(date).getTime()) ||
+    typeof short !== 'boolean' ||
+    !Array.isArray(sets) ||
+    (elapsed !== null && !isCount(elapsed))
+  )
+    return null;
+
+  return {
+    stop,
+    round,
+    date,
+    short,
+    sets: sets.filter(isSetRecord),
+    elapsed,
+    ...(isKeyOf(cardioTitles, cardioActivity) && { cardioActivity }),
+    ...(isCount(durationSeconds) && { durationSeconds }),
+    ...(Array.isArray(skipped) && {
+      skipped: skipped.filter((item): item is ExerciseId => typeof item === 'string' && !!item),
+    }),
+    ...(typeof partial === 'boolean' && { partial }),
+  };
+}
+
+function readPreferences(value: unknown): WorkoutPreferences | undefined {
+  if (!isRecord(value)) return;
+  const {
+    level,
+    minutes,
+    warmup,
+    cooldown,
+    warmupActivity,
+    cooldownActivity,
+    weeklyGoal,
+    equipment,
+    muscleGroups: selected,
+  } = value;
+  if (
+    !isKeyOf(levels, level) ||
+    !isOneOf(durations, minutes) ||
+    typeof warmup !== 'boolean' ||
+    typeof cooldown !== 'boolean'
+  )
+    return;
+
+  return {
+    level,
+    minutes,
+    warmup,
+    cooldown,
+    ...(isOneOf(['walking', 'stretching'] as const, warmupActivity) && { warmupActivity }),
+    ...(isOneOf(['walking', 'stretching'] as const, cooldownActivity) && { cooldownActivity }),
+    ...(isOneOf(weeklyGoals, weeklyGoal) && { weeklyGoal }),
+    ...(Array.isArray(equipment) && {
+      equipment: equipment.filter((item) => isOneOf(homeEquipment, item)),
+    }),
+    ...(Array.isArray(selected) && {
+      muscleGroups: selected.filter((item) => isOneOf(muscleGroups, item)),
+    }),
+  };
+}
+
 export function readProgress(): Progress {
   try {
-    const saved = JSON.parse(localStorage.getItem(progressStorageKey) ?? 'null') as Progress | null;
-    if (saved?.version === 1 && Number.isInteger(saved.round) && Array.isArray(saved.sessions)) {
-      return saved;
+    const saved: unknown = JSON.parse(localStorage.getItem(progressStorageKey) ?? 'null');
+    if (
+      isRecord(saved) &&
+      saved.version === 1 &&
+      isCount(saved.round) &&
+      Array.isArray(saved.sessions)
+    ) {
+      const preferences = readPreferences(saved.preferences);
+      const sessions = saved.sessions.map(readSession).filter((session) => session !== null);
+      return { version: 1, round: saved.round, sessions, ...(preferences && { preferences }) };
     }
   } catch {
     // The route is still usable if browser storage is unavailable.

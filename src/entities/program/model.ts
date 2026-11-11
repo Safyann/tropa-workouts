@@ -2,35 +2,32 @@ import {
   defaultPreferences,
   homeEquipment,
   mainBudget,
+  muscleGroups,
   optionalBlockMinutes,
   type HomeEquipment,
+  type MuscleGroup,
 } from './preferences';
+import { kineticStrengthExercises, kineticVideo, type KineticExerciseId } from './kinetic';
 
 type Point = [number, number];
 type Pose = Point[];
 
 export interface Exercise {
   title: string;
-  group:
-    | 'Ноги и ягодицы'
-    | 'Грудь и трицепсы'
-    | 'Спина'
-    | 'Задняя поверхность бедра и ягодицы'
-    | 'Плечи'
-    | 'Мышцы корпуса';
+  group: MuscleGroup;
   gear: string;
   needs?: readonly HomeEquipment[];
   weighted: boolean;
   perSide?: boolean;
-  cues: string[];
+  cues: readonly string[] | KineticExerciseId;
   equipment?: string;
   poses?: [Pose, Pose];
-  gifId?: string;
+  video?: string;
   support?: string;
   reference?: string;
 }
 
-export type ExerciseId =
+type RouteExerciseId =
   | 'squat'
   | 'press'
   | 'row'
@@ -49,7 +46,9 @@ export type ExerciseId =
   | 'birdDog'
   | 'proneW';
 
-export const exercises: Record<ExerciseId, Exercise> = {
+export type ExerciseId = RouteExerciseId | KineticExerciseId;
+
+const routeExercises: Record<RouteExerciseId, Exercise> = {
   squat: {
     needs: ['bench'],
     title: 'Присед к скамье',
@@ -91,7 +90,6 @@ export const exercises: Record<ExerciseId, Exercise> = {
     group: 'Грудь и трицепсы',
     gear: 'Скамья · гантели',
     weighted: true,
-    gifId: 'SpYC0Kp',
     reference:
       'https://www.mayoclinic.org/healthy-lifestyle/fitness/multimedia/chest-press/vid-20084677',
     cues: [
@@ -166,23 +164,23 @@ export const exercises: Record<ExerciseId, Exercise> = {
     weighted: false,
     reference:
       'https://www.acefitness.org/resources/everyone/exercise-library/135/bodyweight-squat/',
-    gifId: '6YUfHPL',
     cues: [
       'Упрись всей стопой в пол и отведи таз назад.',
       'Плавно опустись на удобную глубину, затем выпрямись.',
     ],
   },
   gobletSquat: {
+    video: kineticVideo('goblet-squat'),
     needs: ['dumbbells'],
     title: 'Присед с гантелью у груди',
     group: 'Ноги и ягодицы',
     gear: 'Одна гантель',
     weighted: true,
-    gifId: 'yn8yg1r',
     reference: 'https://www.acefitness.org/resources/everyone/exercise-library/362/goblet-squat/',
     cues: ['Держи гантель двумя руками перед грудью.', 'Опускайся плавно и держи стопы на полу.'],
   },
   floorPress: {
+    video: kineticVideo('dumbbell-floor-press'),
     needs: ['dumbbells'],
     title: 'Жим гантелей на полу',
     group: 'Грудь и трицепсы',
@@ -200,7 +198,6 @@ export const exercises: Record<ExerciseId, Exercise> = {
     group: 'Грудь и трицепсы',
     gear: 'Устойчивая стена',
     weighted: false,
-    gifId: 'NCmbLCw',
     reference: 'https://www.nhs.uk/live-well/exercise/strength-exercises/',
     cues: [
       'Поставь ладони на стену примерно на уровне груди.',
@@ -208,11 +205,11 @@ export const exercises: Record<ExerciseId, Exercise> = {
     ],
   },
   pushup: {
+    video: kineticVideo('pushups'),
     title: 'Отжимания от пола',
     group: 'Грудь и трицепсы',
     gear: 'Без инвентаря',
     weighted: false,
-    gifId: 'I4hDWkc',
     reference: 'https://www.acefitness.org/resources/everyone/exercise-library/41/push-up/',
     cues: [
       'Упрись ладонями в пол и удерживай корпус ровно.',
@@ -220,13 +217,12 @@ export const exercises: Record<ExerciseId, Exercise> = {
     ],
   },
   freeRow: {
+    video: kineticVideo('bent-over-two-dumbbell-row'),
     needs: ['dumbbells'],
     title: 'Тяга двух гантелей в наклоне',
     group: 'Спина',
     gear: 'Гантели',
     weighted: true,
-    gifId: 'BJ0Hz5L',
-    reference: 'https://oss.exercisedb.dev/api/v1/exercises/BJ0Hz5L',
     cues: [
       'Слегка согни колени и наклони корпус за счёт движения в тазу.',
       'Подтяни гантели к корпусу, удерживая его неподвижно, затем плавно опусти.',
@@ -239,8 +235,6 @@ export const exercises: Record<ExerciseId, Exercise> = {
     gear: 'Одна гантель',
     weighted: true,
     perSide: true,
-    gifId: 'v2DfH14',
-    reference: 'https://oss.exercisedb.dev/api/v1/exercises/v2DfH14',
     cues: [
       'Наклони корпус и сохраняй устойчивое положение.',
       'Подтяни гантель к боку, удерживая корпус неподвижно. Повтори другой рукой.',
@@ -259,35 +253,35 @@ export const exercises: Record<ExerciseId, Exercise> = {
     ],
   },
   rdl: {
+    video: kineticVideo('dumbbell-romanian-extension'),
     needs: ['dumbbells'],
     title: 'Румынская тяга с гантелями',
     group: 'Задняя поверхность бедра и ягодицы',
     gear: 'Гантели',
     weighted: true,
-    gifId: 'rR0LJzx',
     cues: [
       'Слегка согни колени и отведи таз назад, держа гантели близко к ногам.',
       'Выпрямись, сохраняя контроль и устойчивое положение корпуса.',
     ],
   },
   gluteBridge: {
+    video: kineticVideo('butt-lift-bridge'),
     title: 'Ягодичный мост на полу',
     group: 'Задняя поверхность бедра и ягодицы',
     gear: 'Без инвентаря',
     weighted: false,
-    gifId: 'u0cNiij',
     cues: [
       'Ляг на спину, согни колени и поставь стопы на пол.',
       'Подними таз и плавно опусти его, сохраняя контроль.',
     ],
   },
   shoulderPress: {
+    video: kineticVideo('dumbbell-shoulder-press'),
     needs: ['dumbbells'],
     title: 'Жим гантелей сидя',
     group: 'Плечи',
     gear: 'Гантели · скамья или устойчивый стул',
     weighted: true,
-    gifId: 'znQUdHY',
     cues: [
       'Сядь устойчиво и держи гантели у плеч.',
       'Плавно выжми гантели вверх и верни их к плечам.',
@@ -305,12 +299,12 @@ export const exercises: Record<ExerciseId, Exercise> = {
     ],
   },
   deadBug: {
+    video: kineticVideo('dead-bug'),
     title: 'Мёртвый жук',
     group: 'Мышцы корпуса',
     gear: 'Без инвентаря',
     weighted: false,
     perSide: true,
-    gifId: 'iny3m5y',
     cues: [
       'Ляг на спину, подними руки и согнутые ноги.',
       'Плавно отводи противоположные руку и ногу, сохраняя корпус неподвижным. Чередуй стороны.',
@@ -330,6 +324,11 @@ export const exercises: Record<ExerciseId, Exercise> = {
   },
 };
 
+const routeExerciseIds = Object.keys(routeExercises) as RouteExerciseId[];
+const kineticById = Object.fromEntries(kineticStrengthExercises.map((item) => [item.id, item]));
+
+export const exercises: Record<ExerciseId, Exercise> = { ...routeExercises, ...kineticById };
+
 function hasEquipment(id: ExerciseId, equipment: readonly HomeEquipment[]) {
   return exercises[id].needs?.every((item) => equipment.includes(item)) ?? true;
 }
@@ -337,13 +336,54 @@ function hasEquipment(id: ExerciseId, equipment: readonly HomeEquipment[]) {
 export function exerciseAlternatives(
   id: ExerciseId,
   equipment: readonly HomeEquipment[] = homeEquipment,
+  limit = Infinity,
 ): ExerciseId[] {
-  return (Object.keys(exercises) as ExerciseId[]).filter(
-    (candidate) =>
+  const { group } = exercises[id];
+  const candidates = Object.hasOwn(routeExercises, id)
+    ? routeExerciseIds
+    : (kineticAlternativeIds.get(group) ?? []);
+  const alternatives: ExerciseId[] = [];
+  for (const candidate of candidates) {
+    if (alternatives.length >= limit) break;
+    if (
       candidate !== id &&
-      exercises[candidate].group === exercises[id].group &&
-      hasEquipment(candidate, equipment),
-  );
+      exercises[candidate].group === group &&
+      hasEquipment(candidate, equipment)
+    )
+      alternatives.push(candidate);
+  }
+  return alternatives;
+}
+
+const difficultyRank: Record<string, number> = { beginner: 0, intermediate: 1, expert: 3 };
+const rankedKineticExercises = [...kineticStrengthExercises].sort(
+  (a, b) => (difficultyRank[a.difficulty ?? ''] ?? 2) - (difficultyRank[b.difficulty ?? ''] ?? 2),
+);
+const kineticByGroup = new Map<MuscleGroup, typeof rankedKineticExercises>();
+for (const exercise of rankedKineticExercises) {
+  const group = kineticByGroup.get(exercise.group) ?? [];
+  group.push(exercise);
+  kineticByGroup.set(exercise.group, group);
+}
+const kineticAlternativeIds = new Map(
+  [...kineticByGroup].map(([group, candidates]) => [
+    group,
+    candidates.filter(({ difficulty }) => difficulty !== 'expert').map(({ id }) => id),
+  ]),
+);
+
+export function availableExerciseByGroup(preferences = defaultPreferences) {
+  const available = new Map<MuscleGroup, ExerciseId>();
+  const equipment = preferences.equipment ?? homeEquipment;
+  for (const [group, candidates] of kineticByGroup) {
+    const first = candidates.find(
+      ({ id, difficulty }) =>
+        (difficulty !== 'expert' || preferences.level === 'advanced') &&
+        hasEquipment(id, equipment),
+    );
+    if (first) available.set(group, first.id);
+  }
+  return available;
 }
 
 interface StopInfo {
@@ -405,18 +445,28 @@ export function strengthPlan(
   preferences = defaultPreferences,
 ) {
   const budget = mainBudget(preferences);
-  const extraCount = budget >= 45 ? 3 : budget >= 30 ? 2 : 0;
-  const equipment = preferences.equipment ?? homeEquipment;
-  const bodyweight = !equipment.includes('dumbbells') && !equipment.includes('bench');
-  const moves = bodyweight
-    ? bodyweightMoves
-    : [...stop.moves, ...extendedMoves.slice(0, extraCount)];
-  const available = moves.flatMap((exercise) => {
-    if (hasEquipment(exercise, equipment)) return [exercise];
-    return exerciseAlternatives(exercise, equipment).slice(0, 1);
-  });
-  if (short)
-    return available.slice(0, bodyweight ? 3 : 2).map((exercise) => ({ exercise, target: 1 }));
+  const selectedGroups = preferences.muscleGroups;
+  let moves: ExerciseId[] = [];
+  if (Array.isArray(selectedGroups) && selectedGroups.length > 0) {
+    const byGroup = availableExerciseByGroup(preferences);
+    moves = muscleGroups.flatMap((group) => {
+      const exercise = byGroup.get(group);
+      return exercise && selectedGroups.includes(group) ? [exercise] : [];
+    });
+  }
+  if (!moves.length) {
+    const extraCount = budget >= 45 ? 3 : budget >= 30 ? 2 : 0;
+    const equipment = preferences.equipment ?? homeEquipment;
+    const bodyweight = !equipment.includes('dumbbells') && !equipment.includes('bench');
+    const routeMoves = bodyweight
+      ? bodyweightMoves
+      : [...stop.moves, ...extendedMoves.slice(0, extraCount)];
+    moves = routeMoves.flatMap((exercise) =>
+      hasEquipment(exercise, equipment) ? [exercise] : exerciseAlternatives(exercise, equipment, 1),
+    );
+    if (short) moves = moves.slice(0, bodyweight ? 3 : 2);
+  }
+  if (short) return moves.map((exercise) => ({ exercise, target: 1 }));
   const extraSets = {
     beginner: Number(budget >= 45),
     basic: Number(budget >= 30),
@@ -424,13 +474,14 @@ export function strengthPlan(
     advanced: 1 + Number(budget >= 30),
   }[preferences.level];
   const target = budget < 15 ? 1 : stop.sets + extraSets;
-  return available.map((exercise) => ({ exercise, target }));
+  return moves.map((exercise) => ({ exercise, target }));
 }
 
 export function workoutDetail(stop: Stop, short = false, preferences = defaultPreferences) {
   const { total } = workoutTiming(stop, short, preferences);
   if (stop.icon === 'cardio') return `${total} мин`;
   const plan = strengthPlan(stop, short, preferences);
+  if (plan.length === 1) return `1 упражнение · до ${total} мин`;
   const noun = plan.length < 5 ? 'упражнения' : 'упражнений';
   return `${plan.length} ${noun} · до ${total} мин`;
 }

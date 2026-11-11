@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { route } from '../program/@x/progress';
 import {
   nextStop,
-  previousExerciseSets,
+  previousExerciseResult,
   progressStorageKey,
   readProgress,
   routeLength,
@@ -40,9 +40,9 @@ describe('progress', () => {
       { ...entry(0, 1), sets: [blank] },
     ];
 
-    expect(previousExerciseSets(sessions, 'squat')).toEqual([last, blank]);
-    expect(previousExerciseSets(sessions, 'row')).toEqual([other]);
-    expect(previousExerciseSets(sessions, 'press')).toEqual([]);
+    expect(previousExerciseResult(sessions, 'squat')?.sets).toEqual([last, blank]);
+    expect(previousExerciseResult(sessions, 'row')?.sets).toEqual([other]);
+    expect(previousExerciseResult(sessions, 'press')).toBeUndefined();
   });
 
   it('restores saved history and opens the next stop', () => {

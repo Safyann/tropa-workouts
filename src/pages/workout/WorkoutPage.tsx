@@ -9,6 +9,8 @@ import type { Session } from '../../entities/progress';
 import {
   finishWarmup,
   isPending,
+  playRestSound,
+  prepareRestSound,
   remaining,
   selectExercise,
   startCooldown,
@@ -31,6 +33,7 @@ const walkingInstructions = {
 interface Props {
   workout: Workout;
   totalStops: number;
+  restSound?: boolean;
   history: Session[];
   update: (workout: Workout) => void;
   finish: (workout: Workout) => void;
@@ -39,6 +42,7 @@ interface Props {
 export function WorkoutPage({
   workout,
   totalStops,
+  restSound,
   history,
   update,
   finish,
@@ -48,12 +52,15 @@ export function WorkoutPage({
   const exerciseHeading = useRef<HTMLHeadingElement>(null);
   const focusExercise = useRef(false);
   const timer = workout.block?.timer ?? workout.timer;
+  const soundForTimer = restSound && workout.kind === 'strength' && !workout.block;
   useEffect(() => {
     if (!timer || timer.end === null) return;
     let displayedSeconds: number | undefined;
     const tick = () => {
       const timestamp = Date.now();
       const seconds = remaining(timer, timestamp);
+      if (seconds === 0 && soundForTimer && displayedSeconds && displayedSeconds > 0)
+        playRestSound();
       if (seconds !== displayedSeconds) {
         displayedSeconds = seconds;
         setNow(timestamp);
@@ -63,7 +70,7 @@ export function WorkoutPage({
     const interval = window.setInterval(tick, 250);
     tick();
     return () => window.clearInterval(interval);
-  }, [timer]);
+  }, [timer, soundForTimer]);
   useEffect(() => {
     if (focusExercise.current && exerciseHeading.current) {
       focusExercise.current = false;
@@ -75,6 +82,7 @@ export function WorkoutPage({
   const left = timer ? remaining(timer, now) : 0;
   const toggle = () => {
     if (!timer) return;
+    if (soundForTimer) prepareRestSound();
     const timestamp = Date.now();
     setNow(timestamp);
     const nextTimer = toggleTimer(timer, timestamp);
@@ -165,6 +173,7 @@ export function WorkoutPage({
               itemIndex={workout.selected}
               workout={workout}
               history={history}
+              restSound={restSound}
               update={update}
               finish={finishMain}
               headingRef={exerciseHeading}

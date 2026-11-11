@@ -8,6 +8,11 @@ export function monthStart(timestamp: number, offset = 0) {
   return new Date(date.getFullYear(), date.getMonth() + offset, 1).getTime();
 }
 
+export function addDays(timestamp: number, offset: number) {
+  const date = new Date(timestamp);
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate() + offset).getTime();
+}
+
 export function calendarWeeks(month: number) {
   const first = new Date(month);
   const leadingDays = (first.getDay() + 6) % 7;

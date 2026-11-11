@@ -1,6 +1,6 @@
-import type { Ref } from 'react';
-import { exercises, type ExerciseId } from '../../entities/program';
-import type { ExerciseProgressEntry } from '../../entities/progress';
+import { Fragment, useState, type Ref } from 'react';
+import { exercises, route, type ExerciseId } from '../../entities/program';
+import { formatSet, type ExerciseProgressEntry } from '../../entities/progress';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './ExerciseProgress.module.css';
 
@@ -34,6 +34,7 @@ export function ExerciseProgress({
   select: (exercise: ExerciseId) => void;
   headingRef: Ref<HTMLHeadingElement>;
 }) {
+  const [expandedSession, setExpandedSession] = useState<string>();
   const entries = entriesByExercise.get(selected) ?? [];
   const exercise = exercises[selected];
   const maxWeight = entries.reduce((max, { weight }) => Math.max(max, weight ?? 0), 0);
@@ -70,17 +71,43 @@ export function ExerciseProgress({
           </tr>
         </thead>
         <tbody>
-          {entries.map(({ session, weight, reps }) => (
-            <tr key={`${session.round}-${session.stop}`}>
-              <th scope="row">
-                <time dateTime={new Date(session.date).toISOString()}>
-                  {dateFormat.format(session.date)}
-                </time>
-              </th>
-              {showsWeight && <Metric value={weight} max={maxWeight} unit="кг" />}
-              {showsReps && <Metric value={reps} max={maxReps} unit="" />}
-            </tr>
-          ))}
+          {entries.map(({ session, weight, reps }) => {
+            const id = `sets-${session.round}-${session.stop}`;
+            const selection = `${selected}-${id}`;
+            const expanded = expandedSession === selection;
+            return (
+              <Fragment key={id}>
+                <tr>
+                  <th scope="row">
+                    <button
+                      className={styles.dateButton}
+                      type="button"
+                      aria-expanded={expanded}
+                      aria-controls={id}
+                      onClick={() => setExpandedSession(expanded ? undefined : selection)}
+                    >
+                      <time dateTime={new Date(session.date).toISOString()}>
+                        {dateFormat.format(session.date)}
+                      </time>
+                    </button>
+                  </th>
+                  {showsWeight && <Metric value={weight} max={maxWeight} unit="кг" />}
+                  {showsReps && <Metric value={reps} max={maxReps} unit="" />}
+                </tr>
+                <tr id={id} hidden={!expanded} className={styles.setDetail}>
+                  <td colSpan={1 + Number(showsWeight) + Number(showsReps)}>
+                    <strong>{route[session.stop].title} · Подходы</strong>
+                    <ol>
+                      {expanded &&
+                        session.sets
+                          .filter(({ exercise }) => exercise === selected)
+                          .map((set, index) => <li key={index}>{formatSet(set)}</li>)}
+                    </ol>
+                  </td>
+                </tr>
+              </Fragment>
+            );
+          })}
         </tbody>
       </table>
     </section>

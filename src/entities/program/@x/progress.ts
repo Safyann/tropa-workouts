@@ -10,6 +10,7 @@ export {
   levels,
   muscleGroups,
   routeWeeks,
+  trainingWeekdays,
   weeklyGoals,
 } from '../preferences';
 export type { CardioActivity, WorkoutPreferences } from '../preferences';

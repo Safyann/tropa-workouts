@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
-import type { Session } from '../../entities/progress';
+import type { PlannedWorkout, Session } from '../../entities/progress';
 import ui from '../../shared/ui/Common.module.css';
-import { calendarWeeks, localDay, monthStart } from './calendarDates';
+import { calendarWeeks, localDay, monthStart } from '../../shared/lib/calendarDates';
 import styles from './HistoryCalendar.module.css';
 
 const monthFormat = new Intl.DateTimeFormat('ru', { month: 'long', year: 'numeric' });
@@ -18,17 +18,20 @@ const weekdays = [
 
 export function HistoryCalendar({
   sessions,
+  planned,
   selectedDay,
   selectDay,
 }: {
   sessions: readonly Session[];
+  planned: readonly PlannedWorkout[];
   selectedDay: number | null;
   selectDay: (day: number | null) => void;
 }) {
   const now = Date.now();
   const latestWorkout = sessions.reduce((latest, { date }) => Math.max(latest, date), 0);
-  const currentMonth = monthStart(Math.max(now, latestWorkout));
-  const [month, setMonth] = useState(() => monthStart(latestWorkout || now));
+  const latestPlanned = planned.reduce((latest, { day }) => Math.max(latest, day), 0);
+  const currentMonth = monthStart(Math.max(now, latestWorkout, latestPlanned));
+  const [month, setMonth] = useState(() => monthStart(planned.length ? now : latestWorkout || now));
   const workoutDays = useMemo(() => {
     const counts = new Map<number, number>();
     for (const { date } of sessions) {
@@ -37,11 +40,13 @@ export function HistoryCalendar({
     }
     return counts;
   }, [sessions]);
+  const plannedDays = new Set(planned.map(({ day }) => day));
   const today = localDay(now);
   const weeks = calendarWeeks(month);
   const hasWorkouts = weeks.some((week) =>
     week.some((day) => day !== null && workoutDays.has(day)),
   );
+  const hasPlanned = weeks.some((week) => week.some((day) => day !== null && plannedDays.has(day)));
 
   function changeMonth(offset: number) {
     setMonth(monthStart(month, offset));
@@ -89,17 +94,20 @@ export function HistoryCalendar({
               {week.map((day, weekday) => {
                 if (day === null) return <td key={weekday} />;
                 const count = workoutDays.get(day);
+                const isPlanned = plannedDays.has(day);
                 const dayOfMonth = new Date(day).getDate();
                 const currentDate = day === today ? 'date' : undefined;
                 return (
                   <td key={weekday}>
-                    {count ? (
+                    {count || isPlanned ? (
                       <button
                         type="button"
                         className={styles.workoutDay}
                         aria-current={currentDate}
                         aria-pressed={day === selectedDay}
-                        aria-label={`${dayFormat.format(day)}, тренировок ${count}`}
+                        data-planned={isPlanned || undefined}
+                        data-completed={Boolean(count) || undefined}
+                        aria-label={`${dayFormat.format(day)}${count ? `, выполнено ${count}` : ''}${isPlanned ? ', есть план' : ''}`}
                         aria-controls="history-sessions"
                         onClick={() => selectDay(day === selectedDay ? null : day)}
                       >
@@ -117,15 +125,19 @@ export function HistoryCalendar({
           ))}
         </tbody>
       </table>
-      <p className={styles.legend}>
-        {hasWorkouts ? (
-          <>
-            <span className={styles.dot} aria-hidden="true" /> День с тренировкой
-          </>
-        ) : (
-          'В этом месяце занятий нет.'
+      <div className={styles.legends}>
+        {hasWorkouts && (
+          <p className={styles.legend}>
+            <span className={styles.dot} aria-hidden="true" /> Выполнено
+          </p>
         )}
-      </p>
+        {hasPlanned && (
+          <p className={styles.legend}>
+            <span className={styles.plannedDot} aria-hidden="true" /> Запланировано
+          </p>
+        )}
+        {!hasWorkouts && !hasPlanned && <p className={styles.legend}>В этом месяце занятий нет.</p>}
+      </div>
     </section>
   );
 }

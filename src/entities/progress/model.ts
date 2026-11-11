@@ -9,6 +9,7 @@ import {
   muscleGroups,
   route,
   routeWeeks,
+  trainingWeekdays,
   weeklyGoals,
   type CardioActivity,
   type ExerciseId,
@@ -16,6 +17,8 @@ import {
 } from '../program/@x/progress';
 
 export const progressStorageKey = 'tropa-workouts-v1';
+export const effortLabels = { easy: 'Легко', normal: 'Нормально', hard: 'Тяжело' } as const;
+export type Effort = keyof typeof effortLabels;
 
 export interface SetRecord {
   exercise: ExerciseId;
@@ -36,6 +39,7 @@ export interface Session {
   bodyWeightKg?: number;
   skipped?: ExerciseId[];
   partial?: boolean;
+  effort?: Effort;
 }
 
 export interface Progress {
@@ -43,14 +47,16 @@ export interface Progress {
   round: number;
   sessions: Session[];
   preferences?: WorkoutPreferences;
+  movedWorkout?: { round: number; stop: number; day: number };
 }
 
-export function previousExerciseSets(sessions: readonly Session[], exercise: ExerciseId) {
+export function previousExerciseResult(sessions: readonly Session[], exercise: ExerciseId) {
   for (let index = sessions.length - 1; index >= 0; index--) {
-    const sets = sessions[index].sets.filter((set) => set.exercise === exercise);
-    if (sets.some(({ weight, reps }) => weight !== null || reps !== null)) return sets;
+    const session = sessions[index];
+    const sets = session.sets.filter((set) => set.exercise === exercise);
+    if (sets.some(({ weight, reps }) => weight !== null || reps !== null))
+      return { sets, effort: session.effort };
   }
-  return [];
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -59,6 +65,10 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function isCount(value: unknown): value is number {
   return typeof value === 'number' && Number.isSafeInteger(value) && value >= 0;
+}
+
+function isTimestamp(value: unknown): value is number {
+  return isCount(value) && Number.isFinite(new Date(value).getTime());
 }
 
 function isOneOf<T>(values: readonly T[], value: unknown): value is T {
@@ -94,13 +104,13 @@ function readSession(value: unknown): Session | null {
     bodyWeightKg,
     skipped,
     partial,
+    effort,
   } = value;
   if (
     !isCount(stop) ||
     stop >= route.length ||
     !isCount(round) ||
-    !isCount(date) ||
-    !Number.isFinite(new Date(date).getTime()) ||
+    !isTimestamp(date) ||
     typeof short !== 'boolean' ||
     !Array.isArray(sets) ||
     (elapsed !== null && !isCount(elapsed))
@@ -124,6 +134,7 @@ function readSession(value: unknown): Session | null {
       skipped: skipped.filter((item): item is ExerciseId => typeof item === 'string' && !!item),
     }),
     ...(typeof partial === 'boolean' && { partial }),
+    ...(isKeyOf(effortLabels, effort) && { effort }),
   };
 }
 
@@ -138,6 +149,8 @@ function readPreferences(value: unknown): WorkoutPreferences | undefined {
     cooldownActivity,
     weeklyGoal,
     routeWeeks: weeks,
+    schedule,
+    restSound,
     bodyWeightKg,
     equipment,
     muscleGroups: selected,
@@ -150,6 +163,8 @@ function readPreferences(value: unknown): WorkoutPreferences | undefined {
   )
     return;
 
+  const scheduleDays = isRecord(schedule) && Array.isArray(schedule.days) ? schedule.days : [];
+  const trainingDays = trainingWeekdays.filter((day) => scheduleDays.includes(day));
   return {
     level,
     minutes,
@@ -159,6 +174,10 @@ function readPreferences(value: unknown): WorkoutPreferences | undefined {
     ...(isOneOf(['walking', 'stretching'] as const, cooldownActivity) && { cooldownActivity }),
     ...(isOneOf(weeklyGoals, weeklyGoal) && { weeklyGoal }),
     ...(isOneOf(routeWeeks, weeks) && { routeWeeks: weeks }),
+    ...(isRecord(schedule) &&
+      isTimestamp(schedule.start) &&
+      trainingDays.length > 0 && { schedule: { days: trainingDays, start: schedule.start } }),
+    ...(typeof restSound === 'boolean' && { restSound }),
     ...(isBodyWeight(bodyWeightKg) && { bodyWeightKg }),
     ...(Array.isArray(equipment) && {
       equipment: equipment.filter((item) => isOneOf(homeEquipment, item)),
@@ -169,9 +188,9 @@ function readPreferences(value: unknown): WorkoutPreferences | undefined {
   };
 }
 
-export function readProgress(): Progress {
+export function parseProgress(data: string, strict = false): Progress | null {
   try {
-    const saved: unknown = JSON.parse(localStorage.getItem(progressStorageKey) ?? 'null');
+    const saved: unknown = JSON.parse(data);
     if (
       isRecord(saved) &&
       saved.version === 1 &&
@@ -180,12 +199,46 @@ export function readProgress(): Progress {
     ) {
       const preferences = readPreferences(saved.preferences);
       const sessions = saved.sessions.map(readSession).filter((session) => session !== null);
-      return { version: 1, round: saved.round, sessions, ...(preferences && { preferences }) };
+      if (
+        strict &&
+        (sessions.length !== saved.sessions.length ||
+          new Set(sessions.map(({ round, stop }) => `${round}/${stop}`)).size !== sessions.length ||
+          saved.sessions.some(
+            (session) =>
+              !isRecord(session) ||
+              !Array.isArray(session.sets) ||
+              !session.sets.every(isSetRecord),
+          ))
+      )
+        return null;
+      const moved = saved.movedWorkout;
+      return {
+        version: 1,
+        round: saved.round,
+        sessions,
+        ...(preferences && { preferences }),
+        ...(isRecord(moved) &&
+          isCount(moved.round) &&
+          isCount(moved.stop) &&
+          moved.stop < route.length &&
+          isTimestamp(moved.day) && {
+            movedWorkout: { round: moved.round, stop: moved.stop, day: moved.day },
+          }),
+      };
     }
   } catch {
-    // The route is still usable if browser storage is unavailable.
+    return null;
   }
-  return { version: 1, round: 0, sessions: [] };
+  return null;
+}
+
+export function readProgress(): Progress {
+  const empty: Progress = { version: 1, round: 0, sessions: [] };
+  try {
+    return parseProgress(localStorage.getItem(progressStorageKey) ?? '') ?? empty;
+  } catch {
+    return empty;
+  }
 }
 
 export function saveProgress(progress: Progress) {
@@ -225,6 +278,16 @@ export function weekCount(sessions: Session[]) {
 export function formatTime(seconds: number) {
   const value = Math.max(0, seconds);
   return `${String(Math.floor(value / 60)).padStart(2, '0')}:${String(value % 60).padStart(2, '0')}`;
+}
+
+export function formatWeight(weight: number) {
+  return `${String(weight).replace('.', ',')} кг`;
+}
+
+export function formatSet({ weight, reps }: SetRecord) {
+  if (weight === null) return reps === null ? 'Без данных' : `${reps} повт.`;
+  const load = formatWeight(weight);
+  return reps === null ? load : `${load} × ${reps}`;
 }
 
 export function estimatedCalories(session: Session) {

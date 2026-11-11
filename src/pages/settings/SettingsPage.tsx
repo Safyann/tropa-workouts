@@ -8,9 +8,12 @@ import {
   type WorkoutPreferences,
 } from '../../entities/program';
 import { BodyWeightForm } from '../../features/workout/BodyWeightForm';
+import type { Progress } from '../../entities/progress';
+import { BackupSettings } from './BackupSettings';
 import { EquipmentPicker } from './EquipmentPicker';
 import { LevelGuide } from './LevelGuide';
 import { levelOptions } from './levelOptions';
+import { ScheduleSettings } from './ScheduleSettings';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './Settings.module.css';
 import formStyles from '../../shared/ui/SettingsForm.module.css';
@@ -18,9 +21,13 @@ import formStyles from '../../shared/ui/SettingsForm.module.css';
 export function SettingsPage({
   preferences,
   change,
+  progress,
+  restore,
 }: {
   preferences: WorkoutPreferences;
   change: (preferences: WorkoutPreferences) => void;
+  progress: Progress;
+  restore: (contents: string) => string;
 }) {
   return (
     <section className={ui.narrow}>
@@ -75,7 +82,7 @@ export function SettingsPage({
                 const weeklyGoal = weeklyGoals.find(
                   (value) => String(value) === event.target.value,
                 );
-                if (weeklyGoal) change({ ...preferences, weeklyGoal });
+                if (weeklyGoal) change({ ...preferences, weeklyGoal, schedule: undefined });
               }}
             >
               {weeklyGoals.map((goal) => (
@@ -86,6 +93,14 @@ export function SettingsPage({
             </select>
           </label>
         </div>
+        <label className={styles.soundSetting}>
+          <input
+            type="checkbox"
+            checked={preferences.restSound ?? false}
+            onChange={(event) => change({ ...preferences, restSound: event.target.checked })}
+          />
+          Звук окончания отдыха между подходами
+        </label>
         <BodyWeightForm
           key={preferences.bodyWeightKg}
           value={preferences.bodyWeightKg}
@@ -93,10 +108,16 @@ export function SettingsPage({
         />
         <LevelGuide apply={(level) => change({ ...preferences, level })} />
       </div>
+      <ScheduleSettings
+        key={`${preferences.weeklyGoal}-${preferences.schedule?.days.join(',')}`}
+        preferences={preferences}
+        change={change}
+      />
       <EquipmentPicker
         selected={preferences.equipment ?? defaultEquipment}
         change={(equipment) => change({ ...preferences, equipment })}
       />
+      <BackupSettings progress={progress} restore={restore} />
     </section>
   );
 }

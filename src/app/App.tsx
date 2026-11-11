@@ -7,15 +7,20 @@ import {
 } from '../entities/program';
 import {
   nextStop,
+  mergeProgressBackup,
+  parseProgress,
+  plannedWorkouts,
   progressStorageKey,
   readProgress,
   routeLength,
   saveProgress,
+  type Effort,
   type Progress,
   type Session,
 } from '../entities/progress';
 import {
   createWorkout,
+  prepareRestSound,
   readWorkoutDraft,
   saveWorkoutDraft,
   summarize,
@@ -32,6 +37,7 @@ import { SettingsPage } from '../pages/settings';
 import { WorkoutPage } from '../pages/workout';
 import { WorkoutResult } from '../pages/workout/WorkoutResult';
 import { resolveRoute } from './route';
+import { localDay } from '../shared/lib/calendarDates';
 import { useAppUpdate } from './useAppUpdate';
 import './styles/global.css';
 import ui from '../shared/ui/Common.module.css';
@@ -95,9 +101,11 @@ export function App() {
     return () => window.removeEventListener('storage', sync);
   }, []);
 
-  function storeProgress(next: Progress) {
-    setProgress(next);
-    setProgressSaveFailed(!saveProgress(next));
+  function storeProgress(next: Progress, requireSaved = false) {
+    const saved = saveProgress(next);
+    if (saved || !requireSaved) setProgress(next);
+    setProgressSaveFailed(!saved);
+    return saved;
   }
 
   function latestProgress() {
@@ -122,6 +130,7 @@ export function App() {
   }
 
   function start(short: boolean) {
+    if (progress.preferences?.restSound) prepareRestSound();
     if (!workout) {
       const latest = latestProgress();
       const index = nextStop(latest, routeLength(latest));
@@ -162,15 +171,68 @@ export function App() {
     });
   }
 
+  function saveResultEffort(session: Session, effort: Effort | undefined) {
+    const latest = latestProgress();
+    storeProgress({
+      ...latest,
+      sessions: latest.sessions.map((entry) =>
+        entry.round === session.round && entry.stop === session.stop ? { ...entry, effort } : entry,
+      ),
+    });
+  }
+
   function restart() {
     const latest = latestProgress();
-    if (!workout && nextStop(latest, routeLength(latest)) === -1)
-      storeProgress({ ...latest, round: latest.round + 1 });
-    else setProgress(latest);
+    if (workout || nextStop(latest, routeLength(latest)) !== -1) return;
+    const lastRound = latest.sessions.reduce(
+      (last, { round }) => Math.max(last, round),
+      latest.round,
+    );
+    const preferences = latest.preferences;
+    const schedule = preferences?.schedule;
+    storeProgress({
+      ...latest,
+      round: lastRound + 1,
+      movedWorkout: undefined,
+      preferences:
+        preferences && schedule
+          ? { ...preferences, schedule: { ...schedule, start: localDay(Date.now()) } }
+          : preferences,
+    });
   }
 
   function changePreferences(preferences: WorkoutPreferences) {
-    storeProgress({ ...latestProgress(), preferences });
+    const latest = latestProgress();
+    const prior = latest.preferences?.schedule;
+    const next = preferences.schedule;
+    const sameSchedule =
+      prior?.start === next?.start && prior?.days.join(',') === next?.days.join(',');
+    storeProgress({
+      ...latest,
+      preferences,
+      movedWorkout: sameSchedule ? latest.movedWorkout : undefined,
+    });
+  }
+
+  function moveWorkout(day: number) {
+    const latest = latestProgress();
+    const next = plannedWorkouts(latest, workout?.index)[0];
+    if (next && day >= localDay(Date.now()))
+      storeProgress({ ...latest, movedWorkout: { round: latest.round, stop: next.stop, day } });
+  }
+
+  function restoreBackup(contents: string) {
+    const backup = parseProgress(contents, true);
+    if (!backup) return 'Не удалось восстановить историю. Выбери файл резервной копии «Тропы».';
+    const latest = latestProgress();
+    if (workout || readWorkoutDraft(latest))
+      return 'Заверши текущее занятие перед восстановлением истории.';
+    const merged = mergeProgressBackup(latest, backup);
+    if (!storeProgress(merged, true)) return 'Браузер не сохранил восстановленную историю.';
+    const added = merged.sessions.length - latest.sessions.length;
+    return added
+      ? `История восстановлена. Добавлено занятий: ${added}.`
+      : 'Резервная копия загружена. Новых занятий нет.';
   }
 
   function renderScreen() {
@@ -180,6 +242,7 @@ export function App() {
           <WorkoutPage
             workout={screen.workout}
             totalStops={totalStops}
+            restSound={progress.preferences?.restSound}
             history={progress.sessions}
             update={updateWorkout}
             finish={finish}
@@ -187,7 +250,13 @@ export function App() {
           />
         );
       case 'history':
-        return <HistoryPage sessions={progress.sessions} stopIndex={screen.stopIndex} />;
+        return (
+          <HistoryPage
+            sessions={progress.sessions}
+            stopIndex={screen.stopIndex}
+            planned={plannedWorkouts(progress, workout?.index)}
+          />
+        );
       case 'result': {
         const session = progress.sessions.find(
           (entry) => entry.round === screen.round && entry.stop === screen.stopIndex,
@@ -196,6 +265,7 @@ export function App() {
           <WorkoutResult
             session={session}
             saveWeight={(weight) => saveResultWeight(session, weight)}
+            saveEffort={(effort) => saveResultEffort(session, effort)}
           />
         ) : (
           <section className={ui.narrow}>
@@ -213,6 +283,8 @@ export function App() {
           <SettingsPage
             preferences={progress.preferences ?? defaultPreferences}
             change={changePreferences}
+            progress={progress}
+            restore={restoreBackup}
           />
         );
       case 'map':
@@ -224,6 +296,7 @@ export function App() {
             start={start}
             restart={restart}
             changePreferences={changePreferences}
+            moveWorkout={moveWorkout}
           />
         );
     }

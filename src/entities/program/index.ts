@@ -28,12 +28,14 @@ export {
   optionalBlockMinutes,
   recommendLevel,
   routeWeeks,
+  trainingWeekdays,
   weeklyGoals,
   workoutBlockTitles,
 } from './preferences';
 export type {
   CardioActivity,
   HomeEquipment,
+  TrainingWeekday,
   MuscleGroup,
   WorkoutBlockActivity,
   WorkoutBlockType,

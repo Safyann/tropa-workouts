@@ -2,12 +2,14 @@ import { useMemo, useRef, useState } from 'react';
 import { cardioTitles, exercises, route, type ExerciseId } from '../../entities/program';
 import {
   estimatedCalories,
+  effortLabels,
   exerciseProgress,
   formatTime,
+  type PlannedWorkout,
   type Session,
 } from '../../entities/progress';
 import { Icon } from '../../shared/ui/Icon';
-import { localDay } from './calendarDates';
+import { localDay } from '../../shared/lib/calendarDates';
 import { ExerciseProgress } from './ExerciseProgress';
 import { HistoryCalendar } from './HistoryCalendar';
 import ui from '../../shared/ui/Common.module.css';
@@ -16,7 +18,17 @@ import styles from './History.module.css';
 const dateFormat = new Intl.DateTimeFormat('ru', { day: 'numeric', month: 'short' });
 const selectedDateFormat = new Intl.DateTimeFormat('ru', { dateStyle: 'long' });
 
-export function HistoryPage({ sessions, stopIndex }: { sessions: Session[]; stopIndex?: number }) {
+const noPlans: readonly PlannedWorkout[] = [];
+
+export function HistoryPage({
+  sessions,
+  stopIndex,
+  planned = noPlans,
+}: {
+  sessions: Session[];
+  stopIndex?: number;
+  planned?: readonly PlannedWorkout[];
+}) {
   const [selectedExercise, setSelectedExercise] = useState<ExerciseId>();
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const progressHeading = useRef<HTMLHeadingElement>(null);
@@ -29,6 +41,9 @@ export function HistoryPage({ sessions, stopIndex }: { sessions: Session[]; stop
   const entriesByExercise = useMemo(() => exerciseProgress(entries), [entries]);
   const visibleEntries =
     selectedDay === null ? entries : entries.filter(({ date }) => localDay(date) === selectedDay);
+  const applicablePlans =
+    stopIndex === undefined ? planned : planned.filter(({ stop }) => stop === stopIndex);
+  const selectedPlans = applicablePlans.filter(({ day }) => day === selectedDay);
   const selected =
     selectedExercise && entriesByExercise.has(selectedExercise)
       ? selectedExercise
@@ -71,7 +86,12 @@ export function HistoryPage({ sessions, stopIndex }: { sessions: Session[]; stop
       <p className={ui.subtitle}>
         {stop ? `Занятий на этой остановке: ${entries.length}` : 'Занятия, которые ты прошёл.'}
       </p>
-      <HistoryCalendar sessions={entries} selectedDay={selectedDay} selectDay={setSelectedDay} />
+      <HistoryCalendar
+        sessions={entries}
+        planned={applicablePlans}
+        selectedDay={selectedDay}
+        selectDay={setSelectedDay}
+      />
       {selectedDay === null && progressView}
       <div id="history-sessions" className={styles.historyList}>
         {selectedDay !== null && (
@@ -82,9 +102,14 @@ export function HistoryPage({ sessions, stopIndex }: { sessions: Session[]; stop
             </button>
           </div>
         )}
-        {selectedDay !== null && visibleEntries.length === 0 ? (
+        {selectedPlans.map(({ stop }) => (
+          <p className={styles.plannedWorkout} key={stop}>
+            Запланировано · {route[stop].title}
+          </p>
+        ))}
+        {selectedDay !== null && visibleEntries.length === 0 && selectedPlans.length === 0 ? (
           <p className={ui.subtitle}>За этот день занятий нет.</p>
-        ) : visibleEntries.length === 0 ? (
+        ) : selectedDay === null && visibleEntries.length === 0 ? (
           <div className={styles.empty}>
             <h2>Здесь пока тихо</h2>
             <p>Первая тренировка появится после того, как зажжёшь костёр.</p>
@@ -130,6 +155,11 @@ export function HistoryPage({ sessions, stopIndex }: { sessions: Session[]; stop
                   )}
                   {calories !== undefined && (
                     <p className={styles.historyDuration}>Активный расход · ≈ {calories} ккал</p>
+                  )}
+                  {entry.effort && (
+                    <p className={styles.historyDuration}>
+                      Оценка нагрузки · {effortLabels[entry.effort]}
+                    </p>
                   )}
                   {entry.elapsed !== null ? (
                     <>Основная часть · {formatTime(entry.elapsed)}</>

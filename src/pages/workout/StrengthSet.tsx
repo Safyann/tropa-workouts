@@ -1,21 +1,23 @@
 import { useRef, type FormEvent, type Ref } from 'react';
 import { ExerciseInstructions, exercises } from '../../entities/program';
-import { previousExerciseSets, type Session, type SetRecord } from '../../entities/progress';
-import { isLastSet, recordSet, type StrengthWorkout, type Workout } from '../../features/workout';
+import {
+  effortLabels,
+  formatSet,
+  formatWeight,
+  previousExerciseResult,
+  type Session,
+} from '../../entities/progress';
+import {
+  isLastSet,
+  prepareRestSound,
+  recordSet,
+  type StrengthWorkout,
+  type Workout,
+} from '../../features/workout';
 import { Icon } from '../../shared/ui/Icon';
 import { Demonstration } from './Demonstration';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './Workout.module.css';
-
-function formatWeight(weight: number) {
-  return `${String(weight).replace('.', ',')} кг`;
-}
-
-function formatSet({ weight, reps }: SetRecord) {
-  if (weight === null) return reps === null ? 'Без данных' : `${reps} повт.`;
-  const load = formatWeight(weight);
-  return reps === null ? load : `${load} × ${reps}`;
-}
 
 export function StrengthSet({
   workout,
@@ -25,6 +27,7 @@ export function StrengthSet({
   itemIndex,
   headingRef,
   endLabel,
+  restSound,
 }: {
   workout: StrengthWorkout;
   history: Session[];
@@ -33,6 +36,7 @@ export function StrengthSet({
   itemIndex: number;
   headingRef: Ref<HTMLHeadingElement>;
   endLabel: string;
+  restSound?: boolean;
 }) {
   const weightInput = useRef<HTMLInputElement>(null);
   const item = workout.plan[itemIndex];
@@ -41,7 +45,8 @@ export function StrengthSet({
   const canAddWeight = exercise.weighted;
   const weightLabel = exercise.needs?.includes('dumbbells') ? 'Вес одной гантели, кг' : 'Вес, кг';
   const finalSet = isLastSet(workout);
-  const previousSets = previousExerciseSets(history, id);
+  const previous = previousExerciseResult(history, id);
+  const previousSets = previous?.sets ?? [];
   const previousWeight = [...previousSets].reverse().find((set) => set.weight !== null)?.weight;
   const prior =
     [...workout.sets].reverse().find((set) => set.exercise === id && set.weight !== null) ??
@@ -59,6 +64,7 @@ export function StrengthSet({
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (restSound && !finalSet) prepareRestSound();
     const data = new FormData(event.currentTarget);
     const number = (name: string) => (data.get(name) === '' ? null : Number(data.get(name)));
     const updated = recordSet(workout, {
@@ -101,6 +107,7 @@ export function StrengthSet({
               <div>
                 <strong>В прошлый раз</strong>
                 <p>{previousSets.map(formatSet).join(' / ')}</p>
+                {previous?.effort && <p>Тренировка далась · {effortLabels[previous.effort]}</p>}
                 {exercise.perSide && previousSets.some(({ reps }) => reps !== null) && (
                   <p>Повторы на сторону</p>
                 )}

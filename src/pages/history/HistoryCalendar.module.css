@@ -43,6 +43,11 @@
   color: var(--ink);
   font-size: 0.875rem;
 }
+.workoutDay[data-planned]:not([data-completed]):not([aria-pressed='true']) {
+  background: var(--paper);
+  border-style: dashed;
+  border-color: var(--input-border);
+}
 .workoutDay {
   padding: 0 0 0.375rem;
   background: var(--moss);
@@ -61,26 +66,49 @@
 .workoutDay:focus-visible {
   outline-offset: -3px;
 }
-.workoutDay::after,
+.workoutDay[data-completed]::after,
 .dot {
   width: 0.375rem;
   height: 0.375rem;
   border-radius: 50%;
   background: var(--accent);
 }
-.workoutDay::after {
+.workoutDay[data-completed]::after {
   position: absolute;
   inset: auto auto 0.25rem;
   content: '';
 }
-.workoutDay[aria-pressed='true']::after {
+.workoutDay[data-completed][aria-pressed='true']::after {
   background: var(--ember);
+}
+.workoutDay[data-planned]::before,
+.plannedDot {
+  width: 0.375rem;
+  height: 0.375rem;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+}
+.workoutDay[data-planned]::before {
+  position: absolute;
+  inset: auto auto 0.25rem;
+  content: '';
+}
+.workoutDay[data-planned][data-completed]::before {
+  margin-right: 0.625rem;
+}
+.workoutDay[data-planned][data-completed]::after {
+  margin-left: 0.625rem;
+}
+.legends {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+  margin-top: 0.625rem;
 }
 .legend {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-top: 0.625rem;
   color: var(--muted);
   font-size: 0.875rem;
 }

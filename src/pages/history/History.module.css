@@ -13,6 +13,12 @@
 .dayFilter h2 {
   font-size: 1.125rem;
 }
+.plannedWorkout {
+  padding: 0.75rem;
+  border: 1px dashed var(--input-border);
+  border-radius: 0.5rem;
+  color: var(--muted);
+}
 .empty {
   composes: surface from '../../shared/ui/Common.module.css';
   padding: clamp(1rem, 3vw, 1.5rem);

@@ -10,10 +10,17 @@ import {
   workoutDetail,
   type WorkoutPreferences,
 } from '../../entities/program';
-import { nextStop, routeLength, weekCount, type Progress } from '../../entities/progress';
+import {
+  nextStop,
+  plannedWorkouts,
+  routeLength,
+  weekCount,
+  type Progress,
+} from '../../entities/progress';
 import { Icon } from '../../shared/ui/Icon';
 import { DayPreview } from './DayPreview';
 import { MuscleGroupPicker } from './MuscleGroupPicker';
+import { NextWorkoutDate } from './NextWorkoutDate';
 import { RouteMap } from './RouteMap';
 import { WorkoutSettings } from './WorkoutSettings';
 import ui from '../../shared/ui/Common.module.css';
@@ -26,6 +33,7 @@ interface Props {
   start: (short: boolean) => void;
   restart: () => void;
   changePreferences: (preferences: WorkoutPreferences) => void;
+  moveWorkout?: (day: number) => void;
 }
 
 export function RoutePage({
@@ -35,11 +43,13 @@ export function RoutePage({
   start,
   restart,
   changePreferences,
+  moveWorkout,
 }: Props) {
   const inWorkout = activeStop !== undefined;
   const totalStops = routeLength(progress, activeStop);
   const next = nextStop(progress, totalStops);
   const stop = route[next];
+  const nextDate = plannedWorkouts(progress, activeStop)[0]?.day;
   const completedStops = new Set(
     progress.sessions.filter((session) => session.round === progress.round).map(({ stop }) => stop),
   );
@@ -87,6 +97,9 @@ export function RoutePage({
             <Icon name={stop?.icon ?? 'check'} />
           </span>
           <h2>{stop?.title ?? 'Все костры горят'}</h2>
+          {nextDate !== undefined && moveWorkout && (
+            <NextWorkoutDate day={nextDate} move={moveWorkout} />
+          )}
           {stop ? (
             <>
               {!inWorkout && (

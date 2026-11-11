@@ -32,6 +32,7 @@ export {
 export type {
   CardioActivity,
   HomeEquipment,
+  MuscleGroup,
   WorkoutBlockActivity,
   WorkoutBlockType,
   WorkoutLevel,

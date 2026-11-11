@@ -17,22 +17,15 @@ import {
 } from '../../features/workout';
 import { Icon } from '../../shared/ui/Icon';
 import { StrengthSet } from './StrengthSet';
+import { StretchingInstructions } from './StretchingInstructions';
 import { Timer } from './Timer';
 import { WorkoutPlan } from './WorkoutPlan';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './Workout.module.css';
 
-const blockInstructions = {
-  warmup: {
-    walking: 'Начни с лёгкой ходьбы на месте.',
-    stretching:
-      'Плавно повторяй движения для мышц, которые будут работать. Например, сделай круги плечами или неглубокие выпады.',
-  },
-  cooldown: {
-    walking: 'Постепенно сбавь темп и закончи спокойной ходьбой.',
-    stretching:
-      'Плавно растяни мышцы, которые работали. Задержись в удобном положении и дыши спокойно.',
-  },
+const walkingInstructions = {
+  warmup: 'Начни с лёгкой ходьбы на месте.',
+  cooldown: 'Постепенно сбавь темп и закончи спокойной ходьбой.',
 };
 
 interface Props {
@@ -117,9 +110,12 @@ export function WorkoutPage({
         <div className={styles.step} key={workout.block.type}>
           <h2>{workoutBlockTitles[workout.block.type]}</h2>
           <p className={styles.stepDescription}>
-            {blockActivityLabel(workout.block.type, blockActivity)}.{' '}
-            {blockInstructions[workout.block.type][blockActivity]}
+            {blockActivityLabel(workout.block.type, blockActivity)}
+            {blockActivity === 'walking' && `. ${walkingInstructions[workout.block.type]}`}
           </p>
+          {blockActivity === 'stretching' && (
+            <StretchingInstructions workout={workout} type={workout.block.type} />
+          )}
           {timerView(warmup ? 'ТАЙМЕР РАЗМИНКИ' : 'ТАЙМЕР ЗАМИНКИ')}
           <button
             className={styles.stepAction}
@@ -188,11 +184,14 @@ export function WorkoutPage({
         </>
       )}
       <div className={styles.workoutExit}>
-        {workout.kind === 'strength' && workout.sets.length > 0 && workout.plan.some(isPending) && (
-          <button type="button" className={ui.secondary} onClick={() => finish(workout)}>
-            Закончить и сохранить
-          </button>
-        )}
+        {!workout.block &&
+          workout.kind === 'strength' &&
+          workout.sets.length > 0 &&
+          workout.plan.some(isPending) && (
+            <button type="button" className={ui.secondary} onClick={() => finishMain(workout)}>
+              {workout.cooldownMinutes ? endLabel : 'Закончить и сохранить'}
+            </button>
+          )}
         <button
           type="button"
           className={ui.secondary}

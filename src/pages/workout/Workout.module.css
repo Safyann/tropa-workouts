@@ -65,6 +65,24 @@
   composes: subtitle from '../../shared/ui/Common.module.css';
   margin-top: 0.5rem;
 }
+.stretchingPlan {
+  padding-inline-start: 1.25rem;
+  line-height: 1.45;
+}
+.stretchingPlan li + li {
+  margin-top: 0.75rem;
+}
+.stretchingPlan small,
+.stretchingPlan p {
+  display: block;
+  margin: 0.125rem 0 0;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+.stretchingHint {
+  color: var(--muted);
+  font-size: 0.875rem;
+}
 @keyframes step-enter {
   from {
     opacity: 0.8;

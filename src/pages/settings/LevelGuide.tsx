@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { levels, recommendLevel, type WorkoutLevel } from '../../entities/program';
 import { levelOptions } from './levelOptions';
+import { Button, Checkbox, Input } from '../../shared/ui/Controls';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './Settings.module.css';
 import formStyles from '../../shared/ui/SettingsForm.module.css';
@@ -38,19 +39,18 @@ export function LevelGuide({ apply }: { apply: (level: WorkoutLevel) => void }) 
       <form className={formStyles.fields} onSubmit={submit}>
         <label>
           Силовых занятий в неделю
-          <input name="days" type="number" inputMode="numeric" min="0" max="7" required />
+          <Input name="days" type="number" inputMode="numeric" min="0" max="7" required />
         </label>
         <label>
           Минут силовых в неделю
-          <input name="minutes" type="number" inputMode="numeric" min="0" max="10080" required />
+          <Input name="minutes" type="number" inputMode="numeric" min="0" max="10080" required />
         </label>
         <label className={formStyles.toggle}>
-          <input type="checkbox" name="regular" /> Регулярно занимаюсь несколько месяцев и умею
-          менять нагрузку
+          <Checkbox name="regular" /> Регулярно занимаюсь несколько месяцев и умею менять нагрузку
         </label>
-        <button className={styles.guideSubmit} type="submit">
+        <Button className={styles.guideSubmit} type="submit">
           Подобрать уровень
-        </button>
+        </Button>
       </form>
       {suggestion && (
         <p role="status" className={ui.hint}>

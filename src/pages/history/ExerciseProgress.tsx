@@ -6,6 +6,7 @@ import {
   sessionTitle,
   type ExerciseProgressEntry,
 } from '../../entities/progress';
+import { Button, Select } from '../../shared/ui/Controls';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './ExerciseProgress.module.css';
 
@@ -54,13 +55,13 @@ export function ExerciseProgress({
       </h2>
       <label className={styles.picker}>
         Упражнение
-        <select value={selected} onChange={(event) => select(event.target.value as ExerciseId)}>
+        <Select value={selected} onChange={(event) => select(event.target.value as ExerciseId)}>
           {[...entriesByExercise.keys()].map((id) => (
             <option key={id} value={id}>
               {exercises[id]?.title ?? id}
             </option>
           ))}
-        </select>
+        </Select>
       </label>
       <p className={styles.note}>
         Максимальные значения за подход в каждом занятии.
@@ -84,7 +85,8 @@ export function ExerciseProgress({
               <Fragment key={id}>
                 <tr>
                   <th scope="row">
-                    <button
+                    <Button
+                      variant="plain"
                       className={styles.dateButton}
                       type="button"
                       aria-expanded={expanded}
@@ -94,7 +96,7 @@ export function ExerciseProgress({
                       <time dateTime={new Date(session.date).toISOString()}>
                         {dateFormat.format(session.date)}
                       </time>
-                    </button>
+                    </Button>
                   </th>
                   {showsWeight && <Metric value={weight} max={maxWeight} unit="кг" />}
                   {showsReps && <Metric value={reps} max={maxReps} unit="" />}

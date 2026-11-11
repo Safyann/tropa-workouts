@@ -13,7 +13,11 @@ import {
   saveFreeStrengthDraft,
   type FreeStrengthDraft,
 } from '../../features/workout/draft';
+import { readSetFields, SetFields } from '../../features/workout/SetFields';
 import { ExercisePicker, useExerciseChoice } from './ExercisePicker';
+import { BackLink } from '../../shared/ui/NavigationLinks';
+import { PageTitle } from '../../shared/ui/PageTitle';
+import { Button, Input, Select } from '../../shared/ui/Controls';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './Workout.module.css';
 
@@ -61,12 +65,9 @@ export function FreeWorkoutPage({
     event.preventDefault();
     if (!selected) return;
     const data = new FormData(event.currentTarget);
-    const weight = data.get('weight');
-    const reps = data.get('reps');
     const set: SetRecord = {
       exercise: selected,
-      weight: typeof weight === 'string' && weight !== '' ? Number(weight) : null,
-      reps: typeof reps === 'string' && reps !== '' ? Number(reps) : null,
+      ...readSetFields(data),
     };
     updateDraft({ sets: [...sets, set] });
     event.currentTarget.reset();
@@ -95,18 +96,14 @@ export function FreeWorkoutPage({
 
   return (
     <section className={ui.narrow}>
-      <a className={ui.back} href="#map">
-        ← К карте
-      </a>
-      <h1 tabIndex={-1}>
-        Свободное занятие<span>.</span>
-      </h1>
+      <BackLink href="#map">К карте</BackLink>
+      <PageTitle>Свободное занятие</PageTitle>
       <p className={ui.subtitle}>Запиши тренировку или прогулку в историю.</p>
       <div className={styles.step}>
         <div className={styles.freeFields}>
           <label>
             Вид занятия
-            <select
+            <Select
               value={mode}
               onChange={(event) =>
                 setMode(event.target.value === 'walking' ? 'walking' : 'strength')
@@ -114,7 +111,7 @@ export function FreeWorkoutPage({
             >
               <option value="strength">Силовая</option>
               <option value="walking">Прогулка</option>
-            </select>
+            </Select>
           </label>
         </div>
         {mode === 'walking' ? (
@@ -129,11 +126,11 @@ export function FreeWorkoutPage({
           >
             <label>
               Длительность, мин
-              <input type="number" inputMode="numeric" name="minutes" min="1" max="1440" required />
+              <Input type="number" inputMode="numeric" name="minutes" min="1" max="1440" required />
             </label>
-            <button className={ui.primary} type="submit">
+            <Button variant="primary" type="submit">
               Сохранить прогулку
-            </button>
+            </Button>
           </form>
         ) : (
           <>
@@ -141,7 +138,7 @@ export function FreeWorkoutPage({
               <div className={styles.freeFields}>
                 <label>
                   Шаблон тренировки
-                  <select
+                  <Select
                     value={template?.id ?? ''}
                     onChange={(event) => {
                       setTemplateId(event.target.value);
@@ -155,11 +152,10 @@ export function FreeWorkoutPage({
                         {title}
                       </option>
                     ))}
-                  </select>
+                  </Select>
                 </label>
                 {template && (
-                  <button
-                    className={ui.secondary}
+                  <Button
                     type="button"
                     onClick={() => {
                       if (
@@ -170,33 +166,18 @@ export function FreeWorkoutPage({
                     }}
                   >
                     Удалить шаблон
-                  </button>
+                  </Button>
                 )}
               </div>
             )}
             <form className={styles.freeFields} onSubmit={addSet}>
               <ExercisePicker choice={choice} />
               <div className={styles.fields} key={selected}>
-                {exercise?.weighted && (
-                  <label>
-                    {exercise.needs?.includes('dumbbells') ? 'Вес одной гантели, кг' : 'Вес, кг'}
-                    <input type="number" inputMode="decimal" name="weight" min="0" step="any" />
-                  </label>
-                )}
-                <label>
-                  Повторы{exercise?.perSide ? ' на сторону' : ''}
-                  <input
-                    type="number"
-                    inputMode="numeric"
-                    name="reps"
-                    min="1"
-                    max={Number.MAX_SAFE_INTEGER}
-                  />
-                </label>
+                <SetFields exercise={exercise} />
               </div>
-              <button className={ui.secondary} type="submit" disabled={!selected}>
+              <Button type="submit" disabled={!selected}>
                 Добавить подход
-              </button>
+              </Button>
             </form>
             {sets.length > 0 && (
               <ol className={styles.freeSets}>
@@ -205,8 +186,7 @@ export function FreeWorkoutPage({
                     <span>
                       {exercises[set.exercise].title} · {formatSet(set)}
                     </span>
-                    <button
-                      className={ui.secondary}
+                    <Button
                       type="button"
                       aria-label={`Удалить подход ${index + 1}`}
                       onClick={() =>
@@ -214,7 +194,7 @@ export function FreeWorkoutPage({
                       }
                     >
                       Удалить
-                    </button>
+                    </Button>
                   </li>
                 ))}
               </ol>
@@ -233,7 +213,7 @@ export function FreeWorkoutPage({
             >
               <label>
                 Длительность, мин (необязательно)
-                <input
+                <Input
                   type="number"
                   inputMode="numeric"
                   name="minutes"
@@ -243,9 +223,14 @@ export function FreeWorkoutPage({
                   onChange={(event) => updateDraft({ minutes: event.target.value })}
                 />
               </label>
-              <button className={styles.stepAction} type="submit" disabled={!sets.length}>
+              <Button
+                variant="primary"
+                className={styles.stepAction}
+                type="submit"
+                disabled={!sets.length}
+              >
                 Сохранить тренировку
-              </button>
+              </Button>
             </form>
           </>
         )}

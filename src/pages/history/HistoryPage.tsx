@@ -18,6 +18,9 @@ import {
   type Session,
   type SessionChanges,
 } from '../../entities/progress';
+import { BackLink, ButtonLink } from '../../shared/ui/NavigationLinks';
+import { PageTitle } from '../../shared/ui/PageTitle';
+import { Button } from '../../shared/ui/Controls';
 import { Icon } from '../../shared/ui/Icon';
 import { localDay } from '../../shared/lib/calendarDates';
 import { ExerciseProgress } from './ExerciseProgress';
@@ -98,16 +101,9 @@ export function HistoryPage({
 
   return (
     <section className={ui.narrow}>
-      {stop && (
-        <a className={ui.back} href="#map">
-          ← К карте
-        </a>
-      )}
+      {stop && <BackLink href="#map">К карте</BackLink>}
       <p className={ui.eyebrow}>{stop ? 'ИСТОРИЯ ОСТАНОВКИ' : 'ТВОЙ МАРШРУТ'}</p>
-      <h1 tabIndex={-1}>
-        {stop?.title ?? 'История'}
-        <span>.</span>
-      </h1>
+      <PageTitle>{stop?.title ?? 'История'}</PageTitle>
       <p className={ui.subtitle}>
         {stop ? `Занятий на этой остановке: ${entries.length}` : 'Занятия, которые ты прошёл.'}
       </p>
@@ -122,9 +118,9 @@ export function HistoryPage({
         {selectedDay !== null && (
           <div className={styles.dayFilter}>
             <h2 aria-live="polite">Занятия за {selectedDateFormat.format(selectedDay)}</h2>
-            <button type="button" className={ui.secondary} onClick={() => setSelectedDay(null)}>
+            <Button type="button" onClick={() => setSelectedDay(null)}>
               Все занятия
-            </button>
+            </Button>
           </div>
         )}
         {selectedPlans.map(({ stop, program }) => (
@@ -138,9 +134,7 @@ export function HistoryPage({
           <div className={styles.empty}>
             <h2>Здесь пока тихо</h2>
             <p>Первая тренировка появится после того, как зажжёшь костёр.</p>
-            <a className={ui.secondary} href="#map">
-              К карте
-            </a>
+            <ButtonLink href="#map">К карте</ButtonLink>
           </div>
         ) : (
           [...visibleEntries].reverse().map((entry, index) => {
@@ -208,14 +202,15 @@ export function HistoryPage({
                           return (
                             <li key={id}>
                               {entriesByExercise.has(id) ? (
-                                <button
+                                <Button
+                                  variant="plain"
                                   className={styles.exerciseLink}
                                   type="button"
                                   onClick={() => showProgress(id)}
                                   aria-label={`Показать прогресс: ${title}`}
                                 >
                                   {title}
-                                </button>
+                                </Button>
                               ) : (
                                 <b>{title}</b>
                               )}{' '}
@@ -249,9 +244,9 @@ export function HistoryPage({
                     </>
                   )}
                   {((entry.freeId && entry.elapsed === null) || entry.roundTotal) && (
-                    <a className={ui.secondary} href={`#result/${sessionIdentity(entry)}`}>
+                    <ButtonLink href={`#result/${sessionIdentity(entry)}`}>
                       {entry.roundTotal ? 'Итоги круга' : 'Итоги занятия'}
-                    </a>
+                    </ButtonLink>
                   )}
                   {editSession && deleteSession && (
                     <HistorySessionActions

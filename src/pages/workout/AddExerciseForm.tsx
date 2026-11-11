@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { exercises, type ExerciseId, type HomeEquipment } from '../../entities/program';
+import { Button } from '../../shared/ui/Controls';
 import { ExercisePicker, useExerciseChoice } from './ExercisePicker';
-import ui from '../../shared/ui/Common.module.css';
 import styles from './Workout.module.css';
 
 export function AddExerciseForm({
@@ -26,9 +26,9 @@ export function AddExerciseForm({
         }}
       >
         <ExercisePicker choice={choice} />
-        <button className={ui.secondary} type="submit" disabled={!choice.selected}>
+        <Button type="submit" disabled={!choice.selected}>
           Добавить один подход
-        </button>
+        </Button>
       </form>
       <p role="status">{message}</p>
     </details>

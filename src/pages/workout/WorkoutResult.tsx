@@ -11,6 +11,9 @@ import {
 import { BodyWeightForm } from '../../features/workout/BodyWeightForm';
 import { WorkoutComparison } from './WorkoutComparison';
 import { WorkoutTemplateForm } from './WorkoutTemplateForm';
+import { ButtonLink } from '../../shared/ui/NavigationLinks';
+import { PageTitle } from '../../shared/ui/PageTitle';
+import { Button } from '../../shared/ui/Controls';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './Workout.module.css';
 
@@ -35,9 +38,7 @@ export function WorkoutResult({
 
   return (
     <section className={ui.narrow}>
-      <h1 tabIndex={-1}>
-        Итоги занятия<span>.</span>
-      </h1>
+      <PageTitle>Итоги занятия</PageTitle>
       {session.freeId && <p className={ui.subtitle}>{sessionTitle(session)} · вне маршрута</p>}
       <div className={styles.step}>
         <p className={ui.eyebrow}>ВСЁ ЗАНЯТИЕ</p>
@@ -85,23 +86,18 @@ export function WorkoutResult({
       <fieldset className={styles.effort}>
         <legend>Как далась тренировка?</legend>
         {(Object.keys(effortLabels) as Effort[]).map((effort) => (
-          <button
+          <Button
             key={effort}
-            className={ui.secondary}
             type="button"
             aria-pressed={session.effort === effort}
             onClick={() => saveEffort(session.effort === effort ? undefined : effort)}
           >
             {effortLabels[effort]}
-          </button>
+          </Button>
         ))}
       </fieldset>
-      <a className={ui.secondary} href="#map">
-        К карте
-      </a>{' '}
-      <a className={ui.secondary} href="#history">
-        История занятий
-      </a>
+      <ButtonLink href="#map">К карте</ButtonLink>{' '}
+      <ButtonLink href="#history">История занятий</ButtonLink>
     </section>
   );
 }

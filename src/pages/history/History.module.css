@@ -104,7 +104,10 @@
 .historyEditor label {
   min-width: 0;
 }
-.historyEditor :is(input, textarea) {
+.historyEditor input {
+  padding: 0.375rem;
+}
+.historyEditor textarea {
   min-width: 0;
   width: 100%;
   min-height: 2.75rem;
@@ -114,8 +117,6 @@
   background: var(--surface);
   color: var(--ink);
   font: inherit;
-}
-.historyEditor textarea {
   resize: vertical;
 }
 .historyEditor fieldset {

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { exercises, type ExerciseId, type HomeEquipment } from '../../entities/program';
+import { Input, Select } from '../../shared/ui/Controls';
 import { normalizeSearchText } from '../../shared/lib/normalizeSearchText';
 
 const catalog = Object.entries(exercises).map(([id, exercise]) => ({
@@ -38,7 +39,7 @@ export function ExercisePicker({ choice }: { choice: ReturnType<typeof useExerci
     <>
       <label>
         Поиск упражнения
-        <input
+        <Input
           type="search"
           value={choice.query}
           onChange={(event) => choice.setQuery(event.target.value)}
@@ -46,7 +47,7 @@ export function ExercisePicker({ choice }: { choice: ReturnType<typeof useExerci
       </label>
       <label>
         Упражнение
-        <select
+        <Select
           value={choice.selected ?? ''}
           disabled={!choice.selected}
           onChange={(event) =>
@@ -59,7 +60,7 @@ export function ExercisePicker({ choice }: { choice: ReturnType<typeof useExerci
               {title}
             </option>
           ))}
-        </select>
+        </Select>
       </label>
     </>
   );

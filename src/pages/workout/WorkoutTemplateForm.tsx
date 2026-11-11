@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { workoutTemplateTitleLimit } from '../../entities/progress';
+import { Button, Input } from '../../shared/ui/Controls';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './Workout.module.css';
 
@@ -30,11 +31,9 @@ export function WorkoutTemplateForm({
       >
         <label>
           Название
-          <input name="title" defaultValue={title} maxLength={workoutTemplateTitleLimit} required />
+          <Input name="title" defaultValue={title} maxLength={workoutTemplateTitleLimit} required />
         </label>
-        <button type="submit" className={ui.secondary}>
-          {title ? 'Обновить шаблон' : 'Сохранить как шаблон'}
-        </button>
+        <Button type="submit">{title ? 'Обновить шаблон' : 'Сохранить как шаблон'}</Button>
         {message && (
           <p role="status" className={ui.hint}>
             {message}

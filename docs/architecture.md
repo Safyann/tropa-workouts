@@ -11,7 +11,11 @@
 | [src/features/workout](../src/features/workout) | Модель занятия, подходы и замены, отдых, разминка и заминка, валидация черновика, звуковой сигнал |
 | [src/entities/program](../src/entities/program) | Программы, остановки, настройки, каталог Kinetic, подбор и инструкции к упражнениям |
 | [src/entities/progress](../src/entities/progress) | Сохранённые занятия, расчёт следующей остановки, расписание, статистика, сравнение и импорт |
-| [src/shared](../src/shared) | Общие стили, иконки, нормализация поиска и функции локальных дат |
+| [src/shared](../src/shared) | Общие стили, иконки, кнопки и поля формы, нормализация поиска и функции локальных дат |
+
+`Button`, `Input`, `Checkbox` и `Select` находятся в [shared/ui/Controls.tsx](../src/shared/ui/Controls.tsx). Они используют нативные элементы и принимают их атрибуты. Подписи полей, валидация и расположение остаются частью экрана или формы.
+
+Заголовок экрана и ссылки переиспользуются через [PageTitle](../src/shared/ui/PageTitle.tsx) и [NavigationLinks](../src/shared/ui/NavigationLinks.tsx). [SetFields](../src/features/workout/SetFields.tsx) задаёт подписи, ограничения и чтение веса и повторов для маршрутной тренировки, свободного занятия и редактора истории.
 | [scripts](../scripts) | Подготовка каталога и офлайн-сборки, исходник сервис-воркера |
 | [public](../public) | Манифест PWA, иконки и лицензия каталога |
 | [.storybook](../.storybook) и [.github/workflows](../.github/workflows) | Истории компонентов и публикация на GitHub Pages |

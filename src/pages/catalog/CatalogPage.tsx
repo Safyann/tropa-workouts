@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { muscleGroups, searchKineticExercises, type HomeEquipment } from '../../entities/program';
 import { CatalogTechnique } from './CatalogTechnique';
+import { ButtonLink } from '../../shared/ui/NavigationLinks';
+import { PageTitle } from '../../shared/ui/PageTitle';
+import { Button, Checkbox, Input, Select } from '../../shared/ui/Controls';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './Catalog.module.css';
 
@@ -15,13 +18,11 @@ export function CatalogPage({ equipment }: { equipment: readonly HomeEquipment[]
 
   return (
     <section className={ui.narrow}>
-      <h1 tabIndex={-1}>
-        Упражнения<span>.</span>
-      </h1>
+      <PageTitle>Упражнения</PageTitle>
       <div className={styles.catalogFilters}>
         <label>
           Поиск упражнений
-          <input
+          <Input
             type="search"
             value={query}
             onChange={(event) => {
@@ -34,7 +35,7 @@ export function CatalogPage({ equipment }: { equipment: readonly HomeEquipment[]
         </label>
         <label>
           Основная группа мышц
-          <select
+          <Select
             value={group}
             onChange={(event) => {
               setGroup(event.target.value);
@@ -47,11 +48,10 @@ export function CatalogPage({ equipment }: { equipment: readonly HomeEquipment[]
                 {value}
               </option>
             ))}
-          </select>
+          </Select>
         </label>
         <label className={styles.equipmentFilter}>
-          <input
-            type="checkbox"
+          <Checkbox
             checked={ownEquipmentOnly}
             onChange={(event) => {
               setOwnEquipmentOnly(event.target.checked);
@@ -73,15 +73,14 @@ export function CatalogPage({ equipment }: { equipment: readonly HomeEquipment[]
                 <small>{[...item.groups, item.gear].join(' · ')}</small>
               </div>
               {item.video && (
-                <a
-                  className={ui.secondary}
+                <ButtonLink
                   href={item.video}
                   target="_blank"
                   rel="noreferrer"
                   aria-label={`Видео техники: ${item.title}`}
                 >
                   Видео ↗
-                </a>
+                </ButtonLink>
               )}
               {item.hasCues && <CatalogTechnique id={item.id} />}
             </li>
@@ -89,9 +88,9 @@ export function CatalogPage({ equipment }: { equipment: readonly HomeEquipment[]
         </ul>
       )}
       {matches.length > limit && (
-        <button className={ui.secondary} type="button" onClick={() => setLimit(limit + pageSize)}>
+        <Button type="button" onClick={() => setLimit(limit + pageSize)}>
           Показать ещё
-        </button>
+        </Button>
       )}
       <footer className={ui.foot}>
         <a href="https://github.com/kinetic-place/exercises-json" target="_blank" rel="noreferrer">

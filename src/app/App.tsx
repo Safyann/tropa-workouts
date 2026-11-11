@@ -48,6 +48,7 @@ import { WorkoutPage } from '../pages/workout';
 import { FreeWorkoutPage } from '../pages/workout/FreeWorkoutPage';
 import { WorkoutResult } from '../pages/workout/WorkoutResult';
 import { resolveRoute } from './route';
+import { Button } from '../shared/ui/Controls';
 import { localDay } from '../shared/lib/calendarDates';
 import { useAppUpdate } from './useAppUpdate';
 import './styles/global.css';
@@ -477,14 +478,9 @@ export function App() {
                 ? 'Приложение обновится после выхода из занятия.'
                 : 'Доступна новая версия «Тропы».'}
             </span>
-            <button
-              type="button"
-              className={ui.secondary}
-              onClick={requestUpdate}
-              disabled={requested}
-            >
+            <Button type="button" onClick={requestUpdate} disabled={requested}>
               {workout ? 'Обновить после тренировки' : 'Обновить'}
-            </button>
+            </Button>
           </div>
         )}
         <div className={styles.screenEnter} key={screenKey}>

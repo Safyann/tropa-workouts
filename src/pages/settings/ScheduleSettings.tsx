@@ -6,6 +6,7 @@ import {
   type TrainingWeekday,
   type WorkoutPreferences,
 } from '../../entities/program';
+import { Button, Checkbox } from '../../shared/ui/Controls';
 import { localDay } from '../../shared/lib/calendarDates';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './Settings.module.css';
@@ -48,18 +49,17 @@ export function ScheduleSettings({
           </legend>
           {trainingWeekdays.map((day) => (
             <label key={day}>
-              <input type="checkbox" checked={days.includes(day)} onChange={() => toggle(day)} />
+              <Checkbox checked={days.includes(day)} onChange={() => toggle(day)} />
               {labels[day]}
             </label>
           ))}
         </fieldset>
         <div className={styles.dataActions}>
-          <button className={ui.primary} type="submit" disabled={!changed || days.length !== goal}>
+          <Button variant="primary" type="submit" disabled={!changed || days.length !== goal}>
             Сохранить расписание
-          </button>
+          </Button>
           {savedDays.length > 0 && (
-            <button
-              className={ui.secondary}
+            <Button
               type="button"
               onClick={() => {
                 setDays([]);
@@ -67,7 +67,7 @@ export function ScheduleSettings({
               }}
             >
               Отключить расписание
-            </button>
+            </Button>
           )}
         </div>
       </form>

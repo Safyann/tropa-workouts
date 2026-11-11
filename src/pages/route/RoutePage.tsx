@@ -23,6 +23,9 @@ import {
   weeklyReport,
   type Progress,
 } from '../../entities/progress';
+import { ButtonLink } from '../../shared/ui/NavigationLinks';
+import { PageTitle } from '../../shared/ui/PageTitle';
+import { Button } from '../../shared/ui/Controls';
 import { Icon } from '../../shared/ui/Icon';
 import { DayPreview } from './DayPreview';
 import { MuscleGroupPicker } from './MuscleGroupPicker';
@@ -86,10 +89,7 @@ export function RoutePage({
             <span className={styles.signal} />{' '}
             {program ? 'ПРОГРАММА 02 / ДОМА' : 'ПРОГРАММА 01 / ДОМА'}
           </p>
-          <h1 tabIndex={-1}>
-            {program ? dumbbellProgramTitle : 'Войти в ритм'}
-            <span>.</span>
-          </h1>
+          <PageTitle>{program ? dumbbellProgramTitle : 'Войти в ритм'}</PageTitle>
           <p className={ui.subtitle}>
             {program
               ? 'Две силовые в неделю. Чередуй тренировки А и Б.'
@@ -147,30 +147,23 @@ export function RoutePage({
                 <MuscleGroupPicker preferences={preferences} change={changePreferences} />
               )}
               <div className={styles.cardActions}>
-                <button className={ui.primary} onClick={() => start(false)}>
+                <Button variant="primary" onClick={() => start(false)}>
                   {inWorkout ? 'Продолжить занятие' : 'Начать занятие'} <Icon name="arrow" />
-                </button>
-                {!inWorkout && (
-                  <button className={ui.secondary} onClick={() => start(true)}>
-                    Короткий вариант
-                  </button>
-                )}
+                </Button>
+                {!inWorkout && <Button onClick={() => start(true)}>Короткий вариант</Button>}
               </div>
               {!inWorkout && (
                 <>
                   {!program && !progress.sessions.length && !preferences.equipment && (
                     <div className={styles.equipmentIntro}>
                       <p className={ui.hint}>Подбери план под свой домашний инвентарь.</p>
-                      <a className={ui.secondary} href="#settings">
-                        Выбрать инвентарь
-                      </a>
-                      <button
+                      <ButtonLink href="#settings">Выбрать инвентарь</ButtonLink>
+                      <Button
                         type="button"
-                        className={ui.secondary}
                         onClick={() => changePreferences({ ...preferences, equipment: [] })}
                       >
                         Без инвентаря
-                      </button>
+                      </Button>
                     </div>
                   )}
                   <WorkoutSettings preferences={preferences} change={changePreferences} />
@@ -187,18 +180,16 @@ export function RoutePage({
                 comparisonLabel="Изменения за круг"
               />
               <div className={styles.cardActions}>
-                <button className={ui.primary} onClick={restart}>
+                <Button variant="primary" onClick={restart}>
                   Новый круг <Icon name="arrow" />
-                </button>
-                <a className={ui.secondary} href="#settings">
-                  Настройки частоты и расписания
-                </a>
+                </Button>
+                <ButtonLink href="#settings">Настройки частоты и расписания</ButtonLink>
               </div>
             </>
           )}
-          <a className={`${ui.secondary} ${styles.freeLink}`} href="#free">
+          <ButtonLink className={styles.freeLink} href="#free">
             Записать занятие вне маршрута
-          </a>
+          </ButtonLink>
         </section>
         <RouteMap
           program={program}
@@ -231,15 +222,9 @@ export function RoutePage({
           {inWorkout ? (
             <p className={ui.hint}>Заверши начатое занятие, чтобы сменить программу.</p>
           ) : !program && !hasDumbbells ? (
-            <a className={ui.secondary} href="#settings">
-              Отметить гантели в настройках
-            </a>
+            <ButtonLink href="#settings">Отметить гантели в настройках</ButtonLink>
           ) : (
-            <button
-              className={ui.secondary}
-              type="button"
-              onClick={() => chooseProgram(program ? undefined : 'dumbbell')}
-            >
+            <Button type="button" onClick={() => chooseProgram(program ? undefined : 'dumbbell')}>
               {program
                 ? canResumeProgram
                   ? 'Вернуться к стартовому маршруту'
@@ -247,7 +232,7 @@ export function RoutePage({
                 : canResumeProgram
                   ? 'Вернуться к программе с гантелями'
                   : 'Начать программу с гантелями'}
-            </button>
+            </Button>
           )}
         </section>
       )}

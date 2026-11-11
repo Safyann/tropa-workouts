@@ -9,13 +9,8 @@
   font-size: 0.875rem;
   font-weight: 700;
 }
-.catalogFilters input[type='search'],
-.catalogFilters select {
-  min-width: 0;
-  width: 100%;
-  border: 1px solid var(--input-border);
+.catalogFilters :is(input[type='search'], select) {
   border-radius: 0.5rem;
-  background: var(--surface);
   padding: 0.5rem 0.75rem;
 }
 .catalogFilters .equipmentFilter {

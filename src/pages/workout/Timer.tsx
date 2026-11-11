@@ -1,4 +1,5 @@
 import { formatTime } from '../../entities/progress';
+import { Button } from '../../shared/ui/Controls';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './Workout.module.css';
 
@@ -19,9 +20,9 @@ export function Timer({
       <p className={styles.clock} role="timer">
         {formatTime(seconds)}
       </p>
-      <button className={ui.secondary} onClick={toggle} disabled={seconds === 0}>
+      <Button onClick={toggle} disabled={seconds === 0}>
         {seconds === 0 ? 'Время вышло' : running ? 'Пауза' : 'Запустить таймер'}
-      </button>
+      </Button>
     </div>
   );
 }

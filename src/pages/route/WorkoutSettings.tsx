@@ -5,6 +5,7 @@ import {
   workoutBlockTitles,
   type WorkoutPreferences,
 } from '../../entities/program';
+import { Select } from '../../shared/ui/Controls';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './Route.module.css';
 import formStyles from '../../shared/ui/SettingsForm.module.css';
@@ -22,7 +23,7 @@ export function WorkoutSettings({
       <div className={formStyles.fields}>
         <label className={formStyles.wide}>
           Длительность
-          <select
+          <Select
             value={preferences.minutes}
             onChange={(event) => {
               const minutes = durations.find((value) => String(value) === event.target.value);
@@ -34,14 +35,14 @@ export function WorkoutSettings({
                 {minutes} минут
               </option>
             ))}
-          </select>
+          </Select>
         </label>
         {(['warmup', 'cooldown'] as const).map((type) => {
           const activityKey = `${type}Activity` as const;
           return (
             <label className={formStyles.wide} key={type}>
               {workoutBlockTitles[type]}
-              <select
+              <Select
                 value={preferences[type] ? (preferences[activityKey] ?? 'walking') : 'off'}
                 onChange={(event) => {
                   const value = event.target.value;
@@ -57,7 +58,7 @@ export function WorkoutSettings({
                 <option value="stretching">
                   {blockActivityLabel(type, 'stretching')} · {optionalBlockMinutes} мин
                 </option>
-              </select>
+              </Select>
             </label>
           );
         })}

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { equipmentLabels, selectableEquipment, type HomeEquipment } from '../../entities/program';
+import { Checkbox, Input } from '../../shared/ui/Controls';
 import { normalizeSearchText } from '../../shared/lib/normalizeSearchText';
 import styles from './Settings.module.css';
 import formStyles from '../../shared/ui/SettingsForm.module.css';
@@ -28,7 +29,7 @@ export function EquipmentPicker({
       <div className={formStyles.fields}>
         <label className={formStyles.wide}>
           Поиск инвентаря
-          <input
+          <Input
             type="search"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
@@ -42,8 +43,7 @@ export function EquipmentPicker({
         </p>
         {matches.map((item) => (
           <label key={item} className={formStyles.toggle}>
-            <input
-              type="checkbox"
+            <Checkbox
               checked={selected.includes(item)}
               onChange={(event) =>
                 change(

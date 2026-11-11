@@ -15,6 +15,9 @@ import { EquipmentPicker } from './EquipmentPicker';
 import { LevelGuide } from './LevelGuide';
 import { levelOptions } from './levelOptions';
 import { ScheduleSettings } from './ScheduleSettings';
+import { BackLink } from '../../shared/ui/NavigationLinks';
+import { PageTitle } from '../../shared/ui/PageTitle';
+import { Checkbox, Select } from '../../shared/ui/Controls';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './Settings.module.css';
 import formStyles from '../../shared/ui/SettingsForm.module.css';
@@ -32,12 +35,8 @@ export function SettingsPage({
 }) {
   return (
     <section className={ui.narrow}>
-      <a className={ui.back} href="#map">
-        ← К карте
-      </a>
-      <h1 tabIndex={-1}>
-        Настройки профиля<span>.</span>
-      </h1>
+      <BackLink href="#map">К карте</BackLink>
+      <PageTitle>Настройки профиля</PageTitle>
       <p className={ui.subtitle}>
         {preferences.program
           ? 'В программе с гантелями две тренировки в неделю на протяжении четырёх недель.'
@@ -47,7 +46,7 @@ export function SettingsPage({
         <div className={formStyles.fields}>
           <label>
             Уровень
-            <select
+            <Select
               value={preferences.level}
               onChange={(event) => {
                 const level = levelOptions.find((value) => value === event.target.value);
@@ -59,11 +58,11 @@ export function SettingsPage({
                   {levels[level].title}
                 </option>
               ))}
-            </select>
+            </Select>
           </label>
           <label>
             Недель в маршруте
-            <select
+            <Select
               value={preferences.program ? 4 : (preferences.routeWeeks ?? defaultRouteWeeks)}
               disabled={Boolean(preferences.program)}
               onChange={(event) => {
@@ -76,11 +75,11 @@ export function SettingsPage({
                   {weeks}
                 </option>
               ))}
-            </select>
+            </Select>
           </label>
           <label>
             Занятий в неделю
-            <select
+            <Select
               value={
                 preferences.program
                   ? dumbbellWeeklyGoal
@@ -99,12 +98,11 @@ export function SettingsPage({
                   {goal}
                 </option>
               ))}
-            </select>
+            </Select>
           </label>
         </div>
         <label className={styles.soundSetting}>
-          <input
-            type="checkbox"
+          <Checkbox
             checked={preferences.restSound ?? false}
             onChange={(event) => change({ ...preferences, restSound: event.target.checked })}
           />

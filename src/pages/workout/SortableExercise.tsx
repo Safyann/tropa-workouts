@@ -7,7 +7,7 @@ import {
   type HomeEquipment,
 } from '../../entities/program';
 import { isPending, type PlanExercise } from '../../features/workout';
-import ui from '../../shared/ui/Common.module.css';
+import { Button } from '../../shared/ui/Controls';
 import styles from './WorkoutPlan.module.css';
 
 export function SortableExercise({
@@ -54,9 +54,14 @@ export function SortableExercise({
     >
       <div className={styles.planLine}>
         {pending ? (
-          <button className={styles.planPick} aria-pressed={selected} onClick={choose}>
+          <Button
+            variant="plain"
+            className={styles.planPick}
+            aria-pressed={selected}
+            onClick={choose}
+          >
             {exercise.title}
-          </button>
+          </Button>
         ) : (
           <strong>{exercise.title}</strong>
         )}
@@ -64,7 +69,8 @@ export function SortableExercise({
           {status ? `${status} · ` : ''}
           {item.completed}/{item.target}
         </span>
-        <button
+        <Button
+          variant="plain"
           ref={setActivatorNodeRef}
           type="button"
           className={styles.dragHandle}
@@ -82,7 +88,7 @@ export function SortableExercise({
               </g>
             ))}
           </svg>
-        </button>
+        </Button>
       </div>
       <small>
         {exercise.group} · {exercise.gear}
@@ -98,22 +104,20 @@ export function SortableExercise({
           {alternatives.length > 0 && (
             <div className={styles.planAlternatives}>
               {alternatives.map((id) => (
-                <button key={id} className={styles.alternative} onClick={() => replace(id)}>
+                <Button key={id} className={styles.alternative} onClick={() => replace(id)}>
                   <span>{exercises[id].title}</span>
                   <small>{exercises[id].gear}</small>
-                </button>
+                </Button>
               ))}
             </div>
           )}
-          <button className={ui.secondary} onClick={skip}>
-            Больно · пропустить
-          </button>
+          <Button onClick={skip}>Больно · пропустить</Button>
         </details>
       )}
       {item.skipped && (
-        <button className={styles.planPick} onClick={skip}>
+        <Button variant="plain" className={styles.planPick} onClick={skip}>
           Вернуть в план
-        </button>
+        </Button>
       )}
     </li>
   );

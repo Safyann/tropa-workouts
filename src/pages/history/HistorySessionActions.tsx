@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { Session, SessionChanges } from '../../entities/progress';
 import { HistorySessionEditor } from './HistorySessionEditor';
+import { Button } from '../../shared/ui/Controls';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './History.module.css';
 
@@ -35,8 +36,7 @@ export function HistorySessionActions({
         />
       ) : (
         <div className={styles.historyActions}>
-          <button
-            className={ui.secondary}
+          <Button
             type="button"
             onClick={() => {
               setMessage(undefined);
@@ -44,9 +44,8 @@ export function HistorySessionActions({
             }}
           >
             Редактировать
-          </button>
-          <button
-            className={ui.secondary}
+          </Button>
+          <Button
             type="button"
             onClick={() => {
               const question = reopensStop
@@ -56,7 +55,7 @@ export function HistorySessionActions({
             }}
           >
             Удалить занятие
-          </button>
+          </Button>
         </div>
       )}
       {message && (

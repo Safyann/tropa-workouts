@@ -1,6 +1,6 @@
 import type { FormEvent } from 'react';
 import { isBodyWeight } from '../../entities/program';
-import ui from '../../shared/ui/Common.module.css';
+import { Button, Input } from '../../shared/ui/Controls';
 import styles from '../../shared/ui/SettingsForm.module.css';
 
 export function BodyWeightForm({
@@ -24,7 +24,7 @@ export function BodyWeightForm({
     <form className={styles.fields} onSubmit={submit}>
       <label>
         Вес тела, кг
-        <input
+        <Input
           name="bodyWeight"
           type="number"
           inputMode="decimal"
@@ -33,9 +33,7 @@ export function BodyWeightForm({
           defaultValue={value}
         />
       </label>
-      <button className={ui.secondary} type="submit">
-        Сохранить вес
-      </button>
+      <Button type="submit">Сохранить вес</Button>
     </form>
   );
 }

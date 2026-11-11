@@ -11,20 +11,10 @@
   color: var(--muted);
   font-weight: 650;
 }
-.fields input {
-  accent-color: var(--forest);
-}
-.fields select,
-.fields input:is([type='number'], [type='search']) {
-  width: 100%;
-  min-width: 0;
+.fields :is(select, input[type='number'], input[type='search']) {
   height: 2.75rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 0.375rem;
+  border-color: var(--border);
   padding: 0.375rem 0.5rem;
-  color: var(--ink);
-  font: inherit;
 }
 .fields :is(select, input, button):focus-visible {
   outline-offset: -3px;

@@ -1,5 +1,6 @@
 import { useState, type ChangeEvent } from 'react';
 import type { Progress } from '../../entities/progress';
+import { Button, Input } from '../../shared/ui/Controls';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './Settings.module.css';
 
@@ -40,12 +41,12 @@ export function BackupSettings({
       <h2 id="backup-heading">Резервная копия</h2>
       <p className={ui.hint}>Скачай историю и настройки, чтобы перенести их в другой браузер.</p>
       <div className={styles.dataActions}>
-        <button className={ui.secondary} type="button" onClick={download}>
+        <Button type="button" onClick={download}>
           Скачать копию
-        </button>
+        </Button>
         <label className={styles.backupInput}>
           Восстановить из файла
-          <input type="file" accept=".json,application/json" onChange={importFile} />
+          <Input type="file" accept=".json,application/json" onChange={importFile} />
         </label>
       </div>
       <p className={styles.backupStatus} role="status">

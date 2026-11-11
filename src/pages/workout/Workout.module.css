@@ -44,43 +44,20 @@
   font-size: 0.75rem;
   font-weight: 650;
 }
-.fields input,
-.setFieldControls input,
 .weightStep select {
-  width: 100%;
-  min-width: 0;
-  min-height: 2.75rem;
-  border: 1px solid var(--input-border);
   background: #fffdf7;
-  border-radius: 0.375rem;
-  color: var(--ink);
-  padding: 0.5rem;
   font-size: 1rem;
 }
-.setFields,
-.setField,
+.setFields {
+  display: grid;
+  gap: 0.625rem;
+}
 .weightStep {
   display: grid;
   gap: 0.375rem;
-}
-.setFields {
-  gap: 0.625rem;
-}
-.setField label,
-.weightStep {
   color: var(--muted);
   font-size: 0.75rem;
   font-weight: 650;
-}
-.setFieldControls {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  gap: 0.375rem;
-}
-.setFieldControls button {
-  min-width: 2.75rem;
-}
-.weightStep {
   justify-self: start;
 }
 .repeatSet {
@@ -176,17 +153,6 @@
   display: grid;
   gap: 0.375rem;
 }
-.freeFields :is(select, input) {
-  width: 100%;
-  min-width: 0;
-  min-height: 2.75rem;
-  padding: 0.5rem;
-  border: 1px solid var(--input-border);
-  border-radius: 0.375rem;
-  color: var(--ink);
-  background: var(--surface);
-  font: inherit;
-}
 .freeSets {
   display: grid;
   gap: 0.5rem;
@@ -218,7 +184,6 @@
   composes: panel from '../../shared/ui/Common.module.css';
 }
 .stepAction {
-  composes: primary from '../../shared/ui/Common.module.css';
   width: 100%;
 }
 .stepDescription {

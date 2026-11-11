@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Exercise } from '../../entities/program';
+import { Button } from '../../shared/ui/Controls';
 import styles from './Demonstration.module.css';
 
 export function Demonstration({ exercise }: { exercise: Exercise }) {
@@ -52,13 +53,14 @@ export function Demonstration({ exercise }: { exercise: Exercise }) {
         {circle(0, 10)}
         {exercise.weighted && exercise.group !== 'Ноги и ягодицы' && circle(7, 6)}
       </svg>
-      <button
+      <Button
+        variant="plain"
         className={styles.demoButton}
         aria-pressed={playing}
         onClick={() => setPlaying(!playing)}
       >
         {playing ? 'Остановить показ' : '▶ Показать движение'}
-      </button>
+      </Button>
     </div>
   );
 }

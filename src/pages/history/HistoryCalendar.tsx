@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import type { PlannedWorkout, Session } from '../../entities/progress';
+import { Button } from '../../shared/ui/Controls';
 import ui from '../../shared/ui/Common.module.css';
 import { calendarWeeks, localDay, monthStart } from '../../shared/lib/calendarDates';
 import styles from './HistoryCalendar.module.css';
@@ -57,26 +58,20 @@ export function HistoryCalendar({
     <section className={ui.panel} aria-labelledby="history-calendar-heading">
       <h2 id="history-calendar-heading">Календарь тренировок</h2>
       <div className={styles.toolbar}>
-        <button
-          className={ui.secondary}
-          type="button"
-          aria-label="Предыдущий месяц"
-          onClick={() => changeMonth(-1)}
-        >
+        <Button type="button" aria-label="Предыдущий месяц" onClick={() => changeMonth(-1)}>
           ←
-        </button>
+        </Button>
         <p className={styles.month} aria-live="polite">
           {monthFormat.format(month)}
         </p>
-        <button
-          className={ui.secondary}
+        <Button
           type="button"
           aria-label="Следующий месяц"
           onClick={() => changeMonth(1)}
           disabled={month >= currentMonth}
         >
           →
-        </button>
+        </Button>
       </div>
       <table className={styles.calendar} aria-label={monthFormat.format(month)}>
         <thead>
@@ -100,7 +95,8 @@ export function HistoryCalendar({
                 return (
                   <td key={weekday}>
                     {count || isPlanned ? (
-                      <button
+                      <Button
+                        variant="plain"
                         type="button"
                         className={styles.workoutDay}
                         aria-current={currentDate}
@@ -112,7 +108,7 @@ export function HistoryCalendar({
                         onClick={() => selectDay(day === selectedDay ? null : day)}
                       >
                         {dayOfMonth}
-                      </button>
+                      </Button>
                     ) : (
                       <span className={styles.day} aria-current={currentDate}>
                         {dayOfMonth}

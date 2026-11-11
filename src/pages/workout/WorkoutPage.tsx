@@ -19,6 +19,9 @@ import {
   toggleTimer,
   type Workout,
 } from '../../features/workout';
+import { BackLink } from '../../shared/ui/NavigationLinks';
+import { PageTitle } from '../../shared/ui/PageTitle';
+import { Button } from '../../shared/ui/Controls';
 import { Icon } from '../../shared/ui/Icon';
 import { StrengthSet } from './StrengthSet';
 import { StretchingInstructions } from './StretchingInstructions';
@@ -114,16 +117,11 @@ export function WorkoutPage({
 
   return (
     <section className={ui.narrow}>
-      <a className={ui.back} href="#map">
-        ← К карте
-      </a>
+      <BackLink href="#map">К карте</BackLink>
       <p className={ui.eyebrow}>
         ОСТАНОВКА {workout.index + 1} / {totalStops}
       </p>
-      <h1 tabIndex={-1}>
-        {stop.title}
-        <span>.</span>
-      </h1>
+      <PageTitle>{stop.title}</PageTitle>
       {workout.block ? (
         <div className={styles.step} key={workout.block.type}>
           <h2>{workoutBlockTitles[workout.block.type]}</h2>
@@ -135,13 +133,14 @@ export function WorkoutPage({
             <StretchingInstructions workout={workout} type={workout.block.type} />
           )}
           {timerView(warmup ? 'ТАЙМЕР РАЗМИНКИ' : 'ТАЙМЕР ЗАМИНКИ')}
-          <button
+          <Button
+            variant="primary"
             className={styles.stepAction}
             onClick={() => (warmup ? update(finishWarmup(workout)) : finish(workout))}
           >
             {warmup ? 'К основной части' : 'Сохранить занятие'}{' '}
             <Icon name={warmup ? 'arrow' : 'check'} />
-          </button>
+          </Button>
         </div>
       ) : workout.kind === 'cardio' ? (
         <>
@@ -150,13 +149,14 @@ export function WorkoutPage({
           </p>
           <div className={styles.step}>
             {timerView('ТАЙМЕР ЗАНЯТИЯ')}
-            <button
+            <Button
+              variant="primary"
               className={styles.stepAction}
               onClick={() => finishMain(workout)}
               disabled={left === workout.seconds}
             >
               {endLabel} <Icon name="check" />
-            </button>
+            </Button>
           </div>
         </>
       ) : (
@@ -172,8 +172,8 @@ export function WorkoutPage({
                 </p>
               )}
               {timerView('ОТДЫХ МЕЖДУ ПОДХОДАМИ')}
-              <button
-                className={`${ui.secondary} ${styles.extendRest}`}
+              <Button
+                className={styles.extendRest}
                 type="button"
                 onClick={() => {
                   if (soundForTimer) prepareRestSound();
@@ -183,14 +183,15 @@ export function WorkoutPage({
                 }}
               >
                 +15 сек
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="primary"
                 className={styles.stepAction}
                 onClick={() => choose(nextSetIndex)}
                 disabled={!nextSet}
               >
                 Начать подход <Icon name="arrow" />
-              </button>
+              </Button>
             </div>
           ) : workout.selected !== null ? (
             <StrengthSet
@@ -211,9 +212,13 @@ export function WorkoutPage({
             !workout.plan.some(isPending) && (
               <div className={styles.step}>
                 {workout.sets.length > 0 ? (
-                  <button className={styles.stepAction} onClick={() => finishMain(workout)}>
+                  <Button
+                    variant="primary"
+                    className={styles.stepAction}
+                    onClick={() => finishMain(workout)}
+                  >
                     {workout.cooldownMinutes ? endLabel : 'Сохранить занятие'} <Icon name="check" />
-                  </button>
+                  </Button>
                 ) : (
                   <p className={styles.stepDescription}>
                     Все упражнения пропущены. Можно вернуть упражнение в план или сбросить занятие.
@@ -229,20 +234,19 @@ export function WorkoutPage({
           workout.kind === 'strength' &&
           workout.sets.length > 0 &&
           workout.plan.some(isPending) && (
-            <button type="button" className={ui.secondary} onClick={() => finishMain(workout)}>
+            <Button type="button" onClick={() => finishMain(workout)}>
               {workout.cooldownMinutes ? endLabel : 'Закончить и сохранить'}
-            </button>
+            </Button>
           )}
-        <button
+        <Button
           type="button"
-          className={ui.secondary}
           onClick={() => {
             if (window.confirm('Сбросить это занятие? Записанные в нём подходы будут удалены.'))
               discard();
           }}
         >
           Сбросить занятие
-        </button>
+        </Button>
       </div>
     </section>
   );

@@ -1,3 +1,4 @@
+import { PageTitle } from '../../shared/ui/PageTitle';
 import { Icon } from '../../shared/ui/Icon';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './Roadmap.module.css';
@@ -79,9 +80,7 @@ const plannedFeatures = [
 export function RoadmapPage() {
   return (
     <div className={ui.narrow}>
-      <h1 tabIndex={-1}>
-        Дорожная карта<span>.</span>
-      </h1>
+      <PageTitle>Дорожная карта</PageTitle>
       <section className={ui.panel}>
         <h2 className={styles.availableHeading}>
           <Icon name="check" />

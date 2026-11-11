@@ -1,5 +1,5 @@
+import { Button, Input } from '../../shared/ui/Controls';
 import { addDays, dateInputValue, localDay } from '../../shared/lib/calendarDates';
-import ui from '../../shared/ui/Common.module.css';
 import styles from './Route.module.css';
 
 const dateFormat = new Intl.DateTimeFormat('ru', {
@@ -23,13 +23,9 @@ export function NextWorkoutDate({
     return (
       <div className={styles.scheduleDate}>
         <p>Расписание на паузе</p>
-        <button
-          className={`${ui.secondary} ${styles.tomorrow}`}
-          type="button"
-          onClick={() => updateSchedule(false)}
-        >
+        <Button className={styles.tomorrow} type="button" onClick={() => updateSchedule(false)}>
           Возобновить с сегодня
-        </button>
+        </Button>
       </div>
     );
   }
@@ -42,22 +38,14 @@ export function NextWorkoutDate({
         {day < today ? 'Было запланировано' : 'Следующее занятие'} · {dateFormat.format(day)}
       </p>
       {day !== tomorrow && (
-        <button
-          className={`${ui.secondary} ${styles.tomorrow}`}
-          type="button"
-          onClick={() => move(tomorrow)}
-        >
+        <Button className={styles.tomorrow} type="button" onClick={() => move(tomorrow)}>
           Перенести на завтра
-        </button>
+        </Button>
       )}
       {day < today && (
-        <button
-          className={`${ui.secondary} ${styles.tomorrow}`}
-          type="button"
-          onClick={() => updateSchedule(false)}
-        >
+        <Button className={styles.tomorrow} type="button" onClick={() => updateSchedule(false)}>
           Пересчитать даты с сегодня
-        </button>
+        </Button>
       )}
       <details>
         <summary>Перенести занятие</summary>
@@ -73,7 +61,7 @@ export function NextWorkoutDate({
         >
           <label>
             Новая дата
-            <input
+            <Input
               name="day"
               type="date"
               min={dateInputValue(today)}
@@ -81,14 +69,17 @@ export function NextWorkoutDate({
               required
             />
           </label>
-          <button className={ui.secondary} type="submit">
-            Сохранить дату
-          </button>
+          <Button type="submit">Сохранить дату</Button>
         </form>
       </details>
-      <button className={styles.pauseSchedule} type="button" onClick={() => updateSchedule(true)}>
+      <Button
+        variant="plain"
+        className={styles.pauseSchedule}
+        type="button"
+        onClick={() => updateSchedule(true)}
+      >
         Приостановить расписание
-      </button>
+      </Button>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { useId, useRef, type FormEvent, type Ref, type RefObject } from 'react';
+import { useRef, type FormEvent, type Ref } from 'react';
 import { ExerciseInstructions, exercises } from '../../entities/program';
 import {
   effortLabels,
@@ -17,73 +17,12 @@ import {
   type StrengthWorkout,
   type Workout,
 } from '../../features/workout';
+import { readSetFields, SetFields } from '../../features/workout/SetFields';
+import { Button, Select } from '../../shared/ui/Controls';
 import { Icon } from '../../shared/ui/Icon';
 import { Demonstration } from './Demonstration';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './Workout.module.css';
-
-function SetField({
-  label,
-  name,
-  minimum,
-  placeholder,
-  inputRef,
-  increment,
-}: {
-  label: string;
-  name: 'weight' | 'reps';
-  minimum: number;
-  placeholder: number;
-  inputRef: RefObject<HTMLInputElement | null>;
-  increment: number;
-}) {
-  const inputId = useId();
-  const isWeight = name === 'weight';
-
-  function adjust(direction: number) {
-    const input = inputRef.current;
-    if (!input) return;
-    const current = Number.isFinite(input.valueAsNumber) ? input.valueAsNumber : placeholder;
-    const maximum = isWeight ? Number.MAX_VALUE : Number.MAX_SAFE_INTEGER;
-    const next = Math.min(maximum, Math.max(minimum, current + direction * increment));
-    input.value = String(isWeight ? Number(next.toFixed(10)) : next);
-  }
-
-  return (
-    <div className={styles.setField}>
-      <label htmlFor={inputId}>{label}</label>
-      <div className={styles.setFieldControls}>
-        <button
-          className={ui.secondary}
-          type="button"
-          aria-label={`Уменьшить: ${label}`}
-          onClick={() => adjust(-1)}
-        >
-          −
-        </button>
-        <input
-          id={inputId}
-          ref={inputRef}
-          name={name}
-          type="number"
-          inputMode={isWeight ? 'decimal' : 'numeric'}
-          min={minimum}
-          max={isWeight ? undefined : Number.MAX_SAFE_INTEGER}
-          step={isWeight ? 'any' : '1'}
-          placeholder={String(placeholder)}
-        />
-        <button
-          className={ui.secondary}
-          type="button"
-          aria-label={`Увеличить: ${label}`}
-          onClick={() => adjust(1)}
-        >
-          +
-        </button>
-      </div>
-    </div>
-  );
-}
 
 export function StrengthSet({
   workout,
@@ -116,7 +55,6 @@ export function StrengthSet({
   const id = item.exercise;
   const exercise = exercises[id];
   const canAddWeight = exercise.weighted;
-  const weightLabel = exercise.needs?.includes('dumbbells') ? 'Вес одной гантели, кг' : 'Вес, кг';
   const finalSet = isLastSet(workout);
   const previous = previousExerciseResult(history, id);
   const previousSets = previous?.sets ?? [];
@@ -152,15 +90,7 @@ export function StrengthSet({
     event.preventDefault();
     if (restSound && !finalSet) prepareRestSound();
     const data = new FormData(event.currentTarget);
-    const number = (name: string) => (data.get(name) === '' ? null : Number(data.get(name)));
-    const updated = recordSet(
-      workout,
-      {
-        weight: canAddWeight ? number('weight') : null,
-        reps: number('reps'),
-      },
-      String(data.get('note') ?? ''),
-    );
+    const updated = recordSet(workout, readSetFields(data), String(data.get('note') ?? ''));
     if (finalSet) finish(updated);
     else update(updated);
   }
@@ -206,30 +136,23 @@ export function StrengthSet({
                 )}
               </div>
               {canAddWeight && previousWeight != null && (
-                <button
-                  className={ui.secondary}
-                  type="button"
-                  onClick={() => applyPreviousWeight(previousWeight)}
-                >
+                <Button type="button" onClick={() => applyPreviousWeight(previousWeight)}>
                   Подставить {formatWeight(previousWeight)}
-                </button>
+                </Button>
               )}
             </div>
           )}
           <div className={styles.setFields}>
-            {canAddWeight && (
-              <>
-                <SetField
-                  label={weightLabel}
-                  name="weight"
-                  minimum={0}
-                  placeholder={prior?.weight ?? 0}
-                  inputRef={weightInput}
-                  increment={weightStep}
-                />
+            <SetFields
+              exercise={exercise}
+              adjustments={{
+                weight: { ref: weightInput, step: weightStep, fallback: prior?.weight ?? 0 },
+                reps: { ref: repsInput, step: 1, fallback: targetReps },
+              }}
+              afterWeight={
                 <label className={styles.weightStep}>
                   Шаг веса, кг
-                  <select
+                  <Select
                     value={weightStep}
                     onChange={(event) => setWeightStep(Number(event.target.value))}
                   >
@@ -238,27 +161,15 @@ export function StrengthSet({
                     <option value="1">1</option>
                     <option value="2.5">2,5</option>
                     <option value="5">5</option>
-                  </select>
+                  </Select>
                 </label>
-              </>
-            )}
-            <SetField
-              label={exercise.perSide ? 'Повторы на сторону' : 'Повторы'}
-              name="reps"
-              minimum={1}
-              placeholder={targetReps}
-              inputRef={repsInput}
-              increment={1}
+              }
             />
           </div>
           {repeat && (
-            <button
-              className={`${ui.secondary} ${styles.repeatSet}`}
-              type="button"
-              onClick={repeatSet}
-            >
+            <Button className={styles.repeatSet} type="button" onClick={repeatSet}>
               Повторить подход · {formatSet(repeat)}
-            </button>
+            </Button>
           )}
           <details className={styles.exerciseNote} open={currentNote ? true : undefined}>
             <summary>Заметка к упражнению</summary>
@@ -276,9 +187,9 @@ export function StrengthSet({
             Ориентир — {targetReps} повторов. Можно записать фактический результат или оставить поля
             пустыми.
           </p>
-          <button className={styles.stepAction} type="submit">
+          <Button variant="primary" className={styles.stepAction} type="submit">
             {finalSet ? endLabel : 'Записать подход'} <Icon name="check" />
-          </button>
+          </Button>
         </form>
       </div>
     </>

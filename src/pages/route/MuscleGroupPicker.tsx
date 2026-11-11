@@ -3,6 +3,7 @@ import {
   muscleGroups,
   type WorkoutPreferences,
 } from '../../entities/program';
+import { Checkbox } from '../../shared/ui/Controls';
 import ui from '../../shared/ui/Common.module.css';
 import formStyles from '../../shared/ui/SettingsForm.module.css';
 import styles from './Route.module.css';
@@ -28,8 +29,7 @@ export function MuscleGroupPicker({
         <div className={formStyles.fields}>
           {muscleGroups.map((group) => (
             <label className={formStyles.toggle} key={group}>
-              <input
-                type="checkbox"
+              <Checkbox
                 checked={selected.includes(group)}
                 disabled={!available.has(group)}
                 onChange={(event) =>

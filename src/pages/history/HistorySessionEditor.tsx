@@ -7,8 +7,9 @@ import {
   type Session,
   type SessionChanges,
 } from '../../entities/progress';
+import { readSetFields, SetFields } from '../../features/workout/SetFields';
+import { Button, Input } from '../../shared/ui/Controls';
 import { changeLocalDate, dateInputValue } from '../../shared/lib/calendarDates';
-import ui from '../../shared/ui/Common.module.css';
 import styles from './History.module.css';
 
 export function HistorySessionEditor({
@@ -31,14 +32,9 @@ export function HistorySessionEditor({
       setError('Проверь дату занятия.');
       return;
     }
-    const number = (name: string) => {
-      const value = data.get(name);
-      return typeof value === 'string' && value !== '' ? Number(value) : null;
-    };
     const sets = session.sets.map(({ exercise }, index) => ({
       exercise,
-      weight: number(`weight-${index}`),
-      reps: number(`reps-${index}`),
+      ...readSetFields(data, index),
     }));
     let notes = session.notes ?? [];
     for (const [index, exercise] of exerciseIds.entries())
@@ -50,7 +46,7 @@ export function HistorySessionEditor({
     <form className={styles.historyEditor} onSubmit={submit}>
       <label>
         Дата занятия
-        <input
+        <Input
           autoFocus
           type="date"
           name="date"
@@ -66,29 +62,12 @@ export function HistorySessionEditor({
               {exercise?.title ?? set.exercise} · подход {index + 1}
             </legend>
             <div className={styles.historyEditFields}>
-              {(exercise?.weighted !== false || set.weight !== null) && (
-                <label>
-                  {exercise?.needs?.includes('dumbbells') ? 'Вес одной гантели, кг' : 'Вес, кг'}
-                  <input
-                    name={`weight-${index}`}
-                    type="number"
-                    inputMode="decimal"
-                    min="0"
-                    step="any"
-                    defaultValue={set.weight ?? ''}
-                  />
-                </label>
-              )}
-              <label>
-                {exercise?.perSide ? 'Повторы на сторону' : 'Повторы'}
-                <input
-                  name={`reps-${index}`}
-                  type="number"
-                  inputMode="numeric"
-                  min="1"
-                  defaultValue={set.reps ?? ''}
-                />
-              </label>
+              <SetFields
+                exercise={exercise}
+                showWeight={exercise?.weighted !== false || set.weight !== null}
+                index={index}
+                values={set}
+              />
             </div>
           </fieldset>
         );
@@ -106,12 +85,12 @@ export function HistorySessionEditor({
       ))}
       {error && <p role="alert">{error}</p>}
       <div className={styles.historyActions}>
-        <button className={ui.primary} type="submit">
+        <Button variant="primary" type="submit">
           Сохранить изменения
-        </button>
-        <button className={ui.secondary} type="button" onClick={cancel}>
+        </Button>
+        <Button type="button" onClick={cancel}>
           Отмена
-        </button>
+        </Button>
       </div>
     </form>
   );

@@ -1,15 +1,61 @@
-import { cardioTitles, exercises, route } from '../../entities/program';
-import { estimatedCalories, formatTime, type Session } from '../../entities/progress';
+import { useMemo, useRef, useState } from 'react';
+import { cardioTitles, exercises, route, type ExerciseId } from '../../entities/program';
+import {
+  estimatedCalories,
+  exerciseProgress,
+  formatTime,
+  type Session,
+} from '../../entities/progress';
 import { Icon } from '../../shared/ui/Icon';
+import { localDay } from './calendarDates';
+import { ExerciseProgress } from './ExerciseProgress';
+import { HistoryCalendar } from './HistoryCalendar';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './History.module.css';
 
 const dateFormat = new Intl.DateTimeFormat('ru', { day: 'numeric', month: 'short' });
+const selectedDateFormat = new Intl.DateTimeFormat('ru', { dateStyle: 'long' });
 
 export function HistoryPage({ sessions, stopIndex }: { sessions: Session[]; stopIndex?: number }) {
+  const [selectedExercise, setSelectedExercise] = useState<ExerciseId>();
+  const [selectedDay, setSelectedDay] = useState<number | null>(null);
+  const progressHeading = useRef<HTMLHeadingElement>(null);
   const stop = stopIndex === undefined ? undefined : route[stopIndex];
-  const entries =
-    stopIndex === undefined ? sessions : sessions.filter((entry) => entry.stop === stopIndex);
+  const entries = useMemo(
+    () =>
+      stopIndex === undefined ? sessions : sessions.filter((entry) => entry.stop === stopIndex),
+    [sessions, stopIndex],
+  );
+  const entriesByExercise = useMemo(() => exerciseProgress(entries), [entries]);
+  const visibleEntries =
+    selectedDay === null ? entries : entries.filter(({ date }) => localDay(date) === selectedDay);
+  const selected =
+    selectedExercise && entriesByExercise.has(selectedExercise)
+      ? selectedExercise
+      : entriesByExercise.keys().next().value;
+
+  function showProgress(exercise: ExerciseId) {
+    setSelectedExercise(exercise);
+    progressHeading.current?.focus();
+  }
+
+  const progressView = selected ? (
+    <ExerciseProgress
+      entriesByExercise={entriesByExercise}
+      selected={selected}
+      select={setSelectedExercise}
+      headingRef={progressHeading}
+    />
+  ) : (
+    !stop &&
+    entries.length > 0 && (
+      <section className={ui.panel}>
+        <h2>Прогресс по упражнениям</h2>
+        <p className={ui.subtitle}>Здесь появится динамика, когда ты запишешь вес или повторы.</p>
+      </section>
+    )
+  );
+
   return (
     <section className={ui.narrow}>
       {stop && (
@@ -25,8 +71,20 @@ export function HistoryPage({ sessions, stopIndex }: { sessions: Session[]; stop
       <p className={ui.subtitle}>
         {stop ? `Занятий на этой остановке: ${entries.length}` : 'Занятия, которые ты прошёл.'}
       </p>
-      <div className={styles.historyList}>
-        {entries.length === 0 ? (
+      <HistoryCalendar sessions={entries} selectedDay={selectedDay} selectDay={setSelectedDay} />
+      {selectedDay === null && progressView}
+      <div id="history-sessions" className={styles.historyList}>
+        {selectedDay !== null && (
+          <div className={styles.dayFilter}>
+            <h2 aria-live="polite">Занятия за {selectedDateFormat.format(selectedDay)}</h2>
+            <button type="button" className={ui.secondary} onClick={() => setSelectedDay(null)}>
+              Все занятия
+            </button>
+          </div>
+        )}
+        {selectedDay !== null && visibleEntries.length === 0 ? (
+          <p className={ui.subtitle}>За этот день занятий нет.</p>
+        ) : visibleEntries.length === 0 ? (
           <div className={styles.empty}>
             <h2>Здесь пока тихо</h2>
             <p>Первая тренировка появится после того, как зажжёшь костёр.</p>
@@ -35,7 +93,7 @@ export function HistoryPage({ sessions, stopIndex }: { sessions: Session[]; stop
             </a>
           </div>
         ) : (
-          [...entries].reverse().map((entry, index) => {
+          [...visibleEntries].reverse().map((entry, index) => {
             const entryStop = route[entry.stop];
             const calories = estimatedCalories(entry);
             const activity = entry.cardioActivity
@@ -80,9 +138,21 @@ export function HistoryPage({ sessions, stopIndex }: { sessions: Session[]; stop
                       <ul>
                         {[...new Set(entry.sets.map((set) => set.exercise))].map((id) => {
                           const sets = entry.sets.filter((set) => set.exercise === id);
+                          const title = exercises[id]?.title ?? id;
                           return (
                             <li key={id}>
-                              <b>{exercises[id]?.title ?? 'Упражнение'}</b>{' '}
+                              {entriesByExercise.has(id) ? (
+                                <button
+                                  className={styles.exerciseLink}
+                                  type="button"
+                                  onClick={() => showProgress(id)}
+                                  aria-label={`Показать прогресс: ${title}`}
+                                >
+                                  {title}
+                                </button>
+                              ) : (
+                                <b>{title}</b>
+                              )}{' '}
                               <span>
                                 {sets
                                   .map(
@@ -117,6 +187,7 @@ export function HistoryPage({ sessions, stopIndex }: { sessions: Session[]; stop
           })
         )}
       </div>
+      {selectedDay !== null && progressView}
     </section>
   );
 }

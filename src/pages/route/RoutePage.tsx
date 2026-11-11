@@ -1,4 +1,3 @@
-import type { CSSProperties } from 'react';
 import {
   cardioActivity,
   cardioTitles,
@@ -11,17 +10,18 @@ import {
   workoutDetail,
   type WorkoutPreferences,
 } from '../../entities/program';
-import { nextStop, weekCount, type Progress } from '../../entities/progress';
+import { nextStop, routeLength, weekCount, type Progress } from '../../entities/progress';
 import { Icon } from '../../shared/ui/Icon';
 import { DayPreview } from './DayPreview';
 import { MuscleGroupPicker } from './MuscleGroupPicker';
+import { RouteMap } from './RouteMap';
 import { WorkoutSettings } from './WorkoutSettings';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './Route.module.css';
 
 interface Props {
   progress: Progress;
-  inWorkout: boolean;
+  activeStop?: number;
   offlineReady: boolean;
   start: (short: boolean) => void;
   restart: () => void;
@@ -30,15 +30,20 @@ interface Props {
 
 export function RoutePage({
   progress,
-  inWorkout,
+  activeStop,
   offlineReady,
   start,
   restart,
   changePreferences,
 }: Props) {
-  const next = nextStop(progress, route.length);
+  const inWorkout = activeStop !== undefined;
+  const totalStops = routeLength(progress, activeStop);
+  const next = nextStop(progress, totalStops);
   const stop = route[next];
-  const completed = next === -1 ? route.length : next;
+  const completedStops = new Set(
+    progress.sessions.filter((session) => session.round === progress.round).map(({ stop }) => stop),
+  );
+  const historyStops = new Set(progress.sessions.map(({ stop }) => stop));
   const count = weekCount(progress.sessions);
   const preferences = progress.preferences ?? defaultPreferences;
   const goal = preferences.weeklyGoal ?? defaultWeeklyGoal;
@@ -55,7 +60,7 @@ export function RoutePage({
           <h1 tabIndex={-1}>
             Войти в ритм<span>.</span>
           </h1>
-          <p className={ui.subtitle}>Четыре остановки, чтобы начать заниматься регулярно.</p>
+          <p className={ui.subtitle}>Чередуй силовые и кардио в своём темпе.</p>
         </div>
         <div className={styles.week}>
           <p className={styles.weekLabel}>ЦЕЛЬ НЕДЕЛИ</p>
@@ -75,7 +80,9 @@ export function RoutePage({
       </div>
       <div className={styles.dashboard}>
         <section className={styles.nextCard}>
-          <p className={ui.eyebrow}>{stop ? `ОСТАНОВКА 0${next + 1} / 04` : 'МАРШРУТ ЗАВЕРШЁН'}</p>
+          <p className={ui.eyebrow}>
+            {stop ? `ОСТАНОВКА ${next + 1} / ${totalStops}` : 'МАРШРУТ ЗАВЕРШЁН'}
+          </p>
           <span className={styles.stopIcon}>
             <Icon name={stop?.icon ?? 'check'} />
           </span>
@@ -132,7 +139,7 @@ export function RoutePage({
           ) : (
             <>
               <p className={styles.sessionType}>
-                Четыре занятия в истории. Можно пройти тропу ещё раз.
+                Результаты сохранены в истории. Можно пройти тропу ещё раз.
               </p>
               <div className={styles.cardActions}>
                 <button className={ui.primary} onClick={restart}>
@@ -142,48 +149,12 @@ export function RoutePage({
             </>
           )}
         </section>
-        <section className={styles.map} aria-label="Карта из четырёх остановок">
-          <img className={styles.mapArt} src="./map.svg" alt="" />
-          <div className={styles.mapCaption}>
-            <span>01 / МАРШРУТ</span>
-            <strong>Тропа костров</strong>
-          </div>
-          <ol className={styles.markers}>
-            {route.map((item, index) => {
-              const state = index < completed ? 'done' : index === next ? 'current' : 'locked';
-              const status = { done: 'Пройдено', current: 'Следующее занятие', locked: 'Закрыто' }[
-                state
-              ];
-              const hasHistory = progress.sessions.some((session) => session.stop === index);
-              const position = { '--x': `${item.x}%`, '--y': `${item.y}%` } as CSSProperties;
-              return (
-                <li className={styles.marker} data-state={state} style={position} key={item.title}>
-                  {hasHistory ? (
-                    <a
-                      className={`${styles.markerDot} ${styles.markerLink}`}
-                      href={`#history/${index + 1}`}
-                      aria-label={`История: ${item.title}`}
-                      title="Открыть историю"
-                    >
-                      <Icon name="flame" />
-                    </a>
-                  ) : (
-                    <span className={styles.markerDot}>
-                      <Icon name={state === 'locked' ? 'lock' : 'flame'} />
-                    </span>
-                  )}
-                  <span className={styles.markerLabel}>
-                    <b>0{index + 1}</b> <span className={styles.markerName}>{item.title}</span>
-                    <span className={ui.srOnly}> — {status}</span>
-                  </span>
-                </li>
-              );
-            })}
-          </ol>
-          <div className={styles.mapLegend}>
-            <span className={styles.signal} /> {completed} из 4 остановок пройдено
-          </div>
-        </section>
+        <RouteMap
+          next={next}
+          totalStops={totalStops}
+          completedStops={completedStops}
+          historyStops={historyStops}
+        />
       </div>
       <footer className={ui.foot}>
         <span>{equipment.join(' · ') || 'Без инвентаря'}</span>

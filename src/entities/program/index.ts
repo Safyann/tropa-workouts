@@ -18,6 +18,7 @@ export {
   defaultPreferences,
   defaultEquipment,
   defaultWeeklyGoal,
+  defaultRouteWeeks,
   durations,
   equipmentLabels,
   homeEquipment,
@@ -26,6 +27,7 @@ export {
   muscleGroups,
   optionalBlockMinutes,
   recommendLevel,
+  routeWeeks,
   weeklyGoals,
   workoutBlockTitles,
 } from './preferences';

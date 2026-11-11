@@ -1,11 +1,14 @@
 import {
   cardioTitles,
+  defaultRouteWeeks,
+  defaultWeeklyGoal,
   durations,
   homeEquipment,
   isBodyWeight,
   levels,
   muscleGroups,
   route,
+  routeWeeks,
   weeklyGoals,
   type CardioActivity,
   type ExerciseId,
@@ -134,6 +137,7 @@ function readPreferences(value: unknown): WorkoutPreferences | undefined {
     warmupActivity,
     cooldownActivity,
     weeklyGoal,
+    routeWeeks: weeks,
     bodyWeightKg,
     equipment,
     muscleGroups: selected,
@@ -154,6 +158,7 @@ function readPreferences(value: unknown): WorkoutPreferences | undefined {
     ...(isOneOf(['walking', 'stretching'] as const, warmupActivity) && { warmupActivity }),
     ...(isOneOf(['walking', 'stretching'] as const, cooldownActivity) && { cooldownActivity }),
     ...(isOneOf(weeklyGoals, weeklyGoal) && { weeklyGoal }),
+    ...(isOneOf(routeWeeks, weeks) && { routeWeeks: weeks }),
     ...(isBodyWeight(bodyWeightKg) && { bodyWeightKg }),
     ...(Array.isArray(equipment) && {
       equipment: equipment.filter((item) => isOneOf(homeEquipment, item)),
@@ -190,6 +195,17 @@ export function saveProgress(progress: Progress) {
   } catch {
     return false;
   }
+}
+
+export function routeLength(progress: Progress, activeStop = -1) {
+  const { weeklyGoal = defaultWeeklyGoal, routeWeeks: weeks = defaultRouteWeeks } =
+    progress.preferences ?? {};
+  // A shorter plan still includes the stops already completed or started in this round.
+  return progress.sessions.reduce(
+    (length, session) =>
+      session.round === progress.round ? Math.max(length, session.stop + 1) : length,
+    Math.max(weeklyGoal * weeks, activeStop + 1),
+  );
 }
 
 export function nextStop(progress: Progress, totalStops: number) {

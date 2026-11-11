@@ -30,6 +30,7 @@ const walkingInstructions = {
 
 interface Props {
   workout: Workout;
+  totalStops: number;
   history: Session[];
   update: (workout: Workout) => void;
   finish: (workout: Workout) => void;
@@ -37,6 +38,7 @@ interface Props {
 
 export function WorkoutPage({
   workout,
+  totalStops,
   history,
   update,
   finish,
@@ -101,7 +103,9 @@ export function WorkoutPage({
       <a className={ui.back} href="#map">
         ← К карте
       </a>
-      <p className={ui.eyebrow}>ОСТАНОВКА 0{workout.index + 1} / 04</p>
+      <p className={ui.eyebrow}>
+        ОСТАНОВКА {workout.index + 1} / {totalStops}
+      </p>
       <h1 tabIndex={-1}>
         {stop.title}
         <span>.</span>

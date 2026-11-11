@@ -399,8 +399,6 @@ export function availableExercisesByGroup(preferences = defaultPreferences) {
 interface StopInfo {
   title: string;
   type: string;
-  x: number;
-  y: number;
 }
 
 export type Stop = StopInfo &
@@ -409,27 +407,58 @@ export type Stop = StopInfo &
     | { icon: 'cardio'; shortMinutes: number }
   );
 
-export const route: Stop[] = [
+const routeTemplates: Stop[] = [
   {
     title: 'Первый костёр',
     type: 'Силовая',
     icon: 'strength',
     moves: ['squat', 'press', 'row'],
     sets: 2,
-    x: 15.3,
-    y: 76.4,
   },
-  { title: 'Лесная тропа', type: 'Эллипс', icon: 'cardio', shortMinutes: 5, x: 38.1, y: 53.6 },
+  { title: 'Лесная тропа', type: 'Эллипс', icon: 'cardio', shortMinutes: 5 },
   {
     title: 'Тихий подъём',
     type: 'Силовая',
     icon: 'strength',
     moves: ['row', 'squat', 'press'],
     sets: 2,
-    x: 61.9,
-    y: 60,
   },
-  { title: 'Большая поляна', type: 'Эллипс', icon: 'cardio', shortMinutes: 6, x: 81.9, y: 25.1 },
+  { title: 'Большая поляна', type: 'Эллипс', icon: 'cardio', shortMinutes: 6 },
+];
+
+const laterStopTitles = [
+  'Каменный брод',
+  'Сосновый просвет',
+  'Крутой склон',
+  'Речная излучина',
+  'Гранитный уступ',
+  'Берёзовая роща',
+  'Перевал',
+  'Тропа у озера',
+  'Дальний костёр',
+  'Вересковая пустошь',
+  'Высокий холм',
+  'Песчаный берег',
+  'Кедровый приют',
+  'Луговая тропа',
+  'Каменный гребень',
+  'Ольховая заводь',
+  'Северный склон',
+  'Лесная просека',
+  'Верхняя стоянка',
+  'Мост через ручей',
+  'Горное седло',
+  'Туманная низина',
+  'Костёр на вершине',
+  'Тропа домой',
+];
+
+export const route: Stop[] = [
+  ...routeTemplates,
+  ...laterStopTitles.map((title, index) => ({
+    ...routeTemplates[index % routeTemplates.length],
+    title,
+  })),
 ];
 
 const extendedMoves: ExerciseId[] = ['rdl', 'shoulderPress', 'deadBug'];

@@ -102,6 +102,17 @@ it('restores a valid cardio draft and rejects an invalid cardio timer', () => {
   expect(readWorkoutDraft(cardioProgress)).toBeNull();
 });
 
+it('keeps the active stop after shortening the route', () => {
+  const preferences = { ...defaultPreferences, weeklyGoal: 1, routeWeeks: 1 } as const;
+  const sessions = Array.from({ length: 4 }, (_, index) =>
+    summarize(createWorkout(index, 0, false)),
+  );
+  const active = createWorkout(4, 0, false);
+  saveWorkoutDraft(active);
+  expect(readWorkoutDraft({ ...progress, preferences, sessions })).toEqual(active);
+  expect(readWorkoutDraft({ ...progress, preferences, sessions: sessions.slice(0, 2) })).toBeNull();
+});
+
 it('preserves a locally recorded set if writing the draft failed', () => {
   const saved = createWorkout(0, 0, false);
   if (saved.kind !== 'strength') throw new Error('Expected a strength workout');

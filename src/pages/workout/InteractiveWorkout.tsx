@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { routeLength } from '../../entities/progress';
 import { type Workout } from '../../features/workout';
 import { WorkoutPage } from './WorkoutPage';
 
@@ -9,6 +10,7 @@ export function InteractiveWorkout({ initial }: { initial: Workout }) {
   return (
     <WorkoutPage
       workout={workout}
+      totalStops={routeLength({ version: 1, round: workout.round, sessions: [] }, workout.index)}
       history={[]}
       update={update}
       finish={() => setCompleted(true)}

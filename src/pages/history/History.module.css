@@ -3,6 +3,16 @@
   gap: 0.625rem;
   margin-top: 1.25rem;
 }
+.dayFilter {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.625rem;
+}
+.dayFilter h2 {
+  font-size: 1.125rem;
+}
 .empty {
   composes: surface from '../../shared/ui/Common.module.css';
   padding: clamp(1rem, 3vw, 1.5rem);
@@ -51,6 +61,16 @@
 }
 .historyDetail li span {
   color: var(--muted);
+}
+.exerciseLink {
+  padding: 0.25rem 0;
+  border: 0;
+  background: none;
+  color: var(--forest);
+  font-weight: 700;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 0.125rem;
 }
 .historyRow {
   composes: surface from '../../shared/ui/Common.module.css';

@@ -57,10 +57,25 @@
   background: var(--forest);
   color: #f4f1df;
   border-radius: 1rem;
-  min-height: 21rem;
+  min-width: 0;
   position: relative;
   overflow: hidden;
   isolation: isolate;
+}
+.mapTrack {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+}
+.mapTrack:focus-visible {
+  outline-offset: -4px;
+  outline-color: var(--ember);
+}
+.mapSegment {
+  position: relative;
+  flex: 0 0 100%;
+  min-height: 21rem;
+  scroll-snap-align: start;
 }
 .mapArt {
   position: absolute;
@@ -74,6 +89,7 @@
   left: 1.25rem;
   display: grid;
   gap: 0.25rem;
+  pointer-events: none;
 }
 .mapCaption span {
   color: #c5d2b6;
@@ -96,6 +112,7 @@
   padding: 0.375rem 0.625rem;
   font-size: 0.75rem;
   color: #e3ebd5;
+  pointer-events: none;
 }
 .markers {
   list-style: none;
@@ -239,7 +256,7 @@
   }
 }
 @media (max-width: 30rem) {
-  .map {
+  .mapSegment {
     min-height: 15.5rem;
   }
 }
@@ -283,6 +300,8 @@
   .map {
     grid-area: 1 / 1;
     align-self: start;
+  }
+  .mapSegment {
     min-height: clamp(22rem, 37vw, 29rem);
   }
   .nextCard {

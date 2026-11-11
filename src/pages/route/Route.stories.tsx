@@ -7,7 +7,6 @@ const meta = {
   component: RoutePage,
   args: {
     progress: { version: 1, round: 0, sessions: [] },
-    inWorkout: false,
     offlineReady: false,
     start: () => {},
     restart: () => {},

@@ -9,6 +9,7 @@ import {
   nextStop,
   progressStorageKey,
   readProgress,
+  routeLength,
   saveProgress,
   type Progress,
   type Session,
@@ -51,6 +52,7 @@ export function App() {
     saveFailed: false,
   }));
   const { workout } = draft;
+  const totalStops = routeLength(progress, workout?.index);
   const [progressSaveFailed, setProgressSaveFailed] = useState(false);
   const { offlineReady, updateAvailable, requested, requestUpdate } = useAppUpdate(
     workout !== null,
@@ -122,7 +124,7 @@ export function App() {
   function start(short: boolean) {
     if (!workout) {
       const latest = latestProgress();
-      const index = nextStop(latest, route.length);
+      const index = nextStop(latest, routeLength(latest));
       if (index === -1) return;
       updateWorkout(createWorkout(index, latest.round, short, latest.preferences));
     }
@@ -162,7 +164,7 @@ export function App() {
 
   function restart() {
     const latest = latestProgress();
-    if (nextStop(latest, route.length) === -1)
+    if (!workout && nextStop(latest, routeLength(latest)) === -1)
       storeProgress({ ...latest, round: latest.round + 1 });
     else setProgress(latest);
   }
@@ -177,6 +179,7 @@ export function App() {
         return (
           <WorkoutPage
             workout={screen.workout}
+            totalStops={totalStops}
             history={progress.sessions}
             update={updateWorkout}
             finish={finish}
@@ -216,7 +219,7 @@ export function App() {
         return (
           <RoutePage
             progress={progress}
-            inWorkout={workout !== null}
+            activeStop={workout?.index}
             offlineReady={offlineReady}
             start={start}
             restart={restart}

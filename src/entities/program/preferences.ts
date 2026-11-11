@@ -5,6 +5,8 @@ export { equipmentLabels };
 export const durations = [20, 40, 60] as const;
 export const weeklyGoals = [1, 2, 3, 4, 5, 6, 7] as const;
 export const defaultWeeklyGoal = 2;
+export const routeWeeks = [1, 2, 3, 4] as const;
+export const defaultRouteWeeks = 2;
 export type HomeEquipment = keyof typeof equipmentLabels;
 export const homeEquipment = Object.keys(equipmentLabels) as HomeEquipment[];
 export const defaultEquipment = [
@@ -74,6 +76,7 @@ export interface WorkoutPreferences {
   warmupActivity?: WorkoutBlockActivity;
   cooldownActivity?: WorkoutBlockActivity;
   weeklyGoal?: (typeof weeklyGoals)[number];
+  routeWeeks?: (typeof routeWeeks)[number];
   bodyWeightKg?: number;
   equipment?: readonly HomeEquipment[];
   muscleGroups?: readonly MuscleGroup[];

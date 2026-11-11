@@ -5,7 +5,7 @@ import {
   route,
   type ExerciseId,
 } from '../../entities/program';
-import { nextStop, type Progress, type SetRecord } from '../../entities/progress';
+import { nextStop, routeLength, type Progress, type SetRecord } from '../../entities/progress';
 import { isPending, type PlanExercise, type Workout } from './model';
 
 export const workoutDraftKey = 'tropa-workout-draft-v1';
@@ -66,7 +66,7 @@ function isCurrentWorkoutDraft(draft: Workout, progress: Progress): boolean {
   return (
     isCount(draft.index) &&
     draft.round === progress.round &&
-    draft.index === nextStop(progress, route.length)
+    draft.index === nextStop(progress, routeLength(progress, draft.index))
   );
 }
 

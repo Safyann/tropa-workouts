@@ -1,7 +1,9 @@
 import {
   defaultWeeklyGoal,
+  defaultRouteWeeks,
   defaultEquipment,
   levels,
+  routeWeeks,
   weeklyGoals,
   type WorkoutPreferences,
 } from '../../entities/program';
@@ -29,7 +31,7 @@ export function SettingsPage({
         Настройки профиля<span>.</span>
       </h1>
       <p className={ui.subtitle}>
-        Уровень и недельная цель сохраняются в этом браузере и действуют для следующих занятий.
+        Число занятий в неделю и длительность в неделях задают длину маршрута.
       </p>
       <div className={`${ui.panel} ${styles.profileSettings}`}>
         <div className={formStyles.fields}>
@@ -45,6 +47,22 @@ export function SettingsPage({
               {levelOptions.map((level) => (
                 <option key={level} value={level}>
                   {levels[level].title}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Недель в маршруте
+            <select
+              value={preferences.routeWeeks ?? defaultRouteWeeks}
+              onChange={(event) => {
+                const weeks = routeWeeks.find((value) => String(value) === event.target.value);
+                if (weeks) change({ ...preferences, routeWeeks: weeks });
+              }}
+            >
+              {routeWeeks.map((weeks) => (
+                <option key={weeks} value={weeks}>
+                  {weeks}
                 </option>
               ))}
             </select>

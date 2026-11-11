@@ -1,9 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { route } from '../program/@x/progress';
 import {
   nextStop,
   previousExerciseSets,
   progressStorageKey,
   readProgress,
+  routeLength,
   saveProgress,
   weekCount,
   type Session,
@@ -56,6 +58,32 @@ describe('progress', () => {
     const sessions = Array.from({ length: 4 }, (_, index) => entry(index));
     expect(nextStop({ version: 1, round: 0, sessions }, 4)).toBe(-1);
     expect(nextStop({ version: 1, round: 1, sessions }, 4)).toBe(0);
+  });
+
+  it('sizes a round from weekly frequency and weeks without dropping completed stops', () => {
+    const progress = readProgress();
+    expect(routeLength(progress)).toBe(4);
+    const preferences = {
+      level: 'beginner',
+      minutes: 20,
+      warmup: false,
+      cooldown: false,
+      weeklyGoal: 7,
+      routeWeeks: 4,
+    } as const;
+    saveProgress({ ...progress, preferences, sessions: [entry(27, 0)] });
+    const restored = readProgress();
+    expect(restored.preferences).toEqual(preferences);
+    expect(restored.sessions).toHaveLength(1);
+    expect(routeLength(restored)).toBe(route.length);
+    expect(new Set(route.map(({ title }) => title)).size).toBe(28);
+
+    const shortened = {
+      ...restored,
+      preferences: { ...preferences, weeklyGoal: 1, routeWeeks: 1 },
+    } as const;
+    expect(routeLength(shortened)).toBe(28);
+    expect(routeLength({ ...shortened, round: 1 })).toBe(1);
   });
 
   it('restores valid history even when other sessions and sets are damaged', () => {

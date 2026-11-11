@@ -14,3 +14,8 @@ it('opens the workout screen when an active draft exists', () => {
   expect(resolveRoute('#workout', workout, 4)).toEqual({ page: 'workout', workout });
   expect(resolveRoute('#workout', null, 4)).toEqual({ page: 'map' });
 });
+
+it('opens the public roadmap with or without an active workout', () => {
+  expect(resolveRoute('#roadmap', null, 4)).toEqual({ page: 'roadmap' });
+  expect(resolveRoute('#roadmap', createWorkout(0, 0, false), 4)).toEqual({ page: 'roadmap' });
+});

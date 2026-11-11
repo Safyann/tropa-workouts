@@ -27,6 +27,7 @@
 }
 .navigation {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.25rem;
 }
 .navigation a {
@@ -81,10 +82,12 @@
       opacity var(--motion-fast) ease;
   }
 }
-@media (max-width: 30rem) {
+@media (max-width: 36rem) {
   .barInner {
+    flex-direction: column;
+    align-items: flex-start;
     gap: 0.5rem;
-    min-height: 3.75rem;
+    padding-block: 0.625rem 0.375rem;
   }
   .brand {
     gap: 0.375rem;
@@ -98,11 +101,11 @@
     gap: 0.125rem;
   }
   .navigation a {
-    padding: 0.75rem 0.375rem;
+    padding: 0.75rem 0.25rem;
     font-size: 0.75rem;
   }
 }
-@media (min-width: 38rem) {
+@media (min-width: 46rem) {
   .brand span,
   .brand small {
     display: inline;

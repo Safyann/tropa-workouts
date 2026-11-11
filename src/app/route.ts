@@ -1,7 +1,7 @@
 import type { Workout } from '../features/workout';
 
 export type AppRoute =
-  | { page: 'map' | 'catalog' | 'settings' }
+  | { page: 'map' | 'catalog' | 'roadmap' | 'settings' }
   | { page: 'workout'; workout: Workout }
   | { page: 'result'; round: number; stopIndex: number }
   | { page: 'history'; stopIndex?: number };
@@ -12,6 +12,7 @@ export function resolveRoute(hash: string, workout: Workout | null, stopCount: n
     case 'workout':
       return workout ? { page: 'workout', workout } : { page: 'map' };
     case 'catalog':
+    case 'roadmap':
     case 'settings':
     case 'history':
       return { page: path };

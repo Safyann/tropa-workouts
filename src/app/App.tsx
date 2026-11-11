@@ -25,6 +25,7 @@ import {
 } from '../features/workout';
 import { CatalogPage } from '../pages/catalog';
 import { HistoryPage } from '../pages/history';
+import { RoadmapPage } from '../pages/roadmap';
 import { RoutePage } from '../pages/route';
 import { SettingsPage } from '../pages/settings';
 import { WorkoutPage } from '../pages/workout';
@@ -39,6 +40,7 @@ const navigation = [
   ['map', 'Карта'],
   ['history', 'История'],
   ['catalog', 'Упражнения'],
+  ['roadmap', 'Дорожная карта'],
 ] as const;
 
 export function App() {
@@ -201,6 +203,8 @@ export function App() {
       }
       case 'catalog':
         return <CatalogPage equipment={progress.preferences?.equipment ?? defaultEquipment} />;
+      case 'roadmap':
+        return <RoadmapPage />;
       case 'settings':
         return (
           <SettingsPage

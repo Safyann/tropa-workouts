@@ -9,6 +9,7 @@ import {
 } from '../../entities/program';
 import { formatTime, type Session } from '../../entities/progress';
 import {
+  finishWarmup,
   isLastSet,
   isPending,
   recordSet,
@@ -150,7 +151,7 @@ export function WorkoutPage({
           {timerView(warmup ? 'ТАЙМЕР РАЗМИНКИ' : 'ТАЙМЕР ЗАМИНКИ')}
           <button
             className={styles.stepAction}
-            onClick={() => (warmup ? update({ ...workout, block: null }) : finish(workout))}
+            onClick={() => (warmup ? update(finishWarmup(workout)) : finish(workout))}
           >
             {warmup ? 'К основной части' : 'Сохранить занятие'}{' '}
             <Icon name={warmup ? 'arrow' : 'check'} />
@@ -252,7 +253,8 @@ function StrengthSet({
   const item = workout.plan[itemIndex];
   const id = item.exercise;
   const exercise = exercises[id];
-  const canAddWeight = exercise.weighted && workout.equipment.includes('dumbbells');
+  const canAddWeight = exercise.weighted;
+  const weightLabel = exercise.needs?.includes('dumbbells') ? 'Вес одной гантели, кг' : 'Вес, кг';
   const finalSet = isLastSet(workout);
   const prior =
     [...workout.sets].reverse().find((set) => set.exercise === id && set.weight !== null) ??
@@ -303,7 +305,7 @@ function StrengthSet({
           <div className={styles.fields}>
             {canAddWeight && (
               <label>
-                Вес одной гантели, кг
+                {weightLabel}
                 <input
                   name="weight"
                   type="number"

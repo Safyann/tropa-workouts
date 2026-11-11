@@ -1,12 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { defaultPreferences, route, type WorkoutPreferences } from '../entities/program';
+import {
+  defaultEquipment,
+  defaultPreferences,
+  route,
+  type WorkoutPreferences,
+} from '../entities/program';
 import {
   nextStop,
   progressStorageKey,
   readProgress,
   saveProgress,
   type Progress,
+  type Session,
 } from '../entities/progress';
 import {
   createWorkout,
@@ -23,6 +29,7 @@ import { HistoryPage } from '../pages/history';
 import { RoutePage } from '../pages/route';
 import { SettingsPage } from '../pages/settings';
 import { WorkoutPage } from '../pages/workout';
+import { WorkoutResult } from '../pages/workout/WorkoutResult';
 import { resolveRoute } from './route';
 import { useAppUpdate } from './useAppUpdate';
 import './styles/global.css';
@@ -50,7 +57,7 @@ function App() {
   const screenElement = useRef<HTMLElement>(null);
   const firstRender = useRef(true);
   const screen = resolveRoute(hash, workout, route.length);
-  const activeTab = screen.page === 'workout' ? 'map' : screen.page;
+  const activeTab = screen.page === 'workout' || screen.page === 'result' ? 'map' : screen.page;
   const screenKey =
     screen.page === 'history' && screen.stopIndex !== undefined
       ? `history/${screen.stopIndex + 1}`
@@ -101,14 +108,14 @@ function App() {
     setDraft({ workout: next, saveFailed: !saveWorkoutDraft(next) });
   }
 
-  function navigate(page: 'map' | 'workout') {
+  function navigate(page: 'map' | 'workout' | `result/${number}/${number}`) {
     location.hash = page;
     setHash(location.hash);
   }
 
-  function leaveWorkout() {
+  function leaveWorkout(next: 'map' | `result/${number}/${number}` = 'map') {
     setDraft({ workout: null, saveFailed: !saveWorkoutDraft(null) });
-    navigate('map');
+    navigate(next);
   }
 
   function start(short: boolean) {
@@ -122,8 +129,8 @@ function App() {
   }
 
   function finish(completed: Workout) {
-    const entry = summarize(completed);
     const latest = latestProgress();
+    const entry = summarize(completed, latest.preferences?.bodyWeightKg);
     if (!latest.sessions.some((item) => item.stop === entry.stop && item.round === entry.round)) {
       const next = { ...latest, sessions: [...latest.sessions, entry] };
       if (!saveProgress(next)) {
@@ -136,7 +143,20 @@ function App() {
     } else {
       setProgress(latest);
     }
-    leaveWorkout();
+    leaveWorkout(`result/${entry.round}/${entry.stop + 1}`);
+  }
+
+  function saveResultWeight(session: Session, bodyWeightKg: number) {
+    const latest = latestProgress();
+    storeProgress({
+      ...latest,
+      preferences: { ...(latest.preferences ?? defaultPreferences), bodyWeightKg },
+      sessions: latest.sessions.map((entry) =>
+        entry.round === session.round && entry.stop === session.stop
+          ? { ...entry, bodyWeightKg }
+          : entry,
+      ),
+    });
   }
 
   function restart() {
@@ -164,8 +184,24 @@ function App() {
         );
       case 'history':
         return <HistoryPage sessions={progress.sessions} stopIndex={screen.stopIndex} />;
+      case 'result': {
+        const session = progress.sessions.find(
+          (entry) => entry.round === screen.round && entry.stop === screen.stopIndex,
+        );
+        return session ? (
+          <WorkoutResult
+            session={session}
+            saveWeight={(weight) => saveResultWeight(session, weight)}
+          />
+        ) : (
+          <section className={ui.narrow}>
+            <h1 tabIndex={-1}>Занятие не найдено</h1>
+            <a href="#map">К карте</a>
+          </section>
+        );
+      }
       case 'catalog':
-        return <CatalogPage />;
+        return <CatalogPage equipment={progress.preferences?.equipment ?? defaultEquipment} />;
       case 'settings':
         return (
           <SettingsPage

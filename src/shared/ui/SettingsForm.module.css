@@ -11,8 +11,11 @@
   color: var(--muted);
   font-weight: 650;
 }
+.fields input {
+  accent-color: var(--forest);
+}
 .fields select,
-.fields input[type='number'] {
+.fields input:is([type='number'], [type='search']) {
   width: 100%;
   min-width: 0;
   height: 2.75rem;
@@ -25,9 +28,6 @@
 }
 .fields :is(select, input, button):focus-visible {
   outline-offset: -3px;
-}
-.fields input {
-  accent-color: var(--forest);
 }
 .fields .wide {
   grid-column: 1 / -1;

@@ -1,14 +1,14 @@
 export {
-  availableExerciseByGroup,
+  availableExercisesByGroup,
   exerciseAlternatives,
   exercises,
   route,
-  strengthPlan,
+  strengthSchedule,
   workoutDetail,
   workoutTiming,
 } from './model';
 export type { Exercise, ExerciseId, Stop } from './model';
-export type { KineticExerciseId } from './kinetic';
+export { selectableEquipment, type KineticExerciseId } from './kinetic';
 export { ExerciseInstructions } from './ExerciseInstructions';
 export { searchKineticExercises } from './kineticSearch';
 export {
@@ -16,10 +16,12 @@ export {
   cardioActivity,
   cardioTitles,
   defaultPreferences,
+  defaultEquipment,
   defaultWeeklyGoal,
   durations,
   equipmentLabels,
   homeEquipment,
+  isBodyWeight,
   levels,
   muscleGroups,
   optionalBlockMinutes,

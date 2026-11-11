@@ -1,6 +1,11 @@
 import { expect, it } from 'vitest';
 import sourceCatalog from '@kinetic-place/exercises-json/en/exercises.json';
-import { kineticCatalog, kineticStrengthExercises, loadKineticCues } from './kinetic';
+import {
+  kineticCatalog,
+  kineticStrengthExercises,
+  loadKineticCues,
+  selectableEquipment,
+} from './kinetic';
 import { searchKineticExercises } from './kineticSearch';
 
 it('finds Kinetic exercises with Russian movement and equipment terms', () => {
@@ -18,13 +23,25 @@ it('finds Kinetic exercises with Russian movement and equipment terms', () => {
 
 it('checks equipment and partner requirements mentioned in the instructions', () => {
   expect(kineticCatalog.find(({ slug }) => slug === 'incline-push-up')?.needs).toEqual(['bench']);
-  const unavailable = ['inverted-row', 'prone-manual-hamstring'];
-  const homeIds = new Set(kineticStrengthExercises.map(({ id }) => id));
-  for (const slug of unavailable) {
-    const exercise = kineticCatalog.find((item) => item.slug === slug);
-    expect(exercise?.needs, slug).toBeNull();
-    expect(exercise && homeIds.has(exercise.id), slug).toBe(false);
-  }
+  expect(kineticCatalog.find(({ slug }) => slug === 'inverted-row')?.needs).toEqual([
+    'barbell',
+    'squatRack',
+  ]);
+  const assisted = kineticCatalog.find(({ slug }) => slug === 'prone-manual-hamstring');
+  expect(assisted?.needs).toBeNull();
+  expect(kineticStrengthExercises.map(({ id }) => id)).not.toContain(assisted?.id);
+});
+
+it('matches selected inventory including cardio and stretching without confusing machines', () => {
+  expect(selectableEquipment).toEqual(
+    expect.arrayContaining(['jumpRope', 'foamRoller', 'legPressMachine', 'smithMachine']),
+  );
+  const own = searchKineticExercises('', '', ['jumpRope', 'foamRoller', 'legPressMachine']);
+  const slugs = own.map(({ slug }) => slug);
+  expect(slugs).toEqual(expect.arrayContaining(['rope-jumping', 'quadriceps-smr', 'leg-press']));
+  expect(slugs).not.toContain('smith-machine-leg-press');
+  expect(slugs).not.toContain('inverted-row');
+  expect(slugs).not.toContain('prone-manual-hamstring');
 });
 
 it('ships a Russian name and every instruction for each Kinetic exercise', async () => {

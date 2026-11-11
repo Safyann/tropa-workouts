@@ -33,6 +33,10 @@
 .homeEquipment .equipmentHint {
   margin: 0;
 }
+.equipmentStatus {
+  composes: hint from '../../shared/ui/Common.module.css';
+  margin: 0;
+}
 .guideSubmit {
   composes: secondary from '../../shared/ui/Common.module.css';
   grid-column: 1 / -1;

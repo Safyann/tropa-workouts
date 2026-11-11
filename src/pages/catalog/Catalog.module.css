@@ -9,7 +9,7 @@
   font-size: 0.875rem;
   font-weight: 700;
 }
-.catalogFilters input,
+.catalogFilters input[type='search'],
 .catalogFilters select {
   min-width: 0;
   width: 100%;
@@ -17,6 +17,10 @@
   border-radius: 0.5rem;
   background: var(--surface);
   padding: 0.5rem 0.75rem;
+}
+.catalogFilters .equipmentFilter {
+  display: flex;
+  align-items: center;
 }
 .catalogStatus {
   color: var(--muted);

@@ -7,10 +7,10 @@ import {
   defaultWeeklyGoal,
   equipmentLabels,
   exercises,
-  homeEquipment,
+  defaultEquipment,
   levels,
   route,
-  strengthPlan,
+  strengthSchedule,
   workoutDetail,
   workoutTiming,
   type Stop,
@@ -46,7 +46,9 @@ export function RoutePage({
   const count = weekCount(progress.sessions);
   const preferences = progress.preferences ?? defaultPreferences;
   const goal = preferences.weeklyGoal ?? defaultWeeklyGoal;
-  const equipment = (preferences.equipment ?? homeEquipment).map((item) => equipmentLabels[item]);
+  const equipment = (preferences.equipment ?? defaultEquipment).map(
+    (item) => equipmentLabels[item],
+  );
   return (
     <>
       <div className={styles.intro}>
@@ -201,6 +203,8 @@ export function RoutePage({
 
 function DayPreview({ stop, preferences }: { stop: Stop; preferences: WorkoutPreferences }) {
   const timing = workoutTiming(stop, false, preferences);
+  const schedule = stop.icon === 'strength' ? strengthSchedule(stop, false, preferences) : null;
+  const mainMinutes = schedule?.estimatedMainMinutes ?? timing.main;
   return (
     <details className={styles.dayPreview}>
       <summary>Вся тренировка</summary>
@@ -210,10 +214,10 @@ function DayPreview({ stop, preferences }: { stop: Stop; preferences: WorkoutPre
           мин
         </p>
       )}
-      {stop.icon === 'strength' ? (
+      {schedule ? (
         <>
           <ul className={styles.previewPlan}>
-            {strengthPlan(stop, false, preferences).map((item) => {
+            {schedule.plan.map((item) => {
               const exercise = exercises[item.exercise];
               return (
                 <li key={item.exercise}>
@@ -226,9 +230,15 @@ function DayPreview({ stop, preferences }: { stop: Stop; preferences: WorkoutPre
             })}
           </ul>
           <p className={ui.hint}>
-            Ориентир для основной части — {timing.main} мин. Короткий вариант —{' '}
+            Основная часть · около {mainMinutes} мин. Короткий вариант —{' '}
             {workoutDetail(stop, true, preferences)}. По одному подходу на упражнение.
           </p>
+          {timing.main - mainMinutes > 3 && (
+            <p className={ui.hint}>
+              С выбранными группами и инвентарём подходящих упражнений хватило на {mainMinutes} из{' '}
+              {timing.main} мин основной части.
+            </p>
+          )}
         </>
       ) : (
         <p className={ui.hint}>

@@ -2,16 +2,19 @@ import { useState, type FormEvent } from 'react';
 import {
   defaultWeeklyGoal,
   equipmentLabels,
-  homeEquipment,
+  defaultEquipment,
+  selectableEquipment,
   levels,
   recommendLevel,
   weeklyGoals,
+  type HomeEquipment,
   type WorkoutLevel,
   type WorkoutPreferences,
 } from '../../entities/program';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './Settings.module.css';
 import formStyles from '../../shared/ui/SettingsForm.module.css';
+import { BodyWeightForm } from '../../features/workout/BodyWeightForm';
 
 const levelOptions = Object.keys(levels) as WorkoutLevel[];
 
@@ -22,7 +25,6 @@ export function SettingsPage({
   preferences: WorkoutPreferences;
   change: (preferences: WorkoutPreferences) => void;
 }) {
-  const equipment = preferences.equipment ?? homeEquipment;
   return (
     <section className={ui.narrow}>
       <a className={ui.back} href="#map">
@@ -71,35 +73,79 @@ export function SettingsPage({
             </select>
           </label>
         </div>
+        <BodyWeightForm
+          key={preferences.bodyWeightKg}
+          value={preferences.bodyWeightKg}
+          save={(bodyWeightKg) => change({ ...preferences, bodyWeightKg })}
+        />
         <LevelGuide apply={(level) => change({ ...preferences, level })} />
       </div>
-      <fieldset className={styles.homeEquipment}>
-        <legend>Инвентарь дома</legend>
-        <p className={styles.equipmentHint}>
-          Отметь, чем можешь пользоваться. Если убрать всё, план подберёт упражнения с весом тела и
-          ходьбу.
-        </p>
-        <div className={formStyles.fields}>
-          {homeEquipment.map((item) => (
-            <label key={item} className={formStyles.toggle}>
-              <input
-                type="checkbox"
-                checked={equipment.includes(item)}
-                onChange={(event) =>
-                  change({
-                    ...preferences,
-                    equipment: event.target.checked
-                      ? [...equipment, item]
-                      : equipment.filter((selected) => selected !== item),
-                  })
-                }
-              />
-              {equipmentLabels[item]}
-            </label>
-          ))}
-        </div>
-      </fieldset>
+      <EquipmentPicker
+        selected={preferences.equipment ?? defaultEquipment}
+        change={(equipment) => change({ ...preferences, equipment })}
+      />
     </section>
+  );
+}
+
+function normalizeEquipmentText(value: string) {
+  return value.toLowerCase().replaceAll('ё', 'е').replaceAll('-', ' ');
+}
+
+function EquipmentPicker({
+  selected,
+  change,
+}: {
+  selected: readonly HomeEquipment[];
+  change: (equipment: HomeEquipment[]) => void;
+}) {
+  const [query, setQuery] = useState('');
+  const terms = normalizeEquipmentText(query).trim().split(/\s+/).filter(Boolean);
+  const matches = selectableEquipment.filter((item) => {
+    const label = normalizeEquipmentText(equipmentLabels[item]);
+    return terms.every((term) => label.includes(term));
+  });
+
+  return (
+    <fieldset className={styles.homeEquipment}>
+      <legend>Инвентарь дома</legend>
+      <p className={styles.equipmentHint}>
+        Отметь доступный инвентарь. Приложение учтёт его в силовом плане по группам мышц и в фильтре
+        «Мой инвентарь» в каталоге.
+      </p>
+      <div className={formStyles.fields}>
+        <label className={formStyles.wide}>
+          Поиск инвентаря
+          <input
+            type="search"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Например, гантели или турник"
+          />
+        </label>
+        <p className={`${formStyles.wide} ${styles.equipmentStatus}`} role="status">
+          {matches.length
+            ? `Показано позиций: ${matches.length} из ${selectableEquipment.length}`
+            : 'Инвентарь не найден.'}
+        </p>
+        {matches.map((item) => (
+          <label key={item} className={formStyles.toggle}>
+            <input
+              type="checkbox"
+              checked={selected.includes(item)}
+              onChange={(event) =>
+                change(
+                  event.target.checked
+                    ? [...selected, item]
+                    : selected.filter((value) => value !== item),
+                )
+              }
+            />
+            {equipmentLabels[item]}
+          </label>
+        ))}
+      </div>
+    </fieldset>
   );
 }
 

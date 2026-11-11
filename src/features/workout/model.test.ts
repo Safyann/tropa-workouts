@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   createWorkout,
+  finishWarmup,
   isLastSet,
   moveExercise,
   recordSet,
@@ -13,6 +14,7 @@ import {
   toggleTimer,
 } from './model';
 import { defaultPreferences, exercises } from '../../entities/program';
+import { estimatedCalories } from '../../entities/progress';
 
 afterEach(() => vi.useRealTimers());
 
@@ -48,18 +50,75 @@ describe('workout', () => {
   });
 
   it('builds a full workout for one selected muscle group', () => {
+    const preferences = {
+      ...defaultPreferences,
+      muscleGroups: ['Мышцы корпуса'] as const,
+    };
+    const plans = ([20, 40, 60] as const).map((minutes) => {
+      const workout = createWorkout(0, 0, false, { ...preferences, minutes });
+      if (workout.kind !== 'strength') throw new Error('Expected a strength workout');
+      const ids = workout.plan.map(({ exercise }) => exercise);
+      expect(new Set(ids).size).toBe(ids.length);
+      expect(
+        ids.every((id) => id.startsWith('kinetic:') && exercises[id].group === 'Мышцы корпуса'),
+      ).toBe(true);
+      expect(workout.mainMinutes).toBeGreaterThanOrEqual(minutes - 2);
+      expect(workout.mainMinutes).toBeLessThanOrEqual(minutes);
+      return ids.length;
+    });
+    expect(plans[0]).toBeGreaterThan(1);
+    expect(plans[1]).toBeGreaterThan(plans[0]);
+    expect(plans[2]).toBeGreaterThan(plans[1]);
+  });
+
+  it('uses selected new equipment in a focused workout without adding unavailable gear', () => {
     const workout = createWorkout(0, 0, false, {
       ...defaultPreferences,
+      equipment: ['abWheel'],
       muscleGroups: ['Мышцы корпуса'],
     });
-
     if (workout.kind !== 'strength') throw new Error('Expected a strength workout');
-    expect(workout.plan).toHaveLength(1);
-    expect(workout.plan[0]).toMatchObject({
-      exercise: expect.stringMatching(/^kinetic:/),
-      target: 2,
+    expect(exercises[workout.plan[0].exercise].needs).toEqual(['abWheel']);
+    expect(
+      workout.plan.every(({ exercise }) =>
+        exercises[exercise].needs?.every((item) => item === 'abWheel'),
+      ),
+    ).toBe(true);
+  });
+
+  it('uses both groups and budgets for the warmup and cooldown in a 60-minute plan', () => {
+    const workout = createWorkout(0, 0, false, {
+      ...defaultPreferences,
+      minutes: 60,
+      warmup: true,
+      cooldown: true,
+      muscleGroups: ['Грудь и трицепсы', 'Мышцы корпуса'],
     });
-    expect(exercises[workout.plan[0].exercise].group).toBe('Мышцы корпуса');
+    if (workout.kind !== 'strength') throw new Error('Expected a strength workout');
+    const groups = workout.plan.map(({ exercise }) => exercises[exercise].group);
+    expect(new Set(groups)).toEqual(new Set(['Грудь и трицепсы', 'Мышцы корпуса']));
+    expect(groups.filter((group) => group === 'Грудь и трицепсы').length).toBeGreaterThan(1);
+    expect(groups.filter((group) => group === 'Мышцы корпуса').length).toBeGreaterThan(1);
+    expect(workout.mainMinutes).toBeGreaterThanOrEqual(48);
+    expect(workout.mainMinutes).toBeLessThanOrEqual(50);
+    expect(workout.block?.timer.remaining).toBe(300);
+    expect(workout.cooldownMinutes).toBe(5);
+  });
+
+  it('reports a shorter workout when the selected equipment limits exercise variety', () => {
+    const workout = createWorkout(0, 0, false, {
+      ...defaultPreferences,
+      minutes: 60,
+      muscleGroups: ['Икры'],
+    });
+    if (workout.kind !== 'strength') throw new Error('Expected a strength workout');
+    expect(workout.plan.length).toBeGreaterThan(0);
+    expect(
+      workout.plan.every(
+        ({ exercise, target }) => exercises[exercise].group === 'Икры' && target <= 4,
+      ),
+    ).toBe(true);
+    expect(workout.mainMinutes).toBeLessThan(60);
   });
 
   it('covers every available selected group in a short workout without equipment', () => {
@@ -76,7 +135,7 @@ describe('workout', () => {
     });
 
     if (workout.kind !== 'strength') throw new Error('Expected a strength workout');
-    expect(workout.plan.map(({ exercise }) => exercises[exercise].group)).toEqual([
+    expect([...new Set(workout.plan.map(({ exercise }) => exercises[exercise].group))]).toEqual([
       'Грудь и трицепсы',
       'Спина',
       'Задняя поверхность бедра и ягодицы',
@@ -117,8 +176,42 @@ describe('workout', () => {
       sets: [set],
       elapsed: null,
       durationSeconds: 0,
+      activeCaloriesPerKg: 0,
       partial: true,
     });
+  });
+
+  it('estimates active calories from completed timers and excludes time spent paused', () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(0);
+    const workout = createWorkout(1, 0, false, {
+      ...defaultPreferences,
+      warmup: true,
+      cooldown: true,
+      warmupActivity: 'stretching',
+    });
+    if (workout.kind !== 'cardio' || !workout.block) throw new Error('Expected cardio with warmup');
+    const warmedUp = finishWarmup({
+      ...workout,
+      block: { ...workout.block, timer: { remaining: 240, end: null } },
+    });
+    if (warmedUp.kind !== 'cardio') throw new Error('Expected cardio');
+    const cooldown = startCooldown({
+      ...warmedUp,
+      timer: { remaining: warmedUp.seconds - 120, end: null },
+    });
+    if (!cooldown?.block) throw new Error('Expected cooldown');
+    vi.setSystemTime(600_000);
+    const result = summarize(
+      {
+        ...cooldown,
+        block: { ...cooldown.block, timer: { remaining: 240, end: null } },
+      },
+      72,
+    );
+    expect(result.durationSeconds).toBe(600);
+    expect(result.elapsed).toBe(120);
+    expect(estimatedCalories(result)).toBe(13);
   });
 
   it('records the selected exercise out of order', () => {

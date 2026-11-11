@@ -2,10 +2,10 @@ import {
   cardioActivity,
   defaultPreferences,
   exerciseAlternatives,
-  homeEquipment,
-  levels,
+  defaultEquipment,
+  optionalBlockMinutes,
   route,
-  strengthPlan,
+  strengthSchedule,
   workoutTiming,
   type CardioActivity,
   type ExerciseId,
@@ -28,6 +28,7 @@ interface WorkoutInfo {
   mainMinutes: number;
   cooldownMinutes: number;
   cooldownActivity?: WorkoutBlockActivity;
+  completedWarmup?: { activity: WorkoutBlockActivity; seconds: number };
   block: WorkoutBlock | null;
 }
 
@@ -87,22 +88,23 @@ export function createWorkout(
       timer: { remaining: seconds, end: null },
     };
   }
-  const plan = strengthPlan(stop, short, preferences).map((item, id) => ({
+  const schedule = strengthSchedule(stop, short, preferences);
+  const plan = schedule.plan.map((item, id) => ({
     ...item,
     id,
     completed: 0,
     skipped: false,
   }));
-  const restSeconds = levels[preferences.level].rest;
   return {
     ...info,
     kind: 'strength',
+    mainMinutes: schedule.estimatedMainMinutes ?? timing.main,
     plan,
     selected: 0,
     sets: [],
     timer: null,
-    restSeconds,
-    equipment: preferences.equipment ?? homeEquipment,
+    restSeconds: schedule.restSeconds,
+    equipment: preferences.equipment ?? defaultEquipment,
   };
 }
 
@@ -127,6 +129,19 @@ export function remaining(timer: Timer, now: number) {
   return timer.end === null
     ? timer.remaining
     : Math.min(timer.remaining, Math.max(0, Math.ceil((timer.end - now) / 1000)));
+}
+
+export function finishWarmup(workout: Workout, now = Date.now()): Workout {
+  const { block } = workout;
+  if (block?.type !== 'warmup') return workout;
+  return {
+    ...workout,
+    block: null,
+    completedWarmup: {
+      activity: block.activity ?? 'walking',
+      seconds: Math.max(0, optionalBlockMinutes * 60 - remaining(block.timer, now)),
+    },
+  };
 }
 
 export function toggleTimer(timer: Timer, now: number): Timer {
@@ -219,8 +234,33 @@ export function recordSet(
   };
 }
 
-export function summarize(workout: Workout): Session {
+// 2024 Adult Compendium codes 02048, 02054, 02101 and 17152.
+const activityMet = { elliptical: 5, strength: 3.5, stretching: 2.3, walking: 2.8 };
+const activeSetSeconds = 40;
+
+function activeCaloriesPerKg(met: number, seconds: number) {
+  return ((met - 1) * seconds) / 3600;
+}
+
+export function summarize(workout: Workout, bodyWeightKg?: number): Session {
   const date = Date.now();
+  const durationSeconds = Math.max(0, Math.floor((date - workout.startedAt) / 1000));
+  const elapsed =
+    workout.kind === 'cardio' ? workout.seconds - remaining(workout.timer, date) : null;
+  const warmup = workout.completedWarmup;
+  const cooldown = workout.block?.type === 'cooldown' ? workout.block : null;
+  const cooldownSeconds = cooldown
+    ? Math.max(0, workout.cooldownMinutes * 60 - remaining(cooldown.timer, date))
+    : 0;
+  const mainSeconds = Math.max(0, durationSeconds - (warmup?.seconds ?? 0) - cooldownSeconds);
+  const strengthSeconds =
+    workout.kind === 'strength' ? Math.min(mainSeconds, workout.sets.length * activeSetSeconds) : 0;
+  const energy =
+    activeCaloriesPerKg(activityMet[warmup?.activity ?? 'walking'], warmup?.seconds ?? 0) +
+    activeCaloriesPerKg(activityMet[cooldown?.activity ?? 'walking'], cooldownSeconds) +
+    (workout.kind === 'cardio'
+      ? activeCaloriesPerKg(activityMet[workout.activity], elapsed ?? 0)
+      : activeCaloriesPerKg(activityMet.strength, strengthSeconds));
   const skipped =
     workout.kind === 'strength'
       ? workout.plan.filter((item) => item.skipped).map((item) => item.exercise)
@@ -230,9 +270,11 @@ export function summarize(workout: Workout): Session {
     stop: workout.index,
     round: workout.round,
     short: workout.short,
-    durationSeconds: Math.max(0, Math.floor((date - workout.startedAt) / 1000)),
+    durationSeconds,
+    activeCaloriesPerKg: energy,
+    ...(bodyWeightKg !== undefined && { bodyWeightKg }),
     sets: workout.kind === 'strength' ? workout.sets : [],
-    elapsed: workout.kind === 'cardio' ? workout.seconds - remaining(workout.timer, date) : null,
+    elapsed,
     ...(workout.kind === 'cardio' ? { cardioActivity: workout.activity } : {}),
     ...(workout.kind === 'strength' && workout.plan.some(isPending) ? { partial: true } : {}),
     ...(skipped.length ? { skipped } : {}),

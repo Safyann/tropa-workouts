@@ -1,5 +1,6 @@
 export {
   createWorkout,
+  finishWarmup,
   isLastSet,
   isPending,
   moveExercise,

@@ -3,6 +3,7 @@ import {
   ExerciseInstructions,
   muscleGroups,
   searchKineticExercises,
+  type HomeEquipment,
   type KineticExerciseId,
 } from '../../entities/program';
 import ui from '../../shared/ui/Common.module.css';
@@ -10,11 +11,12 @@ import styles from './Catalog.module.css';
 
 const pageSize = 12;
 
-export function CatalogPage() {
+export function CatalogPage({ equipment }: { equipment: readonly HomeEquipment[] }) {
   const [query, setQuery] = useState('');
   const [group, setGroup] = useState('');
   const [limit, setLimit] = useState(pageSize);
-  const matches = searchKineticExercises(query, group);
+  const [ownEquipmentOnly, setOwnEquipmentOnly] = useState(false);
+  const matches = searchKineticExercises(query, group, ownEquipmentOnly ? equipment : undefined);
 
   return (
     <section className={ui.narrow}>
@@ -51,6 +53,17 @@ export function CatalogPage() {
               </option>
             ))}
           </select>
+        </label>
+        <label className={styles.equipmentFilter}>
+          <input
+            type="checkbox"
+            checked={ownEquipmentOnly}
+            onChange={(event) => {
+              setOwnEquipmentOnly(event.target.checked);
+              setLimit(pageSize);
+            }}
+          />
+          Мой инвентарь
         </label>
       </div>
       <p aria-live="polite" className={styles.catalogStatus}>

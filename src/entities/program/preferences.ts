@@ -1,13 +1,17 @@
+import equipmentLabels from './equipment.json';
+
+export { equipmentLabels };
+
 export const durations = [20, 40, 60] as const;
 export const weeklyGoals = [1, 2, 3, 4, 5, 6, 7] as const;
 export const defaultWeeklyGoal = 2;
-export const homeEquipment = ['dumbbells', 'bench', 'elliptical'] as const;
-export type HomeEquipment = (typeof homeEquipment)[number];
-export const equipmentLabels: Record<HomeEquipment, string> = {
-  dumbbells: 'Гантели',
-  bench: 'Скамья',
-  elliptical: 'Эллипс',
-};
+export type HomeEquipment = keyof typeof equipmentLabels;
+export const homeEquipment = Object.keys(equipmentLabels) as HomeEquipment[];
+export const defaultEquipment = [
+  'dumbbells',
+  'bench',
+  'elliptical',
+] as const satisfies readonly HomeEquipment[];
 export const cardioTitles = { elliptical: 'Эллипс', walking: 'Ходьба' } as const;
 export type CardioActivity = keyof typeof cardioTitles;
 
@@ -70,12 +74,17 @@ export interface WorkoutPreferences {
   warmupActivity?: WorkoutBlockActivity;
   cooldownActivity?: WorkoutBlockActivity;
   weeklyGoal?: (typeof weeklyGoals)[number];
+  bodyWeightKg?: number;
   equipment?: readonly HomeEquipment[];
   muscleGroups?: readonly MuscleGroup[];
 }
 
+export function isBodyWeight(value: unknown): value is number {
+  return typeof value === 'number' && Number.isFinite(value) && value > 0;
+}
+
 export function cardioActivity(
-  equipment: readonly HomeEquipment[] = homeEquipment,
+  equipment: readonly HomeEquipment[] = defaultEquipment,
 ): CardioActivity {
   return equipment.includes('elliptical') ? 'elliptical' : 'walking';
 }

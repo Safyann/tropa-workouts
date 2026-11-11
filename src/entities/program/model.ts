@@ -1,11 +1,13 @@
 import {
   defaultPreferences,
-  homeEquipment,
+  defaultEquipment,
+  levels,
   mainBudget,
   muscleGroups,
   optionalBlockMinutes,
   type HomeEquipment,
   type MuscleGroup,
+  type WorkoutPreferences,
 } from './preferences';
 import { kineticStrengthExercises, kineticVideo, type KineticExerciseId } from './kinetic';
 
@@ -335,7 +337,7 @@ function hasEquipment(id: ExerciseId, equipment: readonly HomeEquipment[]) {
 
 export function exerciseAlternatives(
   id: ExerciseId,
-  equipment: readonly HomeEquipment[] = homeEquipment,
+  equipment: readonly HomeEquipment[] = defaultEquipment,
   limit = Infinity,
 ): ExerciseId[] {
   const { group } = exercises[id];
@@ -372,16 +374,24 @@ const kineticAlternativeIds = new Map(
   ]),
 );
 
-export function availableExerciseByGroup(preferences = defaultPreferences) {
-  const available = new Map<MuscleGroup, ExerciseId>();
-  const equipment = preferences.equipment ?? homeEquipment;
+export function availableExercisesByGroup(preferences = defaultPreferences) {
+  const available = new Map<MuscleGroup, ExerciseId[]>();
+  const equipment = preferences.equipment ?? defaultEquipment;
   for (const [group, candidates] of kineticByGroup) {
-    const first = candidates.find(
-      ({ id, difficulty }) =>
-        (difficulty !== 'expert' || preferences.level === 'advanced') &&
-        hasEquipment(id, equipment),
-    );
-    if (first) available.set(group, first.id);
+    const withNewEquipment: ExerciseId[] = [];
+    const usual: ExerciseId[] = [];
+    for (const { id, difficulty, needs } of candidates) {
+      if (difficulty === 'expert' && preferences.level !== 'advanced') continue;
+      if (!hasEquipment(id, equipment)) continue;
+      if (needs.some((item) => !defaultEquipment.some((defaultItem) => defaultItem === item))) {
+        withNewEquipment.push(id);
+      } else {
+        usual.push(id);
+      }
+    }
+    if (withNewEquipment.length || usual.length) {
+      available.set(group, [...withNewEquipment, ...usual]);
+    }
   }
   return available;
 }
@@ -439,49 +449,122 @@ export function workoutTiming(stop: Stop, short: boolean, preferences = defaultP
   return { warmup, main, cooldown, total: warmup + main + cooldown };
 }
 
-export function strengthPlan(
+interface StrengthSchedule {
+  plan: { exercise: ExerciseId; target: number }[];
+  restSeconds: number;
+  estimatedMainMinutes: number | null;
+}
+
+const setsPerExercise = 3;
+const maxSetsPerExercise = 4;
+const regularSetSeconds = 90;
+const quickSetSeconds = 40;
+const maxExtraRestSeconds = 15;
+
+function focusedStrengthSchedule(
+  mainMinutes: number,
+  short: boolean,
+  preferences: WorkoutPreferences,
+): StrengthSchedule | null {
+  const selected = preferences.muscleGroups ?? [];
+  if (!selected.length) return null;
+
+  const byGroup = availableExercisesByGroup(preferences);
+  const groups = muscleGroups.flatMap((group) => {
+    const candidates = byGroup.get(group);
+    return candidates && selected.includes(group) ? [candidates] : [];
+  });
+  if (!groups.length) return null;
+
+  const budget = mainMinutes * 60;
+  const usualRest = levels[preferences.level].rest;
+  // A full set estimate includes setup and logging. Use a quicker pace for short sessions
+  // or when the main block needs to fit at least one set for many selected groups.
+  const minimumRestCount = groups.length - 1;
+  const quickPace =
+    short || groups.length * regularSetSeconds + minimumRestCount * usualRest > budget;
+  const setSeconds = quickPace ? quickSetSeconds : regularSetSeconds;
+  const baseRest =
+    minimumRestCount === 0
+      ? usualRest
+      : Math.min(usualRest, Math.floor((budget - groups.length * setSeconds) / minimumRestCount));
+  // The final set has no rest after it.
+  const setBudget = Math.floor((budget + baseRest) / (setSeconds + baseRest));
+  const exerciseBudget = short
+    ? setBudget
+    : Math.max(groups.length, Math.ceil(setBudget / setsPerExercise));
+  const plan: StrengthSchedule['plan'] = [];
+  for (let position = 0; plan.length < exerciseBudget; position++) {
+    const countBefore = plan.length;
+    for (const group of groups) {
+      const exercise = group[position];
+      if (!exercise) continue;
+      plan.push({ exercise, target: 1 });
+      if (plan.length === exerciseBudget) break;
+    }
+    if (plan.length === countBefore) break;
+  }
+  const totalSets = short ? plan.length : Math.min(setBudget, plan.length * maxSetsPerExercise);
+  for (let index = 0; index < totalSets - plan.length; index++) {
+    plan[index % plan.length].target++;
+  }
+  const workSeconds = totalSets * setSeconds;
+  const restCount = totalSets - 1;
+  // Spread a small remainder across rests without stretching a short plan with long pauses.
+  const restSeconds =
+    restCount > 0
+      ? Math.min(baseRest + maxExtraRestSeconds, Math.floor((budget - workSeconds) / restCount))
+      : baseRest;
+  const seconds = workSeconds + restCount * restSeconds;
+  return { plan, restSeconds, estimatedMainMinutes: Math.round(seconds / 60) };
+}
+
+export function strengthSchedule(
   stop: Extract<Stop, { icon: 'strength' }>,
   short: boolean,
   preferences = defaultPreferences,
-) {
+): StrengthSchedule {
+  const { main } = workoutTiming(stop, short, preferences);
+  const focused = focusedStrengthSchedule(main, short, preferences);
+  if (focused) return focused;
+
   const budget = mainBudget(preferences);
-  const selectedGroups = preferences.muscleGroups;
-  let moves: ExerciseId[] = [];
-  if (Array.isArray(selectedGroups) && selectedGroups.length > 0) {
-    const byGroup = availableExerciseByGroup(preferences);
-    moves = muscleGroups.flatMap((group) => {
-      const exercise = byGroup.get(group);
-      return exercise && selectedGroups.includes(group) ? [exercise] : [];
-    });
-  }
-  if (!moves.length) {
-    const extraCount = budget >= 45 ? 3 : budget >= 30 ? 2 : 0;
-    const equipment = preferences.equipment ?? homeEquipment;
-    const bodyweight = !equipment.includes('dumbbells') && !equipment.includes('bench');
-    const routeMoves = bodyweight
-      ? bodyweightMoves
-      : [...stop.moves, ...extendedMoves.slice(0, extraCount)];
-    moves = routeMoves.flatMap((exercise) =>
-      hasEquipment(exercise, equipment) ? [exercise] : exerciseAlternatives(exercise, equipment, 1),
-    );
-    if (short) moves = moves.slice(0, bodyweight ? 3 : 2);
-  }
-  if (short) return moves.map((exercise) => ({ exercise, target: 1 }));
+  const extraCount = budget >= 45 ? 3 : budget >= 30 ? 2 : 0;
+  const equipment = preferences.equipment ?? defaultEquipment;
+  const bodyweight = !equipment.includes('dumbbells') && !equipment.includes('bench');
+  const routeMoves = bodyweight
+    ? bodyweightMoves
+    : [...stop.moves, ...extendedMoves.slice(0, extraCount)];
+  const moves = routeMoves.flatMap((exercise) =>
+    hasEquipment(exercise, equipment) ? [exercise] : exerciseAlternatives(exercise, equipment, 1),
+  );
   const extraSets = {
     beginner: Number(budget >= 45),
     basic: Number(budget >= 30),
     experienced: 1 + Number(budget >= 45),
     advanced: 1 + Number(budget >= 30),
   }[preferences.level];
-  const target = budget < 15 ? 1 : stop.sets + extraSets;
-  return moves.map((exercise) => ({ exercise, target }));
+  const target = short || budget < 15 ? 1 : stop.sets + extraSets;
+  return {
+    plan: (short ? moves.slice(0, bodyweight ? 3 : 2) : moves).map((exercise) => ({
+      exercise,
+      target,
+    })),
+    restSeconds: levels[preferences.level].rest,
+    estimatedMainMinutes: null,
+  };
 }
 
 export function workoutDetail(stop: Stop, short = false, preferences = defaultPreferences) {
-  const { total } = workoutTiming(stop, short, preferences);
+  const { total, warmup, cooldown } = workoutTiming(stop, short, preferences);
   if (stop.icon === 'cardio') return `${total} мин`;
-  const plan = strengthPlan(stop, short, preferences);
-  if (plan.length === 1) return `1 упражнение · до ${total} мин`;
-  const noun = plan.length < 5 ? 'упражнения' : 'упражнений';
-  return `${plan.length} ${noun} · до ${total} мин`;
+  const { plan, estimatedMainMinutes } = strengthSchedule(stop, short, preferences);
+  let noun = 'упражнений';
+  if (plan.length === 1) noun = 'упражнение';
+  else if (plan.length < 5) noun = 'упражнения';
+  const duration =
+    estimatedMainMinutes === null
+      ? `до ${total} мин`
+      : `около ${warmup + estimatedMainMinutes + cooldown} мин`;
+  return `${plan.length} ${noun} · ${duration}`;
 }

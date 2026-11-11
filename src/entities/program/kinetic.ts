@@ -1,5 +1,11 @@
 import catalog from './kinetic.ru.json';
-import { equipmentLabels, type HomeEquipment, type MuscleGroup } from './preferences';
+import {
+  defaultEquipment,
+  equipmentLabels,
+  homeEquipment,
+  type HomeEquipment,
+  type MuscleGroup,
+} from './preferences';
 import type { Exercise } from './model';
 
 export type KineticExerciseId = `kinetic:${string}`;
@@ -84,6 +90,12 @@ export const kineticCatalog = catalog.map((item) => {
   };
 });
 
+const usedEquipment = new Set<HomeEquipment>([
+  ...defaultEquipment,
+  ...kineticCatalog.flatMap(({ needs }) => needs ?? []),
+]);
+export const selectableEquipment = homeEquipment.filter((item) => usedEquipment.has(item));
+
 export function kineticVideo(slug: string) {
   return kineticCatalog.find((exercise) => exercise.slug === slug)?.video;
 }
@@ -93,6 +105,15 @@ export async function loadKineticCues(id: KineticExerciseId): Promise<readonly s
   const byId: Record<string, string[]> = cues;
   return byId[id.slice('kinetic:'.length)] ?? [];
 }
+
+const weightedEquipment: readonly HomeEquipment[] = [
+  'dumbbells',
+  'barbell',
+  'ezBar',
+  'trapBar',
+  'kettlebells',
+  'weightPlate',
+];
 
 export const kineticStrengthExercises = kineticCatalog.flatMap((item) => {
   const [group] = item.groups;
@@ -104,7 +125,7 @@ export const kineticStrengthExercises = kineticCatalog.flatMap((item) => {
       group,
       gear: item.gear,
       needs: item.needs,
-      weighted: item.needs.includes('dumbbells'),
+      weighted: item.needs.some((equipment) => weightedEquipment.includes(equipment)),
       cues: item.id,
       video: item.video,
       difficulty: item.difficulty,

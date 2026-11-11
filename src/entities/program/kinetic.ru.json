@@ -7,7 +7,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Other"],
-    "needs": null,
+    "needs": ["yoke"],
     "videoId": "ZmPadd9HuX8",
     "strength": false,
     "difficulty": "intermediate"
@@ -33,7 +33,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Squat rack", "Barbell"],
-    "needs": null,
+    "needs": ["squatRack", "barbell", "bench"],
     "videoId": "utxC_-PuRVs",
     "strength": true,
     "difficulty": "beginner"
@@ -46,7 +46,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "WCdhjfg7fv4",
     "strength": false,
     "difficulty": "intermediate"
@@ -85,7 +85,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Landmine", "Barbell"],
-    "needs": null,
+    "needs": ["landmine", "barbell"],
     "videoId": "YC7poHGaVFE",
     "strength": true,
     "difficulty": "beginner"
@@ -98,7 +98,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Dumbbell", "Adjustable bench"],
-    "needs": null,
+    "needs": ["dumbbells", "adjustableBench"],
     "videoId": "2Eji49v7Nl0",
     "strength": true,
     "difficulty": "beginner"
@@ -111,7 +111,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["shoulderPressMachine"],
     "videoId": "WvLMauqrnK8",
     "strength": true,
     "difficulty": "beginner"
@@ -124,7 +124,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Squat rack", "Barbell"],
-    "needs": null,
+    "needs": ["squatRack", "barbell", "dumbbells"],
     "videoId": "MJQHqSJ6xFo",
     "strength": false,
     "difficulty": "intermediate"
@@ -137,7 +137,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Suspension Trainer"],
-    "needs": null,
+    "needs": ["suspensionTrainer"],
     "videoId": "6F2Rcx62z3U",
     "strength": true,
     "difficulty": "intermediate"
@@ -150,7 +150,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "PqZNN-v8vJk",
     "strength": true,
     "difficulty": "beginner"
@@ -163,7 +163,7 @@
     "hasCues": true,
     "muscles": ["lower-back"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "CpWsUsqBtN8",
     "strength": false,
     "difficulty": "intermediate"
@@ -189,7 +189,7 @@
     "hasCues": true,
     "muscles": ["forearms"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "_O3JdshSmVA",
     "strength": true,
     "difficulty": "beginner"
@@ -202,7 +202,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Squat rack", "Barbell"],
-    "needs": null,
+    "needs": ["squatRack", "barbell"],
     "videoId": "lWEBiB42FZ8",
     "strength": true,
     "difficulty": "expert"
@@ -241,7 +241,7 @@
     "hasCues": true,
     "muscles": ["lower-back"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "ZaTM37cfiDs",
     "strength": true,
     "difficulty": "intermediate"
@@ -280,7 +280,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Bands"],
-    "needs": null,
+    "needs": ["bands"],
     "videoId": "ZXncuZKonas",
     "strength": true,
     "difficulty": "beginner"
@@ -293,7 +293,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "xvvN9HZvaBE",
     "strength": true,
     "difficulty": "beginner"
@@ -306,7 +306,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Flat bench", "Barbell", "Bench press station"],
-    "needs": null,
+    "needs": ["bench", "barbell", "benchPressStation"],
     "videoId": "hY-_kXsJl3w",
     "strength": true,
     "difficulty": "intermediate"
@@ -345,7 +345,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Other"],
-    "needs": null,
+    "needs": ["dumbbells"],
     "videoId": "5cbUeYKu6CA",
     "strength": false,
     "difficulty": "beginner"
@@ -371,7 +371,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "4mIbpBoWuWo",
     "strength": true,
     "difficulty": "beginner"
@@ -397,7 +397,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["Dumbbell", "Preacher curl bench"],
-    "needs": null,
+    "needs": ["dumbbells", "preacherBench"],
     "videoId": "WK5yZMlgMb4",
     "strength": true,
     "difficulty": "beginner"
@@ -423,7 +423,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Bands"],
-    "needs": null,
+    "needs": ["bands"],
     "videoId": "CTRaCzE8pWU",
     "strength": false,
     "difficulty": "beginner"
@@ -462,7 +462,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell", "dumbbells", "bench"],
     "videoId": "Jqb9sLZoONs",
     "strength": true,
     "difficulty": "intermediate"
@@ -488,7 +488,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "Q_bf9TtWxTU",
     "strength": true,
     "difficulty": "intermediate"
@@ -527,7 +527,7 @@
     "hasCues": true,
     "muscles": ["glutes", "hamstrings"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "sFQtAuiVwyo",
     "strength": true,
     "difficulty": "intermediate"
@@ -553,7 +553,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Plyo box"],
-    "needs": null,
+    "needs": ["plyoBox", "bench"],
     "videoId": "wFc-ZrkiSsI",
     "strength": false,
     "difficulty": "beginner"
@@ -566,7 +566,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Other"],
-    "needs": null,
+    "needs": ["chains", "dumbbells", "bench"],
     "videoId": "6gazJ4RTyAo",
     "strength": false,
     "difficulty": "intermediate"
@@ -579,7 +579,7 @@
     "hasCues": true,
     "muscles": ["glutes"],
     "equipment": ["Bands"],
-    "needs": null,
+    "needs": ["bands"],
     "videoId": "UHQt49fxraQ",
     "strength": true,
     "difficulty": "beginner"
@@ -605,7 +605,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Other"],
-    "needs": null,
+    "needs": ["rickshawFrame"],
     "videoId": "2d2wXoOsq4k",
     "strength": false,
     "difficulty": "intermediate"
@@ -618,7 +618,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "18PadBGR9qo",
     "strength": true,
     "difficulty": "beginner"
@@ -631,7 +631,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["Adjustable bench", "Dumbbell"],
-    "needs": null,
+    "needs": ["adjustableBench", "dumbbells"],
     "videoId": "L9nnbFzdl3Y",
     "strength": true,
     "difficulty": "beginner"
@@ -644,7 +644,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "VJ_3XuYlrKY",
     "strength": true,
     "difficulty": "intermediate"
@@ -657,7 +657,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "U-KG4oahSLA",
     "strength": true,
     "difficulty": "beginner"
@@ -683,7 +683,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["pecDeck"],
     "videoId": "nc2dAacSYJE",
     "strength": true,
     "difficulty": "beginner"
@@ -696,7 +696,7 @@
     "hasCues": true,
     "muscles": ["lats"],
     "equipment": ["Pull-Up Bar"],
-    "needs": null,
+    "needs": ["pullUpBar"],
     "videoId": "feWrZs4IVx8",
     "strength": true,
     "difficulty": "beginner"
@@ -709,7 +709,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Barbell", "Bench press station", "Flat bench"],
-    "needs": null,
+    "needs": ["barbell", "benchPressStation", "bench"],
     "videoId": "axuknfBPFwA",
     "strength": false,
     "difficulty": "intermediate"
@@ -722,7 +722,7 @@
     "hasCues": true,
     "muscles": ["glutes"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell", "bench"],
     "videoId": "pUdIL5x0fWg",
     "strength": false,
     "difficulty": "intermediate"
@@ -748,7 +748,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Dumbbell", "Adjustable bench"],
-    "needs": null,
+    "needs": ["dumbbells", "adjustableBench"],
     "videoId": "pJklk7UR69s",
     "strength": true,
     "difficulty": "beginner"
@@ -761,7 +761,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "ywBp8G9jI_8",
     "strength": true,
     "difficulty": "beginner"
@@ -774,7 +774,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Bands"],
-    "needs": null,
+    "needs": ["bands", "bench"],
     "videoId": "KcVcmUA_UeU",
     "strength": true,
     "difficulty": "beginner"
@@ -787,7 +787,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "KjqHI59JizY",
     "strength": true,
     "difficulty": "beginner"
@@ -826,7 +826,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["dipMachine"],
     "videoId": "kbmVlw-i0Vs",
     "strength": true,
     "difficulty": "beginner"
@@ -839,7 +839,7 @@
     "hasCues": true,
     "muscles": ["middle-back"],
     "equipment": ["Suspension Trainer"],
-    "needs": null,
+    "needs": ["suspensionTrainer"],
     "videoId": "utTuYn6ncGE",
     "strength": true,
     "difficulty": "beginner"
@@ -852,7 +852,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "DoACGlPyQTI",
     "strength": true,
     "difficulty": "beginner"
@@ -865,7 +865,7 @@
     "hasCues": true,
     "muscles": ["middle-back"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "CsROhQ1onAg",
     "strength": true,
     "difficulty": "beginner"
@@ -878,7 +878,7 @@
     "hasCues": true,
     "muscles": ["glutes"],
     "equipment": ["Body Only"],
-    "needs": null,
+    "needs": ["squatRack"],
     "videoId": "fbGDQGHxvHk",
     "strength": true,
     "difficulty": "beginner"
@@ -891,7 +891,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Foam Roll"],
-    "needs": null,
+    "needs": ["foamRoller"],
     "videoId": "vUzmXO56jDI",
     "strength": false,
     "difficulty": "intermediate"
@@ -904,7 +904,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "eoCVm1-D3-E",
     "strength": true,
     "difficulty": "intermediate"
@@ -917,7 +917,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Body Only"],
-    "needs": null,
+    "needs": ["pullUpBar"],
     "videoId": "mRE8b8jjPDw",
     "strength": true,
     "difficulty": "beginner"
@@ -930,7 +930,7 @@
     "hasCues": true,
     "muscles": ["lower-back"],
     "equipment": ["Other"],
-    "needs": null,
+    "needs": ["kegAndPlatform"],
     "videoId": "GtI0Z0MHvDQ",
     "strength": false,
     "difficulty": "intermediate"
@@ -956,7 +956,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Adjustable bench", "Dumbbell"],
-    "needs": null,
+    "needs": ["adjustableBench", "dumbbells"],
     "videoId": "idAvu2HvqSQ",
     "strength": true,
     "difficulty": "beginner"
@@ -969,7 +969,7 @@
     "hasCues": true,
     "muscles": ["lower-back"],
     "equipment": ["Exercise Ball"],
-    "needs": null,
+    "needs": ["exerciseBall"],
     "videoId": "ZeI9hra6E8A",
     "strength": false,
     "difficulty": "beginner"
@@ -982,7 +982,7 @@
     "hasCues": true,
     "muscles": ["traps"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "P6FmhYC3PYM",
     "strength": true,
     "difficulty": "intermediate"
@@ -995,7 +995,7 @@
     "hasCues": true,
     "muscles": ["lats"],
     "equipment": ["Cable", "Adjustable bench"],
-    "needs": null,
+    "needs": ["cableMachine", "adjustableBench"],
     "videoId": "6kFxX7PAYjM",
     "strength": true,
     "difficulty": "beginner"
@@ -1008,7 +1008,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "wxe9JDl67Yg",
     "strength": true,
     "difficulty": "beginner"
@@ -1021,7 +1021,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "GxDF2AYsI1Q",
     "strength": true,
     "difficulty": "beginner"
@@ -1060,7 +1060,7 @@
     "hasCues": true,
     "muscles": ["middle-back"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "YTJw0Ko3tcg",
     "strength": true,
     "difficulty": "intermediate"
@@ -1073,7 +1073,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "o2HRy4ay4rE",
     "strength": true,
     "difficulty": "beginner"
@@ -1086,7 +1086,7 @@
     "hasCues": true,
     "muscles": ["glutes", "hamstrings", "lower-back", "quadriceps"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "ZaTM37cfiDs",
     "strength": true,
     "difficulty": "intermediate"
@@ -1099,7 +1099,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["smithMachine", "bench"],
     "videoId": "MXrSCU4P9L4",
     "strength": true,
     "difficulty": "beginner"
@@ -1112,7 +1112,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "DROW0vaabJo",
     "strength": true,
     "difficulty": "beginner"
@@ -1125,7 +1125,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Barbell", "Squat rack"],
-    "needs": null,
+    "needs": ["barbell", "squatRack"],
     "videoId": "Akd5xmZlsvg",
     "strength": false,
     "difficulty": "intermediate"
@@ -1151,7 +1151,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Squat rack", "Barbell"],
-    "needs": null,
+    "needs": ["squatRack", "barbell"],
     "videoId": "sUOs8v6IzEg",
     "strength": true,
     "difficulty": "beginner"
@@ -1177,7 +1177,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Weight Plate"],
-    "needs": null,
+    "needs": ["weightPlate"],
     "videoId": "cIoUZOnypS8",
     "strength": true,
     "difficulty": "beginner"
@@ -1190,7 +1190,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Barbell", "Squat rack"],
-    "needs": null,
+    "needs": ["barbell", "squatRack", "bench"],
     "videoId": "P4GiWLqaeQA",
     "strength": true,
     "difficulty": "expert"
@@ -1203,7 +1203,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "5rIqP63yWFg",
     "strength": true,
     "difficulty": "intermediate"
@@ -1216,7 +1216,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Sled"],
-    "needs": null,
+    "needs": ["sled"],
     "videoId": "qDFpMH8Xf9Y",
     "strength": false,
     "difficulty": "beginner"
@@ -1229,7 +1229,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Squat rack", "Barbell", "Flat bench"],
-    "needs": null,
+    "needs": ["squatRack", "barbell", "bench"],
     "videoId": "y9S4D-QHcws",
     "strength": false,
     "difficulty": "intermediate"
@@ -1242,7 +1242,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Gymnastic Rings"],
-    "needs": null,
+    "needs": ["rings"],
     "videoId": "EznLCDBAPIU",
     "strength": true,
     "difficulty": "intermediate"
@@ -1268,7 +1268,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["legPressMachine"],
     "videoId": "sK5F0mG94bY",
     "strength": true,
     "difficulty": "intermediate"
@@ -1294,7 +1294,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Adjustable bench", "Barbell"],
-    "needs": null,
+    "needs": ["barbell", "declineBench"],
     "videoId": "BPfkZ0COUJs",
     "strength": true,
     "difficulty": "beginner"
@@ -1307,7 +1307,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Adjustable bench", "Dumbbell"],
-    "needs": null,
+    "needs": ["adjustableBench", "dumbbells"],
     "videoId": "8fXfwG4ftaQ",
     "strength": true,
     "difficulty": "beginner"
@@ -1346,7 +1346,7 @@
     "hasCues": true,
     "muscles": ["forearms"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "PDHxebi2vDQ",
     "strength": true,
     "difficulty": "beginner"
@@ -1359,7 +1359,7 @@
     "hasCues": true,
     "muscles": ["lats"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "Rkuua2mx1Ws",
     "strength": true,
     "difficulty": "intermediate"
@@ -1372,7 +1372,7 @@
     "hasCues": true,
     "muscles": ["middle-back"],
     "equipment": ["Barbell", "Flat bench"],
-    "needs": null,
+    "needs": ["barbell", "bench"],
     "videoId": "1CRJutjGCTE",
     "strength": true,
     "difficulty": "beginner"
@@ -1385,7 +1385,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "hw14FbggBy4",
     "strength": true,
     "difficulty": "expert"
@@ -1411,7 +1411,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["elliptical"],
     "videoId": "YWfswVvOaiI",
     "strength": false,
     "difficulty": "intermediate"
@@ -1424,7 +1424,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Barbell", "Squat rack"],
-    "needs": null,
+    "needs": ["barbell", "squatRack"],
     "videoId": "2eu_TTpkPN8",
     "strength": false,
     "difficulty": "intermediate"
@@ -1437,7 +1437,7 @@
     "hasCues": true,
     "muscles": ["calves"],
     "equipment": ["Other"],
-    "needs": null,
+    "needs": ["balanceBoard"],
     "videoId": "Wi_dIWMQy_M",
     "strength": true,
     "difficulty": "beginner"
@@ -1450,7 +1450,7 @@
     "hasCues": true,
     "muscles": ["traps"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["shrugMachine"],
     "videoId": "8ppOGwvaFko",
     "strength": true,
     "difficulty": "beginner"
@@ -1528,7 +1528,7 @@
     "hasCues": true,
     "muscles": ["chest", "shoulders", "triceps"],
     "equipment": ["Adjustable bench", "Squat rack", "Barbell"],
-    "needs": null,
+    "needs": ["adjustableBench", "squatRack", "barbell"],
     "videoId": "98HWfiRonkE",
     "strength": true,
     "difficulty": "intermediate"
@@ -1541,7 +1541,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Flat bench", "E-z Curl Bar"],
-    "needs": null,
+    "needs": ["bench", "ezBar"],
     "videoId": "JGWZcp5qdwY",
     "strength": true,
     "difficulty": "intermediate"
@@ -1567,7 +1567,7 @@
     "hasCues": true,
     "muscles": ["glutes"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "xO5WVJGVJ2w",
     "strength": true,
     "difficulty": "intermediate"
@@ -1593,7 +1593,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Barbell", "Squat rack"],
-    "needs": null,
+    "needs": ["barbell", "squatRack"],
     "videoId": "eDf49a4Vx5k",
     "strength": true,
     "difficulty": "expert"
@@ -1606,7 +1606,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Barbell", "Adjustable bench"],
-    "needs": null,
+    "needs": ["barbell", "declineBench"],
     "videoId": "sLae_WpobiM",
     "strength": true,
     "difficulty": "intermediate"
@@ -1619,7 +1619,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Barbell", "Squat rack"],
-    "needs": null,
+    "needs": ["barbell", "squatRack"],
     "videoId": "j4Tu3rVThFM",
     "strength": false,
     "difficulty": "intermediate"
@@ -1632,7 +1632,7 @@
     "hasCues": true,
     "muscles": ["middle-back"],
     "equipment": ["Pull-Up Bar"],
-    "needs": null,
+    "needs": ["pullUpBar"],
     "videoId": "xjME35NboRA",
     "strength": true,
     "difficulty": "expert"
@@ -1645,7 +1645,7 @@
     "hasCues": true,
     "muscles": ["lats"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "xGYSujjFfSo",
     "strength": true,
     "difficulty": "beginner"
@@ -1658,7 +1658,7 @@
     "hasCues": true,
     "muscles": ["forearms"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "If7VfmUPzgA",
     "strength": true,
     "difficulty": "intermediate"
@@ -1671,7 +1671,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell", "squatRack"],
     "videoId": "DyvafNcsVqg",
     "strength": false,
     "difficulty": "expert"
@@ -1684,7 +1684,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "P1pLE1jmnI0",
     "strength": true,
     "difficulty": "beginner"
@@ -1697,7 +1697,7 @@
     "hasCues": true,
     "muscles": ["lats"],
     "equipment": ["Pull-Up Bar"],
-    "needs": null,
+    "needs": ["pullUpBar"],
     "videoId": "WYfy2KWYO4w",
     "strength": true,
     "difficulty": "intermediate"
@@ -1710,7 +1710,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "mIYuVpQF3N8",
     "strength": true,
     "difficulty": "expert"
@@ -1736,7 +1736,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Adjustable bench", "Barbell"],
-    "needs": null,
+    "needs": ["barbell", "declineBench"],
     "videoId": "_Tz-N-2U90Q",
     "strength": true,
     "difficulty": "intermediate"
@@ -1749,7 +1749,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "B340QckIfJM",
     "strength": true,
     "difficulty": "intermediate"
@@ -1775,7 +1775,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "__YwepqHzAU",
     "strength": true,
     "difficulty": "intermediate"
@@ -1801,7 +1801,7 @@
     "hasCues": true,
     "muscles": ["calves"],
     "equipment": ["Foam Roll"],
-    "needs": null,
+    "needs": ["foamRoller"],
     "videoId": "vSUIBqrldkU",
     "strength": false,
     "difficulty": "intermediate"
@@ -1827,7 +1827,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "nCNmFdiuqBc",
     "strength": true,
     "difficulty": "intermediate"
@@ -1840,7 +1840,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Plyo box"],
-    "needs": null,
+    "needs": ["plyoBox"],
     "videoId": "G-bxQY57mKc",
     "strength": false,
     "difficulty": "beginner"
@@ -1853,7 +1853,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "T4EAdzwVEg4",
     "strength": false,
     "difficulty": "intermediate"
@@ -1879,7 +1879,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "crk9ZzNAG_Q",
     "strength": true,
     "difficulty": "beginner"
@@ -1918,7 +1918,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Sled"],
-    "needs": null,
+    "needs": ["sled"],
     "videoId": "hbCeJFBFyYk",
     "strength": false,
     "difficulty": "beginner"
@@ -1931,7 +1931,7 @@
     "hasCues": true,
     "muscles": ["lats"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine", "bench"],
     "videoId": "SALxEARiMkw",
     "strength": true,
     "difficulty": "intermediate"
@@ -1944,7 +1944,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Bench press station", "Barbell", "Flat bench"],
-    "needs": null,
+    "needs": ["benchPressStation", "barbell", "bench"],
     "videoId": "HGaYGsdTp4g",
     "strength": true,
     "difficulty": "intermediate"
@@ -1957,7 +1957,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Dumbbell", "Adjustable bench"],
-    "needs": null,
+    "needs": ["dumbbells", "adjustableBench"],
     "videoId": "G4qnXn5BjhI",
     "strength": true,
     "difficulty": "beginner"
@@ -1970,7 +1970,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "0tn5K9NlCfo",
     "strength": true,
     "difficulty": "intermediate"
@@ -2035,7 +2035,7 @@
     "hasCues": true,
     "muscles": ["lats"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "5YC67yVpBGE",
     "strength": true,
     "difficulty": "beginner"
@@ -2061,7 +2061,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Plyo box"],
-    "needs": null,
+    "needs": ["plyoBox"],
     "videoId": "gjTwcqLBr1I",
     "strength": false,
     "difficulty": "beginner"
@@ -2100,7 +2100,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Barbell", "Squat rack"],
-    "needs": null,
+    "needs": ["barbell", "squatRack"],
     "videoId": "rkgvDaM3FKM",
     "strength": false,
     "difficulty": "expert"
@@ -2126,7 +2126,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["pecDeck"],
     "videoId": "dpAs9mznPmk",
     "strength": true,
     "difficulty": "beginner"
@@ -2139,7 +2139,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell", "bench"],
     "videoId": "XagV4XfG9fo",
     "strength": true,
     "difficulty": "beginner"
@@ -2165,7 +2165,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Squat rack", "Barbell"],
-    "needs": null,
+    "needs": ["squatRack", "barbell"],
     "videoId": "X9QswJmhBQI",
     "strength": true,
     "difficulty": "beginner"
@@ -2178,7 +2178,7 @@
     "hasCues": true,
     "muscles": ["forearms"],
     "equipment": ["Other"],
-    "needs": null,
+    "needs": ["rickshawFrame"],
     "videoId": "pRkHLluG-V8",
     "strength": false,
     "difficulty": "intermediate"
@@ -2191,7 +2191,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["Weight Plate"],
-    "needs": null,
+    "needs": ["weightPlate"],
     "videoId": "-pu02WL_ID0",
     "strength": true,
     "difficulty": "beginner"
@@ -2204,7 +2204,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["recumbentBike"],
     "videoId": "M134EXNHYdA",
     "strength": false,
     "difficulty": "beginner"
@@ -2217,7 +2217,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "H1xkzPbvqDU",
     "strength": true,
     "difficulty": "beginner"
@@ -2243,7 +2243,7 @@
     "hasCues": true,
     "muscles": ["middle-back"],
     "equipment": ["Foam Roll"],
-    "needs": null,
+    "needs": ["foamRoller"],
     "videoId": "_IY1-00YWqs",
     "strength": false,
     "difficulty": "intermediate"
@@ -2282,7 +2282,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Adjustable bench", "Barbell"],
-    "needs": null,
+    "needs": ["adjustableBench", "barbell"],
     "videoId": "3Y_RFoYl-dk",
     "strength": true,
     "difficulty": "beginner"
@@ -2308,7 +2308,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Tire"],
-    "needs": null,
+    "needs": ["tire"],
     "videoId": "MNvV491RaCM",
     "strength": false,
     "difficulty": "beginner"
@@ -2321,7 +2321,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell", "adjustableBench"],
     "videoId": "HXbetYIM-AY",
     "strength": true,
     "difficulty": "beginner"
@@ -2347,7 +2347,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Other"],
-    "needs": null,
+    "needs": ["chains", "bench"],
     "videoId": "W8DU99rAvXA",
     "strength": false,
     "difficulty": "intermediate"
@@ -2360,7 +2360,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Dumbbell", "Adjustable bench"],
-    "needs": null,
+    "needs": ["dumbbells", "declineBench"],
     "videoId": "IMALXhhHRKM",
     "strength": true,
     "difficulty": "beginner"
@@ -2373,7 +2373,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Plyo box"],
-    "needs": null,
+    "needs": ["plyoBox"],
     "videoId": "QHXHEuqg4JE",
     "strength": false,
     "difficulty": "intermediate"
@@ -2386,7 +2386,7 @@
     "hasCues": true,
     "muscles": ["lats"],
     "equipment": ["Body Only"],
-    "needs": null,
+    "needs": ["smithMachine"],
     "videoId": "EYnZDHs_hRM",
     "strength": true,
     "difficulty": "intermediate"
@@ -2399,7 +2399,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["smithMachine"],
     "videoId": "b4esFx8-jeY",
     "strength": true,
     "difficulty": "beginner"
@@ -2425,7 +2425,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Squat rack", "Barbell"],
-    "needs": null,
+    "needs": ["squatRack", "barbell", "chains"],
     "videoId": "5tKk7sJICdk",
     "strength": true,
     "difficulty": "expert"
@@ -2438,7 +2438,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Weight Plate"],
-    "needs": null,
+    "needs": ["weightPlate"],
     "videoId": "l1yFpp8PHbM",
     "strength": true,
     "difficulty": "intermediate"
@@ -2464,7 +2464,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "OM_olNPOeck",
     "strength": false,
     "difficulty": "intermediate"
@@ -2490,7 +2490,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["stationaryBike"],
     "videoId": "NwwDBARCGgo",
     "strength": false,
     "difficulty": "beginner"
@@ -2503,7 +2503,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "rXoIpTfY3e4",
     "strength": true,
     "difficulty": "intermediate"
@@ -2516,7 +2516,7 @@
     "hasCues": true,
     "muscles": ["glutes"],
     "equipment": ["Exercise Ball"],
-    "needs": null,
+    "needs": ["exerciseBall"],
     "videoId": "TfbhISQoSAE",
     "strength": true,
     "difficulty": "beginner"
@@ -2529,7 +2529,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Body Only"],
-    "needs": null,
+    "needs": [],
     "videoId": "d6M3mfAt90E",
     "strength": false,
     "difficulty": "beginner"
@@ -2542,7 +2542,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["standingLegCurlMachine"],
     "videoId": "Z053-kKjesQ",
     "strength": true,
     "difficulty": "beginner"
@@ -2568,7 +2568,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Bands"],
-    "needs": null,
+    "needs": ["bands", "adjustableBench"],
     "videoId": "blWRg-eS5fY",
     "strength": true,
     "difficulty": "beginner"
@@ -2594,7 +2594,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Bands"],
-    "needs": null,
+    "needs": ["bands"],
     "videoId": "3OYSIWaJJk4",
     "strength": true,
     "difficulty": "beginner"
@@ -2620,7 +2620,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "imTQ3AfwKSc",
     "strength": true,
     "difficulty": "beginner"
@@ -2646,7 +2646,7 @@
     "hasCues": true,
     "muscles": ["lats"],
     "equipment": ["Pull-Up Bar"],
-    "needs": null,
+    "needs": ["pullUpBar"],
     "videoId": "58QkcGVA12A",
     "strength": true,
     "difficulty": "intermediate"
@@ -2659,7 +2659,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "uIzg8FZocGY",
     "strength": false,
     "difficulty": "intermediate"
@@ -2685,7 +2685,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "Zv0-vIhlDIk",
     "strength": true,
     "difficulty": "beginner"
@@ -2698,7 +2698,7 @@
     "hasCues": true,
     "muscles": ["middle-back"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "NmN3t5Hg6QI",
     "strength": true,
     "difficulty": "intermediate"
@@ -2750,7 +2750,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "LA0-3NJHabk",
     "strength": true,
     "difficulty": "beginner"
@@ -2763,7 +2763,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "50BDseX8lTY",
     "strength": true,
     "difficulty": "beginner"
@@ -2815,7 +2815,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Exercise Ball"],
-    "needs": null,
+    "needs": ["exerciseBall"],
     "videoId": "EnJTqLyH9ZI",
     "strength": false,
     "difficulty": "beginner"
@@ -2828,7 +2828,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "is3SP_5TW8Q",
     "strength": true,
     "difficulty": "intermediate"
@@ -2867,7 +2867,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "uUGDRwge4F8",
     "strength": true,
     "difficulty": "intermediate"
@@ -2893,7 +2893,7 @@
     "hasCues": true,
     "muscles": ["lats"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "M9xUoJYtXtc",
     "strength": true,
     "difficulty": "beginner"
@@ -2906,7 +2906,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "MsOSMJ33CNA",
     "strength": true,
     "difficulty": "intermediate"
@@ -2919,7 +2919,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Body Only", "Adjustable bench"],
-    "needs": null,
+    "needs": ["declineBench"],
     "videoId": "YcMj0EEadQo",
     "strength": true,
     "difficulty": "beginner"
@@ -2932,7 +2932,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["bicepsMachine"],
     "videoId": "M_uPvGrMx_o",
     "strength": true,
     "difficulty": "beginner"
@@ -2984,7 +2984,7 @@
     "hasCues": true,
     "muscles": ["lats"],
     "equipment": ["Pull-Up Bar"],
-    "needs": null,
+    "needs": ["pullUpBar"],
     "videoId": "FZNXMxkqamM",
     "strength": true,
     "difficulty": "intermediate"
@@ -3049,7 +3049,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Sled"],
-    "needs": null,
+    "needs": ["sled"],
     "videoId": "kvbFK9Z-MG0",
     "strength": false,
     "difficulty": "beginner"
@@ -3062,7 +3062,7 @@
     "hasCues": true,
     "muscles": ["calves"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["smithMachine"],
     "videoId": "Si2z1bf4_IQ",
     "strength": true,
     "difficulty": "beginner"
@@ -3088,7 +3088,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["reverseHyperMachine"],
     "videoId": "7MthYct8yxQ",
     "strength": true,
     "difficulty": "intermediate"
@@ -3114,7 +3114,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["smithMachine", "declineBench"],
     "videoId": "aoOKIxHbhGE",
     "strength": true,
     "difficulty": "beginner"
@@ -3127,7 +3127,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Other"],
-    "needs": null,
+    "needs": ["skates"],
     "videoId": "0-Kw0wbtmSM",
     "strength": false,
     "difficulty": "intermediate"
@@ -3140,7 +3140,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "Rc7-euA8FDI",
     "strength": true,
     "difficulty": "beginner"
@@ -3179,7 +3179,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["smithMachine", "bench"],
     "videoId": "eCDlRpeo73A",
     "strength": true,
     "difficulty": "beginner"
@@ -3192,7 +3192,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Squat rack", "Barbell"],
-    "needs": null,
+    "needs": ["squatRack", "barbell"],
     "videoId": "FQi20qWvy1E",
     "strength": true,
     "difficulty": "beginner"
@@ -3205,7 +3205,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Sled"],
-    "needs": null,
+    "needs": ["sled"],
     "videoId": "BisIi4cagtI",
     "strength": true,
     "difficulty": "beginner"
@@ -3218,7 +3218,7 @@
     "hasCues": true,
     "muscles": ["middle-back"],
     "equipment": ["Adjustable bench", "Dumbbell"],
-    "needs": null,
+    "needs": ["adjustableBench", "dumbbells"],
     "videoId": "2LxN3_3atps",
     "strength": true,
     "difficulty": "beginner"
@@ -3244,7 +3244,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Bands"],
-    "needs": null,
+    "needs": ["bands"],
     "videoId": "SGRcNh68sdc",
     "strength": false,
     "difficulty": "beginner"
@@ -3257,7 +3257,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "PjY1rH4_MOA",
     "strength": false,
     "difficulty": "expert"
@@ -3270,7 +3270,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell", "bench"],
     "videoId": "DKL7NaMeLNo",
     "strength": true,
     "difficulty": "expert"
@@ -3296,7 +3296,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "FVWJglwid4I",
     "strength": true,
     "difficulty": "beginner"
@@ -3348,7 +3348,7 @@
     "hasCues": true,
     "muscles": ["lower-back"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell", "dumbbells"],
     "videoId": "F6xPIZC6lhM",
     "strength": false,
     "difficulty": "expert"
@@ -3361,7 +3361,7 @@
     "hasCues": true,
     "muscles": ["middle-back"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "UL8ZcK64KxA",
     "strength": true,
     "difficulty": "beginner"
@@ -3374,7 +3374,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "fsoMy6M3lAE",
     "strength": true,
     "difficulty": "intermediate"
@@ -3400,7 +3400,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "IVvmnmG0BfE",
     "strength": true,
     "difficulty": "intermediate"
@@ -3413,7 +3413,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Foam Roll"],
-    "needs": null,
+    "needs": ["foamRoller"],
     "videoId": "wQ6uUuBWCbw",
     "strength": false,
     "difficulty": "beginner"
@@ -3439,7 +3439,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Bands"],
-    "needs": null,
+    "needs": ["bands"],
     "videoId": "drh1C9wVVYI",
     "strength": true,
     "difficulty": "beginner"
@@ -3452,7 +3452,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Medicine Ball"],
-    "needs": null,
+    "needs": ["medicineBall"],
     "videoId": "b7ix5GglVjE",
     "strength": false,
     "difficulty": "beginner"
@@ -3465,7 +3465,7 @@
     "hasCues": true,
     "muscles": ["lats"],
     "equipment": ["Bands", "Pull-Up Bar"],
-    "needs": null,
+    "needs": ["bands", "pullUpBar"],
     "videoId": "XxV8q2Qxhrc",
     "strength": true,
     "difficulty": "beginner"
@@ -3478,7 +3478,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "rB2Uce6kJJc",
     "strength": true,
     "difficulty": "intermediate"
@@ -3504,7 +3504,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["declineChestPressMachine"],
     "videoId": "xK9zpXvjFUg",
     "strength": true,
     "difficulty": "beginner"
@@ -3517,7 +3517,7 @@
     "hasCues": true,
     "muscles": ["calves"],
     "equipment": ["Foam Roll"],
-    "needs": null,
+    "needs": ["foamRoller"],
     "videoId": "o7_yW9ROeHs",
     "strength": false,
     "difficulty": "intermediate"
@@ -3556,7 +3556,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Barbell", "Squat rack"],
-    "needs": null,
+    "needs": ["barbell", "squatRack", "bench"],
     "videoId": "860722r7v2E",
     "strength": true,
     "difficulty": "intermediate"
@@ -3582,7 +3582,7 @@
     "hasCues": true,
     "muscles": ["calves"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell", "bench"],
     "videoId": "ORY-ke6vcgk",
     "strength": true,
     "difficulty": "beginner"
@@ -3608,7 +3608,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["pecDeck"],
     "videoId": "fgXSA2-o0NM",
     "strength": true,
     "difficulty": "intermediate"
@@ -3647,7 +3647,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "cikXJydntCk",
     "strength": true,
     "difficulty": "beginner"
@@ -3660,7 +3660,7 @@
     "hasCues": true,
     "muscles": ["traps"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "l5CVf0ztMMs",
     "strength": false,
     "difficulty": "beginner"
@@ -3673,7 +3673,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Squat rack", "Barbell"],
-    "needs": null,
+    "needs": ["squatRack", "barbell"],
     "videoId": "PsiO8lZTU2I",
     "strength": false,
     "difficulty": "intermediate"
@@ -3686,7 +3686,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["E-z Curl Bar", "Flat bench"],
-    "needs": null,
+    "needs": ["ezBar", "bench"],
     "videoId": "zR9gty7LUxE",
     "strength": true,
     "difficulty": "beginner"
@@ -3699,7 +3699,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Dumbbell"],
-    "needs": null,
+    "needs": ["dumbbells", "adjustableBench"],
     "videoId": "WDVkcfXPUuA",
     "strength": true,
     "difficulty": "beginner"
@@ -3712,7 +3712,7 @@
     "hasCues": true,
     "muscles": ["lower-back"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell", "squatRack"],
     "videoId": "fMv_td9m1ZI",
     "strength": false,
     "difficulty": "expert"
@@ -3738,7 +3738,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Plyo box"],
-    "needs": null,
+    "needs": ["plyoBox"],
     "videoId": "dgC4wwqnkp4",
     "strength": false,
     "difficulty": "beginner"
@@ -3751,7 +3751,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Other"],
-    "needs": null,
+    "needs": ["heavyBag"],
     "videoId": "Av0hD5PNNpA",
     "strength": false,
     "difficulty": "beginner"
@@ -3764,7 +3764,7 @@
     "hasCues": true,
     "muscles": ["abductors"],
     "equipment": ["Bands"],
-    "needs": null,
+    "needs": ["bands"],
     "videoId": "snbNxUIUQPc",
     "strength": true,
     "difficulty": "beginner"
@@ -3803,7 +3803,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["Adjustable bench", "Dumbbell"],
-    "needs": null,
+    "needs": ["adjustableBench", "dumbbells"],
     "videoId": "0zsvm1h_-M4",
     "strength": true,
     "difficulty": "intermediate"
@@ -3816,7 +3816,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Body Only"],
-    "needs": [],
+    "needs": ["exerciseBall"],
     "videoId": "meo3bhh8NPk",
     "strength": true,
     "difficulty": "beginner"
@@ -3829,7 +3829,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "ONzEBGwCAQU",
     "strength": true,
     "difficulty": "intermediate"
@@ -3868,7 +3868,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "Xh-NdDOUqhE",
     "strength": true,
     "difficulty": "intermediate"
@@ -3881,7 +3881,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Dumbbell", "Adjustable bench"],
-    "needs": null,
+    "needs": ["dumbbells", "adjustableBench"],
     "videoId": "JcThMhNOKlw",
     "strength": true,
     "difficulty": "beginner"
@@ -3894,7 +3894,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Sandbag"],
-    "needs": null,
+    "needs": ["sandbag"],
     "videoId": "vgY3shLysWQ",
     "strength": false,
     "difficulty": "beginner"
@@ -3907,7 +3907,7 @@
     "hasCues": true,
     "muscles": ["middle-back"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "l5qelXL5nfs",
     "strength": true,
     "difficulty": "intermediate"
@@ -3920,7 +3920,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Plyo box"],
-    "needs": null,
+    "needs": ["plyoBox"],
     "videoId": "XxLwtzSsO9w",
     "strength": false,
     "difficulty": "beginner"
@@ -3933,7 +3933,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Other"],
-    "needs": null,
+    "needs": ["strongmanLog"],
     "videoId": "CblXR2nHp1E",
     "strength": false,
     "difficulty": "intermediate"
@@ -3946,7 +3946,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["Barbell", "Flat bench"],
-    "needs": null,
+    "needs": ["barbell", "bench"],
     "videoId": "HVgvZ4Xf70w",
     "strength": true,
     "difficulty": "intermediate"
@@ -3972,7 +3972,7 @@
     "hasCues": true,
     "muscles": ["lats"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "I8FXgUKsPg0",
     "strength": true,
     "difficulty": "intermediate"
@@ -4024,7 +4024,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["smithMachine"],
     "videoId": "jAcAfsAtHHc",
     "strength": true,
     "difficulty": "intermediate"
@@ -4063,7 +4063,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "ZK6dMdPfe_Y",
     "strength": true,
     "difficulty": "intermediate"
@@ -4076,7 +4076,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "Bvhz7Rfnrr4",
     "strength": true,
     "difficulty": "beginner"
@@ -4089,7 +4089,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Exercise Ball"],
-    "needs": null,
+    "needs": ["exerciseBall"],
     "videoId": "ZvSwTGgETIo",
     "strength": true,
     "difficulty": "beginner"
@@ -4102,7 +4102,7 @@
     "hasCues": true,
     "muscles": ["lower-back"],
     "equipment": ["Exercise Ball"],
-    "needs": null,
+    "needs": ["exerciseBall"],
     "videoId": "tsjMEbjBt3g",
     "strength": true,
     "difficulty": "intermediate"
@@ -4115,7 +4115,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Ab Wheel"],
-    "needs": null,
+    "needs": ["abWheel"],
     "videoId": "kMjbpumsN9U",
     "strength": true,
     "difficulty": "intermediate"
@@ -4128,7 +4128,7 @@
     "hasCues": true,
     "muscles": ["neck"],
     "equipment": ["Other"],
-    "needs": null,
+    "needs": ["neckHarness", "bench"],
     "videoId": "VLdIkr2Gfdc",
     "strength": true,
     "difficulty": "intermediate"
@@ -4141,7 +4141,7 @@
     "hasCues": true,
     "muscles": ["middle-back"],
     "equipment": ["Dumbbell"],
-    "needs": null,
+    "needs": ["dumbbells", "adjustableBench"],
     "videoId": "oDTT5LR1iTY",
     "strength": true,
     "difficulty": "intermediate"
@@ -4154,7 +4154,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "D0QwEQLbAYs",
     "strength": false,
     "difficulty": "intermediate"
@@ -4167,7 +4167,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Bench press station", "Flat bench", "Barbell"],
-    "needs": null,
+    "needs": ["benchPressStation", "bench", "barbell", "chains"],
     "videoId": "MUx0OzQNbDM",
     "strength": false,
     "difficulty": "expert"
@@ -4193,7 +4193,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Pull-Up Bar"],
-    "needs": null,
+    "needs": ["pullUpBar"],
     "videoId": "4cXIO4_HGsw",
     "strength": true,
     "difficulty": "intermediate"
@@ -4206,7 +4206,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["smithMachine"],
     "videoId": "Ycr-mcU0rMc",
     "strength": true,
     "difficulty": "beginner"
@@ -4232,7 +4232,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["Dumbbell", "Preacher curl bench"],
-    "needs": null,
+    "needs": ["dumbbells", "preacherBench"],
     "videoId": "prfNS4YiAqU",
     "strength": true,
     "difficulty": "intermediate"
@@ -4245,7 +4245,7 @@
     "hasCues": true,
     "muscles": ["traps"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["smithMachine"],
     "videoId": "StB7qKKJNWI",
     "strength": true,
     "difficulty": "beginner"
@@ -4284,7 +4284,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "oDHr3vaZE0Y",
     "strength": true,
     "difficulty": "beginner"
@@ -4310,7 +4310,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "wBzU6_YJPEU",
     "strength": true,
     "difficulty": "beginner"
@@ -4336,7 +4336,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Squat rack", "Barbell"],
-    "needs": null,
+    "needs": ["squatRack", "barbell"],
     "videoId": "ci4rsmlOk24",
     "strength": true,
     "difficulty": "intermediate"
@@ -4349,7 +4349,7 @@
     "hasCues": true,
     "muscles": ["lower-back"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["hyperextensionBench"],
     "videoId": "qtjJUWCnDyE",
     "strength": true,
     "difficulty": "beginner"
@@ -4362,7 +4362,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "77UbTnqvVzE",
     "strength": true,
     "difficulty": "beginner"
@@ -4375,7 +4375,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Body Only"],
-    "needs": null,
+    "needs": ["smithMachine"],
     "videoId": "XARFPzMnEJU",
     "strength": true,
     "difficulty": "beginner"
@@ -4388,7 +4388,7 @@
     "hasCues": true,
     "muscles": ["middle-back"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["smithMachine"],
     "videoId": "7PhvyukQ4Sw",
     "strength": true,
     "difficulty": "beginner"
@@ -4401,7 +4401,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Other"],
-    "needs": null,
+    "needs": ["bike"],
     "videoId": "eqg47ZuGZXQ",
     "strength": false,
     "difficulty": "beginner"
@@ -4440,7 +4440,7 @@
     "hasCues": true,
     "muscles": ["middle-back"],
     "equipment": ["Sled"],
-    "needs": null,
+    "needs": ["sled"],
     "videoId": "6K4VxgNmYOQ",
     "strength": true,
     "difficulty": "beginner"
@@ -4453,7 +4453,7 @@
     "hasCues": true,
     "muscles": ["calves"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["donkeyCalfMachine"],
     "videoId": "r30EoMPSNns",
     "strength": true,
     "difficulty": "intermediate"
@@ -4466,7 +4466,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "O-d6HC9gLcw",
     "strength": true,
     "difficulty": "intermediate"
@@ -4492,7 +4492,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Barbell", "Squat rack"],
-    "needs": null,
+    "needs": ["barbell", "squatRack"],
     "videoId": "MLoZuAkIyZI",
     "strength": true,
     "difficulty": "beginner"
@@ -4505,7 +4505,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Plyo box"],
-    "needs": null,
+    "needs": ["plyoBox"],
     "videoId": "xeYtZkHNPjg",
     "strength": false,
     "difficulty": "intermediate"
@@ -4531,7 +4531,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Other"],
-    "needs": null,
+    "needs": ["carDeadliftFrame"],
     "videoId": "ktOWmBr4GFE",
     "strength": false,
     "difficulty": "intermediate"
@@ -4557,7 +4557,7 @@
     "hasCues": true,
     "muscles": ["middle-back"],
     "equipment": ["Body Only"],
-    "needs": null,
+    "needs": ["barbell", "squatRack"],
     "videoId": "9fItzuh9Iok",
     "strength": true,
     "difficulty": "beginner"
@@ -4570,7 +4570,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "U7zru_zkHDM",
     "strength": true,
     "difficulty": "intermediate"
@@ -4583,7 +4583,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Dumbbell"],
-    "needs": null,
+    "needs": ["dumbbells", "adjustableBench"],
     "videoId": "rua9sG-Mb0w",
     "strength": true,
     "difficulty": "beginner"
@@ -4622,7 +4622,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Bands"],
-    "needs": null,
+    "needs": ["bands"],
     "videoId": "ZY-O8MWvLsw",
     "strength": true,
     "difficulty": "beginner"
@@ -4648,7 +4648,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["smithMachine", "bench"],
     "videoId": "kYZ0aUEzgEQ",
     "strength": true,
     "difficulty": "beginner"
@@ -4661,7 +4661,7 @@
     "hasCues": true,
     "muscles": ["lats"],
     "equipment": ["Medicine Ball"],
-    "needs": null,
+    "needs": ["medicineBall"],
     "videoId": "a7ZnLpLIb8s",
     "strength": false,
     "difficulty": "beginner"
@@ -4674,7 +4674,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["tricepsMachine"],
     "videoId": "LBpNVgVTLqY",
     "strength": true,
     "difficulty": "intermediate"
@@ -4687,7 +4687,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["smithMachine", "adjustableBench"],
     "videoId": "yFQshytandQ",
     "strength": true,
     "difficulty": "beginner"
@@ -4700,7 +4700,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "OdDUPN0JBBY",
     "strength": true,
     "difficulty": "beginner"
@@ -4713,7 +4713,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Barbell", "Flat bench", "Bench press station"],
-    "needs": null,
+    "needs": ["barbell", "bench", "benchPressStation"],
     "videoId": "4yKLxOsrGfg",
     "strength": true,
     "difficulty": "beginner"
@@ -4726,7 +4726,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Plyo box"],
-    "needs": null,
+    "needs": ["plyoBox"],
     "videoId": "AzPJZHOmGEg",
     "strength": false,
     "difficulty": "beginner"
@@ -4817,7 +4817,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["Foam Roll"],
-    "needs": null,
+    "needs": ["foamRoller"],
     "videoId": "0UClo99x2mY",
     "strength": false,
     "difficulty": "intermediate"
@@ -4830,7 +4830,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Other"],
-    "needs": null,
+    "needs": ["circusDumbbell"],
     "videoId": "aaQoWXfnddE",
     "strength": false,
     "difficulty": "expert"
@@ -4843,7 +4843,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["tricepsMachine"],
     "videoId": "0yaxe2HMdzA",
     "strength": true,
     "difficulty": "beginner"
@@ -4869,7 +4869,7 @@
     "hasCues": true,
     "muscles": ["forearms"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine", "barbell", "bench"],
     "videoId": "YcXTlq3E3as",
     "strength": true,
     "difficulty": "beginner"
@@ -4882,7 +4882,7 @@
     "hasCues": true,
     "muscles": ["neck"],
     "equipment": ["Weight Plate"],
-    "needs": null,
+    "needs": ["weightPlate", "bench"],
     "videoId": "jg3Q7bkabu4",
     "strength": true,
     "difficulty": "intermediate"
@@ -4895,7 +4895,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Barbell", "Squat rack"],
-    "needs": null,
+    "needs": ["barbell", "squatRack"],
     "videoId": "XOTO2qWRy9U",
     "strength": true,
     "difficulty": "intermediate"
@@ -4908,7 +4908,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Flat bench", "Bench press station", "Barbell"],
-    "needs": null,
+    "needs": ["bench", "benchPressStation", "barbell"],
     "videoId": "iFheDEgOhhc",
     "strength": true,
     "difficulty": "intermediate"
@@ -4934,7 +4934,7 @@
     "hasCues": true,
     "muscles": ["adductors"],
     "equipment": ["Foam Roll"],
-    "needs": null,
+    "needs": ["foamRoller"],
     "videoId": "h1xQabdHdes",
     "strength": false,
     "difficulty": "intermediate"
@@ -4947,7 +4947,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Cable", "Adjustable bench"],
-    "needs": null,
+    "needs": ["cableMachine", "adjustableBench"],
     "videoId": "K88hDCAfjMU",
     "strength": true,
     "difficulty": "beginner"
@@ -4960,7 +4960,7 @@
     "hasCues": true,
     "muscles": ["forearms"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine", "bench"],
     "videoId": "WVAaKJvToe0",
     "strength": true,
     "difficulty": "beginner"
@@ -5012,7 +5012,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Bands"],
-    "needs": null,
+    "needs": ["bands", "bench"],
     "videoId": "M_dUNslNjBU",
     "strength": true,
     "difficulty": "beginner"
@@ -5038,7 +5038,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine", "bench"],
     "videoId": "h9udmN7RfKk",
     "strength": true,
     "difficulty": "intermediate"
@@ -5051,7 +5051,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "SyrQiwTukUg",
     "strength": true,
     "difficulty": "beginner"
@@ -5064,7 +5064,7 @@
     "hasCues": true,
     "muscles": ["lower-back"],
     "equipment": ["Barbell", "Squat rack"],
-    "needs": null,
+    "needs": ["barbell", "squatRack", "dumbbells"],
     "videoId": "qPXoEIKctOk",
     "strength": false,
     "difficulty": "intermediate"
@@ -5077,7 +5077,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "vp8KG8dz3BY",
     "strength": true,
     "difficulty": "expert"
@@ -5103,7 +5103,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Barbell", "Squat rack"],
-    "needs": null,
+    "needs": ["barbell", "squatRack"],
     "videoId": "VWU_0OwXoPQ",
     "strength": false,
     "difficulty": "intermediate"
@@ -5116,7 +5116,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Barbell", "Squat rack"],
-    "needs": null,
+    "needs": ["barbell", "squatRack"],
     "videoId": "Ir_34nxrk1Q",
     "strength": false,
     "difficulty": "expert"
@@ -5129,7 +5129,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Tire"],
-    "needs": null,
+    "needs": ["tire"],
     "videoId": "YoCSGfccgzU",
     "strength": false,
     "difficulty": "intermediate"
@@ -5142,7 +5142,7 @@
     "hasCues": true,
     "muscles": ["lats"],
     "equipment": ["Flat bench", "Barbell"],
-    "needs": null,
+    "needs": ["bench", "barbell"],
     "videoId": "qFTbq-4NGu0",
     "strength": true,
     "difficulty": "intermediate"
@@ -5194,7 +5194,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Plyo box"],
-    "needs": null,
+    "needs": ["plyoBox", "bench"],
     "videoId": "So92bGyQ5d4",
     "strength": false,
     "difficulty": "intermediate"
@@ -5207,7 +5207,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "lnhUi8nbFug",
     "strength": true,
     "difficulty": "expert"
@@ -5220,7 +5220,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Squat rack", "Barbell"],
-    "needs": null,
+    "needs": ["squatRack", "barbell", "dumbbells"],
     "videoId": "zwa-VtaB4S0",
     "strength": false,
     "difficulty": "expert"
@@ -5233,7 +5233,7 @@
     "hasCues": true,
     "muscles": ["middle-back"],
     "equipment": ["Other"],
-    "needs": null,
+    "needs": ["pullUpBar"],
     "videoId": "PGcTxvw6-lo",
     "strength": true,
     "difficulty": "intermediate"
@@ -5246,7 +5246,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine", "bench"],
     "videoId": "eozOiJMU2f8",
     "strength": true,
     "difficulty": "beginner"
@@ -5259,7 +5259,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Pull-Up Bar"],
-    "needs": null,
+    "needs": ["pullUpBar"],
     "videoId": "wVRlRmGsZ2w",
     "strength": true,
     "difficulty": "expert"
@@ -5272,7 +5272,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "b9FJ4hIK3pI",
     "strength": true,
     "difficulty": "beginner"
@@ -5285,7 +5285,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["E-z Curl Bar", "Flat bench"],
-    "needs": null,
+    "needs": ["ezBar", "bench"],
     "videoId": "btrCQonIHKA",
     "strength": true,
     "difficulty": "beginner"
@@ -5298,7 +5298,7 @@
     "hasCues": true,
     "muscles": ["glutes"],
     "equipment": ["Bands"],
-    "needs": null,
+    "needs": ["bands", "dumbbells"],
     "videoId": "fp36r4LYV_Q",
     "strength": false,
     "difficulty": "beginner"
@@ -5311,7 +5311,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Dumbbell", "Adjustable bench"],
-    "needs": null,
+    "needs": ["dumbbells", "adjustableBench"],
     "videoId": "SQF1eEo6phU",
     "strength": true,
     "difficulty": "beginner"
@@ -5324,7 +5324,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["smithMachine", "declineBench"],
     "videoId": "aoOKIxHbhGE",
     "strength": true,
     "difficulty": "beginner"
@@ -5337,7 +5337,7 @@
     "hasCues": true,
     "muscles": ["abductors"],
     "equipment": ["Foam Roll"],
-    "needs": null,
+    "needs": ["foamRoller"],
     "videoId": "Ncl0oa4pD-8",
     "strength": false,
     "difficulty": "intermediate"
@@ -5363,7 +5363,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["lyingSquatMachine"],
     "videoId": "0tn5K9NlCfo",
     "strength": true,
     "difficulty": "intermediate"
@@ -5389,7 +5389,7 @@
     "hasCues": true,
     "muscles": ["glutes"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "vlRIWTCsBpE",
     "strength": false,
     "difficulty": "intermediate"
@@ -5402,7 +5402,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "_IzJCx6gmD4",
     "strength": true,
     "difficulty": "expert"
@@ -5428,7 +5428,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Dip station"],
-    "needs": null,
+    "needs": ["dipBars"],
     "videoId": "NuhXmq6x9Sk",
     "strength": true,
     "difficulty": "intermediate"
@@ -5441,7 +5441,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Plyo box"],
-    "needs": null,
+    "needs": ["plyoBox"],
     "videoId": "ugoS_fU6DZk",
     "strength": false,
     "difficulty": "beginner"
@@ -5493,7 +5493,7 @@
     "hasCues": true,
     "muscles": ["lower-back"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell", "chains"],
     "videoId": "RS6R7pAD6Ao",
     "strength": false,
     "difficulty": "expert"
@@ -5506,7 +5506,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "5t9ggij1eXk",
     "strength": true,
     "difficulty": "beginner"
@@ -5532,7 +5532,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "njLoCel5lUI",
     "strength": true,
     "difficulty": "intermediate"
@@ -5558,7 +5558,7 @@
     "hasCues": true,
     "muscles": ["traps"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "VJyLJAGjptA",
     "strength": true,
     "difficulty": "beginner"
@@ -5597,7 +5597,7 @@
     "hasCues": true,
     "muscles": ["lats"],
     "equipment": ["Climbing Rope"],
-    "needs": null,
+    "needs": ["climbingRope"],
     "videoId": "YN7DcLUSTEs",
     "strength": true,
     "difficulty": "intermediate"
@@ -5610,7 +5610,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "3dMMJMSpFV0",
     "strength": true,
     "difficulty": "expert"
@@ -5623,7 +5623,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Bands"],
-    "needs": null,
+    "needs": ["bands"],
     "videoId": "_UvmPNGtlPM",
     "strength": true,
     "difficulty": "beginner"
@@ -5636,7 +5636,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["stairClimber"],
     "videoId": "SZU9Rm0sNOo",
     "strength": false,
     "difficulty": "intermediate"
@@ -5649,7 +5649,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Barbell", "Squat rack"],
-    "needs": null,
+    "needs": ["barbell", "squatRack", "bench"],
     "videoId": "4HCgc4S0z9g",
     "strength": true,
     "difficulty": "intermediate"
@@ -5675,7 +5675,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Plyo box"],
-    "needs": null,
+    "needs": ["plyoBox"],
     "videoId": "NbO4PuVfw_o",
     "strength": false,
     "difficulty": "beginner"
@@ -5688,7 +5688,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["smithMachine"],
     "videoId": "-S8EzdIJhnQ",
     "strength": true,
     "difficulty": "intermediate"
@@ -5740,7 +5740,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Bands"],
-    "needs": null,
+    "needs": ["bands", "declineBench"],
     "videoId": "n6vuDoTkWjg",
     "strength": true,
     "difficulty": "intermediate"
@@ -5753,7 +5753,7 @@
     "hasCues": true,
     "muscles": ["traps"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "9xGqgGFAtiM",
     "strength": true,
     "difficulty": "beginner"
@@ -5766,7 +5766,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Barbell", "Squat rack"],
-    "needs": null,
+    "needs": ["barbell", "squatRack"],
     "videoId": "xoXwoXoJo_Y",
     "strength": false,
     "difficulty": "intermediate"
@@ -5779,7 +5779,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["Flat bench", "E-z Curl Bar"],
-    "needs": null,
+    "needs": ["bench", "ezBar", "preacherBench"],
     "videoId": "nvufDW-MSQk",
     "strength": true,
     "difficulty": "beginner"
@@ -5792,7 +5792,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Weight Plate"],
-    "needs": null,
+    "needs": ["weightPlate", "barbell"],
     "videoId": "-TlT6aXNok4",
     "strength": true,
     "difficulty": "intermediate"
@@ -5831,7 +5831,7 @@
     "hasCues": true,
     "muscles": ["lower-back"],
     "equipment": ["Squat rack", "Barbell"],
-    "needs": null,
+    "needs": ["squatRack", "barbell"],
     "videoId": "aAjN8zS7Idg",
     "strength": false,
     "difficulty": "intermediate"
@@ -5857,7 +5857,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["E-z Curl Bar"],
-    "needs": null,
+    "needs": ["ezBar"],
     "videoId": "ZV-IMad-o9w",
     "strength": true,
     "difficulty": "beginner"
@@ -5883,7 +5883,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "ApoAgK2MGgM",
     "strength": true,
     "difficulty": "intermediate"
@@ -5909,7 +5909,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Dumbbell", "Adjustable bench"],
-    "needs": null,
+    "needs": ["dumbbells", "declineBench"],
     "videoId": "KBzVTsTMgqA",
     "strength": true,
     "difficulty": "beginner"
@@ -5922,7 +5922,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "8sTXxyK501Q",
     "strength": false,
     "difficulty": "intermediate"
@@ -5935,7 +5935,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": null,
     "strength": true,
     "difficulty": "beginner"
@@ -5961,7 +5961,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Pull-Up Bar"],
-    "needs": null,
+    "needs": ["pullUpBar"],
     "videoId": "2n4UqRIJyk4",
     "strength": true,
     "difficulty": "expert"
@@ -5974,7 +5974,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "G1QygZ3Kd3w",
     "strength": true,
     "difficulty": "intermediate"
@@ -5987,7 +5987,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["smithMachine"],
     "videoId": "2HIgg3MG29k",
     "strength": true,
     "difficulty": "beginner"
@@ -6000,7 +6000,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Body Only"],
-    "needs": null,
+    "needs": ["smithMachine"],
     "videoId": "VTL6dlwQhmc",
     "strength": true,
     "difficulty": "beginner"
@@ -6013,7 +6013,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["Dumbbell", "Preacher curl bench"],
-    "needs": null,
+    "needs": ["dumbbells", "preacherBench"],
     "videoId": "vngli9UR6Hw",
     "strength": true,
     "difficulty": "intermediate"
@@ -6026,7 +6026,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Dumbbell"],
-    "needs": null,
+    "needs": ["dumbbells", "adjustableBench"],
     "videoId": "xvEkgGUrGPM",
     "strength": true,
     "difficulty": "beginner"
@@ -6039,7 +6039,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["stairClimber"],
     "videoId": "K8S_sVxJKLM",
     "strength": false,
     "difficulty": "intermediate"
@@ -6052,7 +6052,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["treadmill"],
     "videoId": "vdsaHSr1H_E",
     "strength": false,
     "difficulty": "beginner"
@@ -6065,7 +6065,7 @@
     "hasCues": true,
     "muscles": ["lats"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "wcVDItawocI",
     "strength": true,
     "difficulty": "beginner"
@@ -6078,7 +6078,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine", "bench"],
     "videoId": "dxoOPAqDgos",
     "strength": true,
     "difficulty": "beginner"
@@ -6091,7 +6091,7 @@
     "hasCues": true,
     "muscles": ["glutes"],
     "equipment": ["Exercise Ball"],
-    "needs": null,
+    "needs": ["exerciseBall"],
     "videoId": "PRja65swvic",
     "strength": true,
     "difficulty": "intermediate"
@@ -6130,7 +6130,7 @@
     "hasCues": true,
     "muscles": ["lower-back"],
     "equipment": ["Other"],
-    "needs": null,
+    "needs": ["atlasStoneTrainer"],
     "videoId": "0IEJjQUqlgE",
     "strength": false,
     "difficulty": "intermediate"
@@ -6143,7 +6143,7 @@
     "hasCues": true,
     "muscles": ["middle-back"],
     "equipment": ["Suspension Trainer"],
-    "needs": null,
+    "needs": ["suspensionTrainer"],
     "videoId": "NZ3iGQbI69M",
     "strength": true,
     "difficulty": "beginner"
@@ -6156,7 +6156,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["Dumbbell", "Adjustable bench"],
-    "needs": null,
+    "needs": ["dumbbells", "adjustableBench"],
     "videoId": "T2EpTC4q-pE",
     "strength": true,
     "difficulty": "beginner"
@@ -6208,7 +6208,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "5_n3gVeGEqc",
     "strength": true,
     "difficulty": "intermediate"
@@ -6234,7 +6234,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "OE3haqtWJpo",
     "strength": false,
     "difficulty": "expert"
@@ -6247,7 +6247,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "yN1ouEOGpag",
     "strength": false,
     "difficulty": "intermediate"
@@ -6299,7 +6299,7 @@
     "hasCues": true,
     "muscles": ["lats"],
     "equipment": ["Pull-Up Bar"],
-    "needs": null,
+    "needs": ["pullUpBar"],
     "videoId": "ozDV_q4FBts",
     "strength": true,
     "difficulty": "intermediate"
@@ -6312,7 +6312,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Body Only"],
-    "needs": null,
+    "needs": ["smithMachine"],
     "videoId": "cfns5VDVVvk",
     "strength": true,
     "difficulty": "beginner"
@@ -6325,7 +6325,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Squat rack", "Barbell"],
-    "needs": null,
+    "needs": ["squatRack", "barbell"],
     "videoId": "dqPvGYaVnhA",
     "strength": false,
     "difficulty": "intermediate"
@@ -6351,7 +6351,7 @@
     "hasCues": true,
     "muscles": ["middle-back"],
     "equipment": ["Flat bench", "Barbell"],
-    "needs": null,
+    "needs": ["bench", "barbell"],
     "videoId": "QWsHaMO86OY",
     "strength": true,
     "difficulty": "beginner"
@@ -6364,7 +6364,7 @@
     "hasCues": true,
     "muscles": ["middle-back"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "SzPxYvZqL6k",
     "strength": true,
     "difficulty": "intermediate"
@@ -6377,7 +6377,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["Dumbbell", "Preacher curl bench"],
-    "needs": null,
+    "needs": ["dumbbells", "preacherBench"],
     "videoId": "EEStsiL9sG8",
     "strength": true,
     "difficulty": "beginner"
@@ -6390,7 +6390,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Barbell", "Landmine"],
-    "needs": null,
+    "needs": ["barbell", "landmine"],
     "videoId": "FkG27LeonTQ",
     "strength": true,
     "difficulty": "intermediate"
@@ -6403,7 +6403,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Other"],
-    "needs": null,
+    "needs": ["conanWheel"],
     "videoId": "edReRpYEX5w",
     "strength": false,
     "difficulty": "intermediate"
@@ -6416,7 +6416,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "ktFGdHYDRKQ",
     "strength": true,
     "difficulty": "intermediate"
@@ -6429,7 +6429,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Suspension Trainer"],
-    "needs": null,
+    "needs": ["suspensionTrainer"],
     "videoId": "0FAMdxWgFnA",
     "strength": true,
     "difficulty": "intermediate"
@@ -6442,7 +6442,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["legPressMachine"],
     "videoId": "nDh_BlnLCGc",
     "strength": true,
     "difficulty": "beginner"
@@ -6455,7 +6455,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["chestPressMachine"],
     "videoId": "2awX3rTGa1k",
     "strength": true,
     "difficulty": "beginner"
@@ -6494,7 +6494,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["Cable", "Preacher curl bench"],
-    "needs": null,
+    "needs": ["cableMachine", "preacherBench"],
     "videoId": "HssKSVyJ6EU",
     "strength": true,
     "difficulty": "beginner"
@@ -6507,7 +6507,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "Q9t1xZRFnow",
     "strength": true,
     "difficulty": "beginner"
@@ -6533,7 +6533,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["deadliftMachine"],
     "videoId": "ZaTM37cfiDs",
     "strength": true,
     "difficulty": "beginner"
@@ -6559,7 +6559,7 @@
     "hasCues": true,
     "muscles": ["traps"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["smithMachine"],
     "videoId": "GaHtS9SUqh4",
     "strength": true,
     "difficulty": "beginner"
@@ -6585,7 +6585,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "B340QckIfJM",
     "strength": true,
     "difficulty": "beginner"
@@ -6598,7 +6598,7 @@
     "hasCues": true,
     "muscles": ["middle-back"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["tBarRowMachine"],
     "videoId": "w0KnlQ-b7jw",
     "strength": true,
     "difficulty": "intermediate"
@@ -6624,7 +6624,7 @@
     "hasCues": true,
     "muscles": ["middle-back"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "NwyhyKyFgf4",
     "strength": true,
     "difficulty": "intermediate"
@@ -6637,7 +6637,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "ZXgLEBdBD_8",
     "strength": true,
     "difficulty": "beginner"
@@ -6650,7 +6650,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["smithMachine", "bench"],
     "videoId": "0TPkV7AXX8o",
     "strength": true,
     "difficulty": "beginner"
@@ -6663,7 +6663,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "ioD3Q6d9PSk",
     "strength": true,
     "difficulty": "intermediate"
@@ -6676,7 +6676,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "_WyBqDZeYbo",
     "strength": true,
     "difficulty": "intermediate"
@@ -6702,7 +6702,7 @@
     "hasCues": true,
     "muscles": ["lats"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "ecRF8ERf2q4",
     "strength": true,
     "difficulty": "beginner"
@@ -6728,7 +6728,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Squat rack", "Barbell"],
-    "needs": null,
+    "needs": ["squatRack", "barbell"],
     "videoId": "JXdGBp_YYz0",
     "strength": true,
     "difficulty": "intermediate"
@@ -6741,7 +6741,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "oa-k5WPM64U",
     "strength": true,
     "difficulty": "intermediate"
@@ -6780,7 +6780,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Medicine Ball"],
-    "needs": null,
+    "needs": ["medicineBall"],
     "videoId": "u2xZRCDNI30",
     "strength": false,
     "difficulty": "beginner"
@@ -6793,7 +6793,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Ab Wheel"],
-    "needs": null,
+    "needs": ["abWheel"],
     "videoId": "ndc391RFNUM",
     "strength": true,
     "difficulty": "intermediate"
@@ -6806,7 +6806,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell", "bench"],
     "videoId": "Tih5iHyELsE",
     "strength": true,
     "difficulty": "beginner"
@@ -6832,7 +6832,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Dip station"],
-    "needs": null,
+    "needs": ["dipBars"],
     "videoId": "x5BXzsPkaww",
     "strength": true,
     "difficulty": "beginner"
@@ -6858,7 +6858,7 @@
     "hasCues": true,
     "muscles": ["lower-back"],
     "equipment": ["Exercise Ball"],
-    "needs": null,
+    "needs": ["exerciseBall"],
     "videoId": "iEBvHQGO44Y",
     "strength": false,
     "difficulty": "beginner"
@@ -6871,7 +6871,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["rowingMachine"],
     "videoId": "uqs9A0B6s9U",
     "strength": false,
     "difficulty": "intermediate"
@@ -6884,7 +6884,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "JSFj7Fzq2yE",
     "strength": true,
     "difficulty": "beginner"
@@ -6897,7 +6897,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Bands"],
-    "needs": null,
+    "needs": ["bands"],
     "videoId": "0rLjkQweIDg",
     "strength": true,
     "difficulty": "beginner"
@@ -6910,7 +6910,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell", "bench"],
     "videoId": "X_eGLtiWZSs",
     "strength": true,
     "difficulty": "beginner"
@@ -6923,7 +6923,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "nJmtGVutszE",
     "strength": false,
     "difficulty": "intermediate"
@@ -6949,7 +6949,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "vZI5VIZpG58",
     "strength": true,
     "difficulty": "beginner"
@@ -6962,7 +6962,7 @@
     "hasCues": true,
     "muscles": ["forearms"],
     "equipment": ["Other"],
-    "needs": null,
+    "needs": ["wristRoller"],
     "videoId": "gUYXMoBpT8o",
     "strength": true,
     "difficulty": "beginner"
@@ -6975,7 +6975,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Barbell", "Flat bench"],
-    "needs": null,
+    "needs": ["barbell", "bench"],
     "videoId": "Ma_SNy-WjwU",
     "strength": true,
     "difficulty": "intermediate"
@@ -7014,7 +7014,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Squat rack", "Barbell"],
-    "needs": null,
+    "needs": ["squatRack", "barbell", "chains"],
     "videoId": "ZA14FPIZJM8",
     "strength": false,
     "difficulty": "intermediate"
@@ -7027,7 +7027,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["smithMachine"],
     "videoId": "_9CjkdU9w9U",
     "strength": true,
     "difficulty": "beginner"
@@ -7040,7 +7040,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "GzmlxvSFE7A",
     "strength": true,
     "difficulty": "beginner"
@@ -7053,7 +7053,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Squat rack", "Barbell", "Flat bench"],
-    "needs": null,
+    "needs": ["squatRack", "barbell", "bench"],
     "videoId": "6rpfubNjoqU",
     "strength": true,
     "difficulty": "expert"
@@ -7079,7 +7079,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "5l9WeYcQGbg",
     "strength": true,
     "difficulty": "intermediate"
@@ -7105,7 +7105,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "vSupPQiBkeY",
     "strength": true,
     "difficulty": "beginner"
@@ -7118,7 +7118,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["Barbell", "Preacher curl bench"],
-    "needs": null,
+    "needs": ["barbell", "preacherBench"],
     "videoId": "BPmUhDtdQfw",
     "strength": true,
     "difficulty": "beginner"
@@ -7131,7 +7131,7 @@
     "hasCues": true,
     "muscles": ["forearms"],
     "equipment": ["Weight Plate"],
-    "needs": null,
+    "needs": ["weightPlate"],
     "videoId": "viEyxih3TLM",
     "strength": true,
     "difficulty": "intermediate"
@@ -7144,7 +7144,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["legExtensionMachine"],
     "videoId": "4bSCM9_0u6A",
     "strength": true,
     "difficulty": "beginner"
@@ -7157,7 +7157,7 @@
     "hasCues": true,
     "muscles": ["neck"],
     "equipment": ["Weight Plate"],
-    "needs": null,
+    "needs": ["weightPlate", "bench"],
     "videoId": "__mHZwz1pzM",
     "strength": true,
     "difficulty": "intermediate"
@@ -7170,7 +7170,7 @@
     "hasCues": true,
     "muscles": ["glutes"],
     "equipment": ["Foam Roll"],
-    "needs": null,
+    "needs": ["foamRoller"],
     "videoId": "ZnoFKVMhxyE",
     "strength": false,
     "difficulty": "intermediate"
@@ -7183,7 +7183,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Exercise Ball"],
-    "needs": null,
+    "needs": ["exerciseBall"],
     "videoId": "3aQXaB4PU_A",
     "strength": true,
     "difficulty": "beginner"
@@ -7209,7 +7209,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Barbell", "Squat rack"],
-    "needs": null,
+    "needs": ["barbell", "squatRack"],
     "videoId": "u7SnJiLbCXE",
     "strength": true,
     "difficulty": "intermediate"
@@ -7222,7 +7222,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Barbell", "Squat rack"],
-    "needs": null,
+    "needs": ["barbell", "squatRack", "chains"],
     "videoId": "wp4lOBIKQh4",
     "strength": false,
     "difficulty": "intermediate"
@@ -7235,7 +7235,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Dumbbell", "Adjustable bench"],
-    "needs": null,
+    "needs": ["dumbbells", "adjustableBench"],
     "videoId": "--JuKZkqeIE",
     "strength": true,
     "difficulty": "beginner"
@@ -7274,7 +7274,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "o74HeVd6BIw",
     "strength": true,
     "difficulty": "beginner"
@@ -7326,7 +7326,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Adjustable bench", "Body Only"],
-    "needs": null,
+    "needs": ["declineBench"],
     "videoId": "YAPmiC58U3U",
     "strength": true,
     "difficulty": "beginner"
@@ -7352,7 +7352,7 @@
     "hasCues": true,
     "muscles": ["lower-back"],
     "equipment": ["Foam Roll"],
-    "needs": null,
+    "needs": ["foamRoller"],
     "videoId": "FwJuv_ZKFrQ",
     "strength": false,
     "difficulty": "beginner"
@@ -7417,7 +7417,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Bench press station", "Flat bench", "Barbell"],
-    "needs": null,
+    "needs": ["benchPressStation", "bench", "barbell"],
     "videoId": "hWbUlkb5Ms4",
     "strength": true,
     "difficulty": "beginner"
@@ -7430,7 +7430,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Cable", "Flat bench"],
-    "needs": null,
+    "needs": ["cableMachine", "bench"],
     "videoId": "D04sUKQi85Y",
     "strength": true,
     "difficulty": "intermediate"
@@ -7456,7 +7456,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "19UTShhUhR4",
     "strength": true,
     "difficulty": "intermediate"
@@ -7469,7 +7469,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["Dumbbell", "Adjustable bench"],
-    "needs": null,
+    "needs": ["dumbbells", "adjustableBench"],
     "videoId": "cbRSu8Ws_hs",
     "strength": true,
     "difficulty": "beginner"
@@ -7482,7 +7482,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Barbell", "Squat rack"],
-    "needs": null,
+    "needs": ["barbell", "squatRack"],
     "videoId": "Hgsq3pY1oZw",
     "strength": true,
     "difficulty": "intermediate"
@@ -7495,7 +7495,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "Php-RclQ1yU",
     "strength": false,
     "difficulty": "expert"
@@ -7508,7 +7508,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "u6sqENBsXjg",
     "strength": true,
     "difficulty": "beginner"
@@ -7521,7 +7521,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "1lusE5oVlyI",
     "strength": true,
     "difficulty": "expert"
@@ -7534,7 +7534,7 @@
     "hasCues": true,
     "muscles": ["traps"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "Wab3-dsZohU",
     "strength": true,
     "difficulty": "beginner"
@@ -7547,7 +7547,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Squat rack", "Barbell"],
-    "needs": null,
+    "needs": ["squatRack", "barbell"],
     "videoId": "8KKQTdnxWso",
     "strength": false,
     "difficulty": "intermediate"
@@ -7560,7 +7560,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Bench press station", "Barbell", "Flat bench"],
-    "needs": null,
+    "needs": ["benchPressStation", "barbell", "bench"],
     "videoId": "y90T12sTukg",
     "strength": true,
     "difficulty": "intermediate"
@@ -7573,7 +7573,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Sliders"],
-    "needs": null,
+    "needs": ["sliders"],
     "videoId": "Dlazt593cuA",
     "strength": true,
     "difficulty": "beginner"
@@ -7599,7 +7599,7 @@
     "hasCues": true,
     "muscles": ["lower-back"],
     "equipment": ["Other"],
-    "needs": null,
+    "needs": ["atlasStone"],
     "videoId": "go0WMsBSN6w",
     "strength": false,
     "difficulty": "expert"
@@ -7612,7 +7612,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "FeERX9UwspY",
     "strength": true,
     "difficulty": "beginner"
@@ -7625,7 +7625,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "E6gpvI1pFnY",
     "strength": true,
     "difficulty": "intermediate"
@@ -7651,7 +7651,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "XZkN5MljJY4",
     "strength": true,
     "difficulty": "beginner"
@@ -7677,7 +7677,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["chestPressMachine"],
     "videoId": "CqSa88orYIc",
     "strength": true,
     "difficulty": "beginner"
@@ -7690,7 +7690,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["inclineChestPressMachine"],
     "videoId": "D45sO7jSebI",
     "strength": true,
     "difficulty": "beginner"
@@ -7703,7 +7703,7 @@
     "hasCues": true,
     "muscles": ["middle-back"],
     "equipment": ["Barbell", "Adjustable bench"],
-    "needs": null,
+    "needs": ["barbell", "adjustableBench", "dumbbells"],
     "videoId": "H_QxZG2bz20",
     "strength": true,
     "difficulty": "beginner"
@@ -7729,7 +7729,7 @@
     "hasCues": true,
     "muscles": ["forearms"],
     "equipment": ["Flat bench", "Barbell"],
-    "needs": null,
+    "needs": ["bench", "barbell"],
     "videoId": "SOdcDpS2dpo",
     "strength": true,
     "difficulty": "beginner"
@@ -7742,7 +7742,7 @@
     "hasCues": true,
     "muscles": ["calves"],
     "equipment": ["Foam Roll"],
-    "needs": null,
+    "needs": ["foamRoller"],
     "videoId": "mNkT0AbkEy4",
     "strength": false,
     "difficulty": "intermediate"
@@ -7755,7 +7755,7 @@
     "hasCues": true,
     "muscles": ["middle-back"],
     "equipment": ["Pull-Up Bar"],
-    "needs": null,
+    "needs": ["pullUpBar"],
     "videoId": "zoOC1BIriAU",
     "strength": true,
     "difficulty": "expert"
@@ -7768,7 +7768,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["lyingLegCurlMachine", "bench"],
     "videoId": "jxctD6fL_FQ",
     "strength": true,
     "difficulty": "beginner"
@@ -7781,7 +7781,7 @@
     "hasCues": true,
     "muscles": ["forearms"],
     "equipment": ["Weight Plate"],
-    "needs": null,
+    "needs": ["weightPlate"],
     "videoId": "UNxM_LJhpjk",
     "strength": true,
     "difficulty": "beginner"
@@ -7807,7 +7807,7 @@
     "hasCues": true,
     "muscles": ["biceps", "lats", "middle-back"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "CsROhQ1onAg",
     "strength": true,
     "difficulty": "intermediate"
@@ -7820,7 +7820,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Barbell", "Squat rack"],
-    "needs": null,
+    "needs": ["barbell", "squatRack"],
     "videoId": "3RdVYQ8l_V8",
     "strength": true,
     "difficulty": "beginner"
@@ -7833,7 +7833,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["treadmill"],
     "videoId": "5PjFRBEAM8I",
     "strength": false,
     "difficulty": "beginner"
@@ -7846,7 +7846,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Exercise Ball"],
-    "needs": null,
+    "needs": ["exerciseBall"],
     "videoId": "XkESHgkTdFw",
     "strength": true,
     "difficulty": "beginner"
@@ -7859,7 +7859,7 @@
     "hasCues": true,
     "muscles": ["chest", "shoulders", "triceps"],
     "equipment": ["Dip station"],
-    "needs": null,
+    "needs": ["dipBars"],
     "videoId": "l5d_LyuaWKk",
     "strength": true,
     "difficulty": "intermediate"
@@ -7898,7 +7898,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Squat rack", "Barbell"],
-    "needs": null,
+    "needs": ["squatRack", "barbell"],
     "videoId": "QOrIAbGFjx8",
     "strength": true,
     "difficulty": "intermediate"
@@ -7911,7 +7911,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "axaCQqM0R1k",
     "strength": true,
     "difficulty": "intermediate"
@@ -7924,7 +7924,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Adjustable bench", "Squat rack", "Barbell"],
-    "needs": null,
+    "needs": ["squatRack", "barbell", "declineBench"],
     "videoId": "NM5lbuq92Aw",
     "strength": true,
     "difficulty": "beginner"
@@ -7950,7 +7950,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "HwB-DevuJjU",
     "strength": true,
     "difficulty": "beginner"
@@ -7963,7 +7963,7 @@
     "hasCues": true,
     "muscles": ["forearms"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "dA9_h9r8YBw",
     "strength": true,
     "difficulty": "beginner"
@@ -7976,7 +7976,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "Dg__TBaN1qo",
     "strength": true,
     "difficulty": "beginner"
@@ -7989,7 +7989,7 @@
     "hasCues": true,
     "muscles": ["calves"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["standingCalfMachine"],
     "videoId": "k8ipHzKeAkQ",
     "strength": true,
     "difficulty": "beginner"
@@ -8002,7 +8002,7 @@
     "hasCues": true,
     "muscles": ["lats"],
     "equipment": ["Pull-Up Bar"],
-    "needs": null,
+    "needs": ["pullUpBar"],
     "videoId": "ym1V5H35IpA",
     "strength": true,
     "difficulty": "beginner"
@@ -8015,7 +8015,7 @@
     "hasCues": true,
     "muscles": ["lats"],
     "equipment": ["Bands"],
-    "needs": null,
+    "needs": ["bands", "pullUpBar"],
     "videoId": "84D8bVJWB3s",
     "strength": true,
     "difficulty": "beginner"
@@ -8028,7 +8028,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["smithMachine"],
     "videoId": "YjxK7RppzIM",
     "strength": true,
     "difficulty": "intermediate"
@@ -8041,7 +8041,7 @@
     "hasCues": true,
     "muscles": ["traps"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "08rSGGhk8Wk",
     "strength": true,
     "difficulty": "intermediate"
@@ -8054,7 +8054,7 @@
     "hasCues": true,
     "muscles": ["traps"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "TOfpapB5wF8",
     "strength": false,
     "difficulty": "intermediate"
@@ -8067,7 +8067,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Squat rack", "Flat bench", "Barbell"],
-    "needs": null,
+    "needs": ["squatRack", "bench", "barbell"],
     "videoId": "2K_DrX3xiRA",
     "strength": true,
     "difficulty": "expert"
@@ -8080,7 +8080,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "6l2Iu26oWW8",
     "strength": true,
     "difficulty": "expert"
@@ -8093,7 +8093,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "wn1AfnU7bb8",
     "strength": true,
     "difficulty": "intermediate"
@@ -8119,7 +8119,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Weight Plate"],
-    "needs": null,
+    "needs": ["weightPlate"],
     "videoId": "BhtnaHGJa8w",
     "strength": true,
     "difficulty": "beginner"
@@ -8158,7 +8158,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Sled"],
-    "needs": null,
+    "needs": ["sled"],
     "videoId": "yKAxMSmHrd0",
     "strength": false,
     "difficulty": "beginner"
@@ -8171,7 +8171,7 @@
     "hasCues": true,
     "muscles": ["calves"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["legPressMachine"],
     "videoId": "OMUvfMZOcSA",
     "strength": true,
     "difficulty": "beginner"
@@ -8223,7 +8223,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Flat bench", "Dumbbell"],
-    "needs": null,
+    "needs": ["bench", "dumbbells", "adjustableBench"],
     "videoId": "hsglKkHnGDs",
     "strength": true,
     "difficulty": "intermediate"
@@ -8249,7 +8249,7 @@
     "hasCues": true,
     "muscles": ["traps"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["standingCalfMachine"],
     "videoId": "8Qla9t5I8rc",
     "strength": true,
     "difficulty": "beginner"
@@ -8262,7 +8262,7 @@
     "hasCues": true,
     "muscles": ["glutes"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "4oZ_0_bQcOg",
     "strength": true,
     "difficulty": "beginner"
@@ -8275,7 +8275,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell", "bench"],
     "videoId": "cfUXRs1PylY",
     "strength": true,
     "difficulty": "beginner"
@@ -8301,7 +8301,7 @@
     "hasCues": true,
     "muscles": ["lats"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "1dY7ovFjLmE",
     "strength": true,
     "difficulty": "intermediate"
@@ -8314,7 +8314,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell", "chains", "squatRack"],
     "videoId": "lEr39_Yz5-Y",
     "strength": false,
     "difficulty": "intermediate"
@@ -8327,7 +8327,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Barbell", "Squat rack"],
-    "needs": null,
+    "needs": ["barbell", "squatRack"],
     "videoId": "r6Z_h_WAX5o",
     "strength": true,
     "difficulty": "expert"
@@ -8340,7 +8340,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Adjustable bench", "Barbell"],
-    "needs": null,
+    "needs": ["adjustableBench", "barbell", "smithMachine"],
     "videoId": "7E5TExnR4W0",
     "strength": true,
     "difficulty": "beginner"
@@ -8353,7 +8353,7 @@
     "hasCues": true,
     "muscles": ["middle-back"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "e8YF8Z_N0-4",
     "strength": true,
     "difficulty": "intermediate"
@@ -8379,7 +8379,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Squat rack", "Barbell"],
-    "needs": null,
+    "needs": ["squatRack", "barbell"],
     "videoId": "leumw836kGo",
     "strength": false,
     "difficulty": "expert"
@@ -8392,7 +8392,7 @@
     "hasCues": true,
     "muscles": ["calves"],
     "equipment": ["Barbell", "Squat rack"],
-    "needs": null,
+    "needs": ["barbell", "squatRack"],
     "videoId": "3UWi44yN-wM",
     "strength": true,
     "difficulty": "beginner"
@@ -8418,7 +8418,7 @@
     "hasCues": true,
     "muscles": ["lats"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "pfjmv8njdws",
     "strength": true,
     "difficulty": "beginner"
@@ -8431,7 +8431,7 @@
     "hasCues": true,
     "muscles": ["lats"],
     "equipment": ["Pull-Up Bar"],
-    "needs": null,
+    "needs": ["pullUpBar"],
     "videoId": "Pfo176NZEJU",
     "strength": false,
     "difficulty": "beginner"
@@ -8444,7 +8444,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Body Only"],
-    "needs": null,
+    "needs": ["chains"],
     "videoId": "gtCNypYeQKY",
     "strength": true,
     "difficulty": "beginner"
@@ -8457,7 +8457,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "V8AR3SGzboU",
     "strength": true,
     "difficulty": "beginner"
@@ -8483,7 +8483,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Dumbbell", "Adjustable bench"],
-    "needs": null,
+    "needs": ["dumbbells", "declineBench"],
     "videoId": "Pf1nDoqx_1A",
     "strength": true,
     "difficulty": "beginner"
@@ -8522,7 +8522,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Barbell", "Squat rack"],
-    "needs": null,
+    "needs": ["barbell", "squatRack"],
     "videoId": "0Syp9iyINZ4",
     "strength": false,
     "difficulty": "intermediate"
@@ -8535,7 +8535,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "TL8SMp7RdXQ",
     "strength": false,
     "difficulty": "expert"
@@ -8561,7 +8561,7 @@
     "hasCues": true,
     "muscles": ["calves"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["seatedCalfMachine"],
     "videoId": "BxfKOyI8sUg",
     "strength": true,
     "difficulty": "beginner"
@@ -8574,7 +8574,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Jump rope"],
-    "needs": null,
+    "needs": ["jumpRope"],
     "videoId": "kDOGb9C5kp0",
     "strength": false,
     "difficulty": "intermediate"
@@ -8587,7 +8587,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "JbY72Him34Q",
     "strength": false,
     "difficulty": "intermediate"
@@ -8613,7 +8613,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Squat rack", "Barbell", "Adjustable bench"],
-    "needs": null,
+    "needs": ["squatRack", "barbell", "adjustableBench"],
     "videoId": "98HWfiRonkE",
     "strength": true,
     "difficulty": "beginner"
@@ -8626,7 +8626,7 @@
     "hasCues": true,
     "muscles": ["calves"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["smithMachine"],
     "videoId": "nOtr_C8i0J8",
     "strength": true,
     "difficulty": "beginner"
@@ -8639,7 +8639,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell", "squatRack"],
     "videoId": "vFoUXHFyP44",
     "strength": true,
     "difficulty": "expert"
@@ -8652,7 +8652,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Flat bench", "Dumbbell"],
-    "needs": null,
+    "needs": ["bench", "dumbbells", "adjustableBench"],
     "videoId": "PQ2JaDQAQVU",
     "strength": true,
     "difficulty": "beginner"
@@ -8665,7 +8665,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["Dumbbell", "Adjustable bench"],
-    "needs": null,
+    "needs": ["dumbbells", "adjustableBench"],
     "videoId": "DCe8f6vMe9A",
     "strength": true,
     "difficulty": "beginner"
@@ -8678,7 +8678,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "mRozZKkGIfg",
     "strength": true,
     "difficulty": "beginner"
@@ -8691,7 +8691,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Body Only", "Adjustable bench"],
-    "needs": null,
+    "needs": ["declineBench"],
     "videoId": "FRzQXeN1hro",
     "strength": true,
     "difficulty": "intermediate"
@@ -8704,7 +8704,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["Preacher curl bench", "Dumbbell"],
-    "needs": null,
+    "needs": ["preacherBench", "dumbbells"],
     "videoId": "32W1sB5DkHY",
     "strength": true,
     "difficulty": "beginner"
@@ -8756,7 +8756,7 @@
     "hasCues": true,
     "muscles": ["calves"],
     "equipment": ["Bands"],
-    "needs": null,
+    "needs": ["bands"],
     "videoId": "ZDmCGE7gnak",
     "strength": true,
     "difficulty": "beginner"
@@ -8769,7 +8769,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["E-z Curl Bar", "Preacher curl bench"],
-    "needs": null,
+    "needs": ["ezBar", "preacherBench"],
     "videoId": "DjqgGTYNtg8",
     "strength": true,
     "difficulty": "intermediate"
@@ -8782,7 +8782,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Dumbbell"],
-    "needs": null,
+    "needs": ["dumbbells", "adjustableBench"],
     "videoId": "_dk6PoEqiC8",
     "strength": true,
     "difficulty": "intermediate"
@@ -8808,7 +8808,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Flat bench", "E-z Curl Bar"],
-    "needs": null,
+    "needs": ["bench", "ezBar"],
     "videoId": "mauSRcRf7-g",
     "strength": true,
     "difficulty": "intermediate"
@@ -8821,7 +8821,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Squat rack", "Barbell"],
-    "needs": null,
+    "needs": ["squatRack", "barbell"],
     "videoId": "oz8dKktTvfs",
     "strength": false,
     "difficulty": "intermediate"
@@ -8834,7 +8834,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Dip station"],
-    "needs": null,
+    "needs": ["dipBars", "bench"],
     "videoId": "mXkWDktMPPM",
     "strength": true,
     "difficulty": "beginner"
@@ -8847,7 +8847,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Medicine Ball"],
-    "needs": null,
+    "needs": ["medicineBall"],
     "videoId": "7r7D-pX7n3w",
     "strength": false,
     "difficulty": "beginner"
@@ -8860,7 +8860,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "lRYBbchqxtI",
     "strength": true,
     "difficulty": "beginner"
@@ -8873,7 +8873,7 @@
     "hasCues": true,
     "muscles": ["calves"],
     "equipment": ["Dumbbell"],
-    "needs": null,
+    "needs": ["dumbbells", "bench"],
     "videoId": "_3l43m-1Gew",
     "strength": true,
     "difficulty": "beginner"
@@ -8886,7 +8886,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Exercise Ball"],
-    "needs": null,
+    "needs": ["exerciseBall"],
     "videoId": "UIEXBznkTGc",
     "strength": false,
     "difficulty": "beginner"
@@ -8899,7 +8899,7 @@
     "hasCues": true,
     "muscles": ["calves"],
     "equipment": ["Foam Roll"],
-    "needs": null,
+    "needs": ["foamRoller"],
     "videoId": "w-e7YIpiok0",
     "strength": false,
     "difficulty": "intermediate"
@@ -8912,7 +8912,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Landmine", "Barbell"],
-    "needs": null,
+    "needs": ["landmine", "barbell"],
     "videoId": "XkvwvOje1DM",
     "strength": true,
     "difficulty": "intermediate"
@@ -8925,7 +8925,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["shoulderPressMachine"],
     "videoId": "RwheHIggxps",
     "strength": true,
     "difficulty": "beginner"
@@ -8938,7 +8938,7 @@
     "hasCues": true,
     "muscles": ["lats"],
     "equipment": ["Pull-Up Bar"],
-    "needs": null,
+    "needs": ["pullUpBar"],
     "videoId": null,
     "strength": true,
     "difficulty": "intermediate"
@@ -8951,7 +8951,7 @@
     "hasCues": true,
     "muscles": ["lower-back"],
     "equipment": ["Barbell", "Squat rack"],
-    "needs": null,
+    "needs": ["barbell", "squatRack"],
     "videoId": "xUZRtvrJgSg",
     "strength": true,
     "difficulty": "beginner"
@@ -8964,7 +8964,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Squat rack", "Barbell", "Adjustable bench"],
-    "needs": null,
+    "needs": ["squatRack", "barbell", "declineBench"],
     "videoId": "iLl4ghLEgB4",
     "strength": true,
     "difficulty": "intermediate"
@@ -8977,7 +8977,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Medicine Ball"],
-    "needs": null,
+    "needs": ["medicineBall", "bench"],
     "videoId": "Pxkw6dUt_Ok",
     "strength": true,
     "difficulty": "beginner"
@@ -9003,7 +9003,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Plyo box"],
-    "needs": null,
+    "needs": ["plyoBox"],
     "videoId": "x3UvaySw0ys",
     "strength": false,
     "difficulty": "beginner"
@@ -9016,7 +9016,7 @@
     "hasCues": true,
     "muscles": ["adductors"],
     "equipment": ["Plyo box"],
-    "needs": null,
+    "needs": ["plyoBox"],
     "videoId": "kJqEVtWkYHo",
     "strength": false,
     "difficulty": "beginner"
@@ -9055,7 +9055,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Medicine Ball"],
-    "needs": null,
+    "needs": ["medicineBall"],
     "videoId": "vFrzJ3oxJC8",
     "strength": false,
     "difficulty": "beginner"
@@ -9068,7 +9068,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Plyo box"],
-    "needs": null,
+    "needs": ["plyoBox"],
     "videoId": "_OwMpiC0oLE",
     "strength": true,
     "difficulty": "beginner"
@@ -9081,7 +9081,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "a5CR3Bi2Gc8",
     "strength": false,
     "difficulty": "intermediate"
@@ -9094,7 +9094,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Exercise Ball"],
-    "needs": null,
+    "needs": ["exerciseBall"],
     "videoId": "ZCl_uYW8fcQ",
     "strength": true,
     "difficulty": "intermediate"
@@ -9133,7 +9133,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "dPqGBoegbj8",
     "strength": true,
     "difficulty": "intermediate"
@@ -9146,7 +9146,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Barbell", "Squat rack"],
-    "needs": null,
+    "needs": ["barbell", "squatRack"],
     "videoId": "sMVyjUCp-XI",
     "strength": true,
     "difficulty": "intermediate"
@@ -9159,7 +9159,7 @@
     "hasCues": true,
     "muscles": ["biceps", "lats", "middle-back"],
     "equipment": ["Pull-Up Bar"],
-    "needs": null,
+    "needs": ["pullUpBar"],
     "videoId": "l6-aIZTbAR0",
     "strength": true,
     "difficulty": "intermediate"
@@ -9198,7 +9198,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["treadmill"],
     "videoId": "5PjFRBEAM8I",
     "strength": false,
     "difficulty": "beginner"
@@ -9211,7 +9211,7 @@
     "hasCues": true,
     "muscles": ["middle-back"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "kMMdNnA819U",
     "strength": true,
     "difficulty": "expert"
@@ -9237,7 +9237,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Squat rack", "Barbell"],
-    "needs": null,
+    "needs": ["squatRack", "barbell"],
     "videoId": "QP24iQjcYCk",
     "strength": false,
     "difficulty": "intermediate"
@@ -9250,7 +9250,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["abCrunchMachine"],
     "videoId": "V7p_DmkYLZw",
     "strength": true,
     "difficulty": "intermediate"
@@ -9263,7 +9263,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "E2z5zK5V-MM",
     "strength": true,
     "difficulty": "intermediate"
@@ -9276,7 +9276,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "9TbV93ZQEXY",
     "strength": true,
     "difficulty": "intermediate"
@@ -9289,7 +9289,7 @@
     "hasCues": true,
     "muscles": ["lats"],
     "equipment": ["Foam Roll"],
-    "needs": null,
+    "needs": ["foamRoller"],
     "videoId": "1GaR-a9TWYM",
     "strength": false,
     "difficulty": "beginner"
@@ -9302,7 +9302,7 @@
     "hasCues": true,
     "muscles": ["calves"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["legPressMachine"],
     "videoId": "IrxfRHGiGE0",
     "strength": true,
     "difficulty": "beginner"
@@ -9315,7 +9315,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Sled"],
-    "needs": null,
+    "needs": ["sled"],
     "videoId": "k9TDUui2OSc",
     "strength": true,
     "difficulty": "beginner"
@@ -9354,7 +9354,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["Adjustable bench", "Dumbbell"],
-    "needs": null,
+    "needs": ["adjustableBench", "dumbbells"],
     "videoId": "S2cYwsDhpI4",
     "strength": true,
     "difficulty": "beginner"
@@ -9380,7 +9380,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Bands"],
-    "needs": null,
+    "needs": ["bands"],
     "videoId": "gfEyrmxbCbw",
     "strength": true,
     "difficulty": "beginner"
@@ -9393,7 +9393,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Suspension Trainer"],
-    "needs": null,
+    "needs": ["suspensionTrainer"],
     "videoId": "hCt7npR4bDM",
     "strength": true,
     "difficulty": "beginner"
@@ -9406,7 +9406,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Cable", "Adjustable bench"],
-    "needs": null,
+    "needs": ["cableMachine", "adjustableBench"],
     "videoId": "bptdQtH7IQA",
     "strength": true,
     "difficulty": "intermediate"
@@ -9432,7 +9432,7 @@
     "hasCues": true,
     "muscles": ["lats"],
     "equipment": ["Pull-Up Bar"],
-    "needs": null,
+    "needs": ["pullUpBar"],
     "videoId": "e1YSApl-QcM",
     "strength": true,
     "difficulty": "intermediate"
@@ -9445,7 +9445,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "H8fmeaq8ewI",
     "strength": true,
     "difficulty": "intermediate"
@@ -9484,7 +9484,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["Flat bench", "Cable"],
-    "needs": null,
+    "needs": ["bench", "cableMachine"],
     "videoId": "khyjpRPUEB0",
     "strength": true,
     "difficulty": "intermediate"
@@ -9510,7 +9510,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "l77n4NJDLmA",
     "strength": true,
     "difficulty": "intermediate"
@@ -9549,7 +9549,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Barbell", "Squat rack"],
-    "needs": null,
+    "needs": ["barbell", "squatRack"],
     "videoId": "iZTxa8NJH2g",
     "strength": true,
     "difficulty": "intermediate"
@@ -9562,7 +9562,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["gluteHamMachine"],
     "videoId": "Co7xAWe3hwo",
     "strength": false,
     "difficulty": "intermediate"
@@ -9588,7 +9588,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Barbell", "Squat rack"],
-    "needs": null,
+    "needs": ["barbell", "squatRack"],
     "videoId": "tW2H0Ib_hQw",
     "strength": true,
     "difficulty": "intermediate"
@@ -9601,7 +9601,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Squat rack", "Barbell"],
-    "needs": null,
+    "needs": ["squatRack", "barbell", "bench"],
     "videoId": "h1hQvDLFYt8",
     "strength": false,
     "difficulty": "intermediate"
@@ -9614,7 +9614,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["hackSquatMachine"],
     "videoId": "-SoTxdDciAY",
     "strength": true,
     "difficulty": "intermediate"
@@ -9640,7 +9640,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["seatedLegCurlMachine"],
     "videoId": "t9sTSr-JYSs",
     "strength": true,
     "difficulty": "beginner"
@@ -9666,7 +9666,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Bands"],
-    "needs": null,
+    "needs": ["bands", "bench"],
     "videoId": "QVH4oUuTNmU",
     "strength": true,
     "difficulty": "beginner"
@@ -9692,7 +9692,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell", "chains"],
     "videoId": "_i8tq5NihcE",
     "strength": false,
     "difficulty": "intermediate"
@@ -9705,7 +9705,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["preacherCurlMachine"],
     "videoId": "jGhd1pIcQ74",
     "strength": true,
     "difficulty": "beginner"
@@ -9718,7 +9718,7 @@
     "hasCues": true,
     "muscles": ["traps"],
     "equipment": ["Bands"],
-    "needs": null,
+    "needs": ["bands"],
     "videoId": "VhpnXlphu88",
     "strength": true,
     "difficulty": "beginner"
@@ -9731,7 +9731,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Squat rack", "Barbell"],
-    "needs": null,
+    "needs": ["squatRack", "barbell"],
     "videoId": "iu5axHXd2fQ",
     "strength": false,
     "difficulty": "intermediate"
@@ -9757,7 +9757,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "yv1Nygxx7rk",
     "strength": true,
     "difficulty": "intermediate"
@@ -9770,7 +9770,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "c_o_TQ8vM1o",
     "strength": true,
     "difficulty": "intermediate"
@@ -9783,7 +9783,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Flat bench", "Dumbbell"],
-    "needs": null,
+    "needs": ["bench", "dumbbells", "adjustableBench"],
     "videoId": "xGfezA8nYAE",
     "strength": true,
     "difficulty": "intermediate"
@@ -9796,7 +9796,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "iCWAMA9Zeus",
     "strength": false,
     "difficulty": "beginner"
@@ -9848,7 +9848,7 @@
     "hasCues": true,
     "muscles": ["glutes", "quadriceps"],
     "equipment": ["Exercise Ball"],
-    "needs": null,
+    "needs": ["exerciseBall"],
     "videoId": "HyDdeS0COAc",
     "strength": true,
     "difficulty": "intermediate"
@@ -9861,7 +9861,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "cmVXzpLROGw",
     "strength": true,
     "difficulty": "expert"
@@ -9887,7 +9887,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["E-z Curl Bar"],
-    "needs": null,
+    "needs": ["ezBar"],
     "videoId": "B2I8dj-5ZA4",
     "strength": true,
     "difficulty": "beginner"
@@ -9900,7 +9900,7 @@
     "hasCues": true,
     "muscles": ["abductors"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["hipAbductorMachine"],
     "videoId": "OjI5OpV6IWA",
     "strength": true,
     "difficulty": "beginner"
@@ -9913,7 +9913,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Dip station"],
-    "needs": null,
+    "needs": ["dipBars"],
     "videoId": "_wUdg_4wCCk",
     "strength": true,
     "difficulty": "beginner"
@@ -9952,7 +9952,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "Ytffw4cHBh0",
     "strength": true,
     "difficulty": "intermediate"
@@ -9965,7 +9965,7 @@
     "hasCues": true,
     "muscles": ["chest", "shoulders", "triceps"],
     "equipment": ["Bench press station", "Barbell", "Flat bench"],
-    "needs": null,
+    "needs": ["benchPressStation", "barbell", "bench"],
     "videoId": "hWbUlkb5Ms4",
     "strength": true,
     "difficulty": "intermediate"
@@ -9991,7 +9991,7 @@
     "hasCues": true,
     "muscles": ["calves"],
     "equipment": ["Squat rack", "Barbell"],
-    "needs": null,
+    "needs": ["squatRack", "barbell"],
     "videoId": "Gu4I8EaTy1I",
     "strength": true,
     "difficulty": "beginner"
@@ -10030,7 +10030,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "WAUvlrF5xqw",
     "strength": false,
     "difficulty": "intermediate"
@@ -10043,7 +10043,7 @@
     "hasCues": true,
     "muscles": ["lats"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["rowMachine"],
     "videoId": "Xeg681mkwgI",
     "strength": true,
     "difficulty": "beginner"
@@ -10069,7 +10069,7 @@
     "hasCues": true,
     "muscles": ["adductors"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["hipAdductorMachine"],
     "videoId": "yucB1Zxw6-c",
     "strength": true,
     "difficulty": "beginner"
@@ -10095,7 +10095,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "gTzU2IV5Gzw",
     "strength": true,
     "difficulty": "intermediate"
@@ -10147,7 +10147,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["E-z Curl Bar"],
-    "needs": null,
+    "needs": ["ezBar"],
     "videoId": "-KaTdZ7aen4",
     "strength": true,
     "difficulty": "intermediate"
@@ -10160,7 +10160,7 @@
     "hasCues": true,
     "muscles": ["lower-back"],
     "equipment": ["Other"],
-    "needs": null,
+    "needs": ["axleBar"],
     "videoId": "BTsNP5zhCL4",
     "strength": false,
     "difficulty": "intermediate"
@@ -10173,7 +10173,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Sled"],
-    "needs": null,
+    "needs": ["sled"],
     "videoId": "4Mjwf7I8hSU",
     "strength": false,
     "difficulty": "beginner"
@@ -10186,7 +10186,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Body Only"],
-    "needs": null,
+    "needs": [],
     "videoId": "a1xE9t-I1lg",
     "strength": false,
     "difficulty": "beginner"
@@ -10199,7 +10199,7 @@
     "hasCues": true,
     "muscles": ["forearms"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "gnDRXH2J5Yc",
     "strength": true,
     "difficulty": "beginner"
@@ -10212,7 +10212,7 @@
     "hasCues": true,
     "muscles": ["middle-back"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "KDEl3AmZbVE",
     "strength": true,
     "difficulty": "beginner"
@@ -10225,7 +10225,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "2EVZzC88mk4",
     "strength": true,
     "difficulty": "beginner"
@@ -10238,7 +10238,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Barbell", "Squat rack"],
-    "needs": null,
+    "needs": ["barbell", "squatRack"],
     "videoId": "eAkalDSMcbo",
     "strength": false,
     "difficulty": "intermediate"
@@ -10251,7 +10251,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "WdO6TfgWis8",
     "strength": true,
     "difficulty": "intermediate"
@@ -10277,7 +10277,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Flat bench", "Cable"],
-    "needs": null,
+    "needs": ["bench", "cableMachine"],
     "videoId": "SzQ9_1fwVZ0",
     "strength": true,
     "difficulty": "beginner"
@@ -10290,7 +10290,7 @@
     "hasCues": true,
     "muscles": ["biceps", "lats", "middle-back"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["rowMachine"],
     "videoId": "VHXOmrs56GU",
     "strength": true,
     "difficulty": "intermediate"
@@ -10303,7 +10303,7 @@
     "hasCues": true,
     "muscles": ["lats"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "m3sY7iJryGQ",
     "strength": true,
     "difficulty": "beginner"
@@ -10355,7 +10355,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Sled"],
-    "needs": null,
+    "needs": ["sled"],
     "videoId": "Nlrq34Mpjj8",
     "strength": true,
     "difficulty": "beginner"
@@ -10381,7 +10381,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "IlMFcqpg1T8",
     "strength": true,
     "difficulty": "intermediate"
@@ -10394,7 +10394,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Bands"],
-    "needs": null,
+    "needs": ["bands"],
     "videoId": "byZrVEt3qF8",
     "strength": true,
     "difficulty": "beginner"
@@ -10433,7 +10433,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["Dumbbell", "Adjustable bench"],
-    "needs": null,
+    "needs": ["dumbbells", "adjustableBench"],
     "videoId": "Ur1q-OL8VcA",
     "strength": true,
     "difficulty": "beginner"
@@ -10524,7 +10524,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "f_OGBg2KxgY",
     "strength": true,
     "difficulty": "intermediate"
@@ -10537,7 +10537,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "ClpxzYm4Zoo",
     "strength": false,
     "difficulty": "expert"
@@ -10550,7 +10550,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["legExtensionMachine"],
     "videoId": "82IuSLk5zNc",
     "strength": true,
     "difficulty": "beginner"
@@ -10563,7 +10563,7 @@
     "hasCues": true,
     "muscles": ["middle-back"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "1W1MnqIIZ7k",
     "strength": true,
     "difficulty": "beginner"
@@ -10589,7 +10589,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine", "bench"],
     "videoId": "0TxfJCE8yqU",
     "strength": true,
     "difficulty": "beginner"
@@ -10602,7 +10602,7 @@
     "hasCues": true,
     "muscles": ["neck"],
     "equipment": ["Foam Roll"],
-    "needs": null,
+    "needs": ["foamRoller"],
     "videoId": "sAeH4bKH35A",
     "strength": false,
     "difficulty": "intermediate"
@@ -10615,7 +10615,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Barbell", "Flat bench"],
-    "needs": null,
+    "needs": ["barbell", "bench"],
     "videoId": "RVGYevyytlc",
     "strength": true,
     "difficulty": "intermediate"
@@ -10628,7 +10628,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "_4U_5JO3oiE",
     "strength": true,
     "difficulty": "beginner"
@@ -10641,7 +10641,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Weight Plate"],
-    "needs": null,
+    "needs": ["weightPlate", "bench"],
     "videoId": "gcNh17Ckjgg",
     "strength": true,
     "difficulty": "intermediate"
@@ -10654,7 +10654,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "RnrWvpYcbzU",
     "strength": true,
     "difficulty": "beginner"
@@ -10667,7 +10667,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["Adjustable bench", "Barbell"],
-    "needs": null,
+    "needs": ["adjustableBench", "barbell"],
     "videoId": "CHK-ISOT0zo",
     "strength": true,
     "difficulty": "beginner"
@@ -10719,7 +10719,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "VFIKI6ihCmc",
     "strength": true,
     "difficulty": "intermediate"
@@ -10732,7 +10732,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "NvZKjiZ8NYc",
     "strength": true,
     "difficulty": "beginner"
@@ -10745,7 +10745,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Body Only"],
-    "needs": null,
+    "needs": ["smithMachine"],
     "videoId": "cfns5VDVVvk",
     "strength": true,
     "difficulty": "beginner"
@@ -10758,7 +10758,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["Flat bench", "Cable"],
-    "needs": null,
+    "needs": ["bench", "cableMachine"],
     "videoId": "76_uuVdMN10",
     "strength": true,
     "difficulty": "beginner"
@@ -10784,7 +10784,7 @@
     "hasCues": true,
     "muscles": ["forearms"],
     "equipment": ["Barbell", "Flat bench"],
-    "needs": null,
+    "needs": ["barbell", "bench"],
     "videoId": "dQtMZ3ZEGwU",
     "strength": true,
     "difficulty": "beginner"
@@ -10797,7 +10797,7 @@
     "hasCues": true,
     "muscles": ["lats"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "CqsO1bQl9QI",
     "strength": true,
     "difficulty": "beginner"
@@ -10810,7 +10810,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["smithMachine", "bench"],
     "videoId": "CqSa88orYIc",
     "strength": true,
     "difficulty": "beginner"
@@ -10836,7 +10836,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Trap Bar"],
-    "needs": null,
+    "needs": ["trapBar"],
     "videoId": "zCc86nyFzQo",
     "strength": true,
     "difficulty": "beginner"
@@ -10862,7 +10862,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["smithMachine"],
     "videoId": "kDWP5VI8N_8",
     "strength": true,
     "difficulty": "intermediate"
@@ -10888,7 +10888,7 @@
     "hasCues": true,
     "muscles": ["adductors"],
     "equipment": ["Bands"],
-    "needs": null,
+    "needs": ["bands"],
     "videoId": "Vce3tIYpzhc",
     "strength": true,
     "difficulty": "beginner"
@@ -10914,7 +10914,7 @@
     "hasCues": true,
     "muscles": ["biceps"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "54x2WF1_Suc",
     "strength": true,
     "difficulty": "beginner"
@@ -10927,7 +10927,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "F0gKY1eMK8M",
     "strength": true,
     "difficulty": "intermediate"
@@ -10940,7 +10940,7 @@
     "hasCues": true,
     "muscles": ["traps"],
     "equipment": ["Pull-Up Bar"],
-    "needs": null,
+    "needs": ["pullUpBar"],
     "videoId": "-ZIpSoTRsuE",
     "strength": true,
     "difficulty": "beginner"
@@ -10979,7 +10979,7 @@
     "hasCues": true,
     "muscles": ["lats"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "HWGntttgJQw",
     "strength": true,
     "difficulty": "beginner"
@@ -10992,7 +10992,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Squat rack", "Barbell"],
-    "needs": null,
+    "needs": ["squatRack", "barbell", "bench"],
     "videoId": "4LBVP2Oe7fg",
     "strength": true,
     "difficulty": "intermediate"
@@ -11018,7 +11018,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Cable", "Adjustable bench"],
-    "needs": null,
+    "needs": ["cableMachine", "adjustableBench"],
     "videoId": "SeLB9dFAl1M",
     "strength": true,
     "difficulty": "beginner"
@@ -11031,7 +11031,7 @@
     "hasCues": true,
     "muscles": ["calves"],
     "equipment": ["Body Only"],
-    "needs": null,
+    "needs": ["squatRack"],
     "videoId": "uV0I5adTRXw",
     "strength": false,
     "difficulty": "beginner"
@@ -11057,7 +11057,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Medicine Ball"],
-    "needs": null,
+    "needs": ["medicineBall"],
     "videoId": "2vNPgIY28g0",
     "strength": true,
     "difficulty": "beginner"
@@ -11083,7 +11083,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "b9bHy3ojQWA",
     "strength": true,
     "difficulty": "intermediate"
@@ -11096,7 +11096,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine", "bench"],
     "videoId": "MegBRxtR14I",
     "strength": true,
     "difficulty": "beginner"
@@ -11122,7 +11122,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Bands"],
-    "needs": null,
+    "needs": ["bands", "squatRack"],
     "videoId": "cc1HZ6EuGps",
     "strength": true,
     "difficulty": "beginner"
@@ -11135,7 +11135,7 @@
     "hasCues": true,
     "muscles": ["lats"],
     "equipment": ["Pull-Up Bar"],
-    "needs": null,
+    "needs": ["pullUpBar"],
     "videoId": "yVxa1-2QnBY",
     "strength": true,
     "difficulty": "beginner"
@@ -11148,7 +11148,7 @@
     "hasCues": true,
     "muscles": ["glutes"],
     "equipment": ["Squat rack", "Barbell"],
-    "needs": null,
+    "needs": ["squatRack", "barbell"],
     "videoId": "4qK55avGyy4",
     "strength": false,
     "difficulty": "expert"
@@ -11161,7 +11161,7 @@
     "hasCues": true,
     "muscles": ["lats"],
     "equipment": ["Pull-Up Bar"],
-    "needs": null,
+    "needs": ["pullUpBar"],
     "videoId": "eJyewErF9z0",
     "strength": true,
     "difficulty": "intermediate"
@@ -11187,7 +11187,7 @@
     "hasCues": true,
     "muscles": ["middle-back"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "1W1MnqIIZ7k",
     "strength": true,
     "difficulty": "beginner"
@@ -11200,7 +11200,7 @@
     "hasCues": true,
     "muscles": ["middle-back"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["rowMachine"],
     "videoId": "UHrxqmzGgVg",
     "strength": true,
     "difficulty": "beginner"
@@ -11213,7 +11213,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "vSjthx8vHNs",
     "strength": true,
     "difficulty": "intermediate"
@@ -11226,7 +11226,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "20_crwqOFK8",
     "strength": true,
     "difficulty": "expert"
@@ -11252,7 +11252,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "pTLPIpSFI9c",
     "strength": true,
     "difficulty": "intermediate"
@@ -11265,7 +11265,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "xx8WkFrST2Y",
     "strength": false,
     "difficulty": "intermediate"
@@ -11304,7 +11304,7 @@
     "hasCues": true,
     "muscles": ["glutes"],
     "equipment": ["Squat rack", "Barbell"],
-    "needs": null,
+    "needs": ["squatRack", "barbell"],
     "videoId": "2NmRI8AlWtg",
     "strength": false,
     "difficulty": "intermediate"
@@ -11330,7 +11330,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Exercise Ball"],
-    "needs": null,
+    "needs": ["exerciseBall"],
     "videoId": "mef57OKETPw",
     "strength": true,
     "difficulty": "intermediate"
@@ -11343,7 +11343,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "V9dJTdolGw8",
     "strength": false,
     "difficulty": "intermediate"
@@ -11356,7 +11356,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Suspension Trainer"],
-    "needs": null,
+    "needs": ["suspensionTrainer"],
     "videoId": "LWGm1xC_fgU",
     "strength": true,
     "difficulty": "beginner"
@@ -11369,7 +11369,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Exercise Ball"],
-    "needs": null,
+    "needs": ["exerciseBall"],
     "videoId": "NNWuqELZS98",
     "strength": true,
     "difficulty": "intermediate"
@@ -11382,7 +11382,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Squat rack", "Barbell"],
-    "needs": null,
+    "needs": ["squatRack", "barbell"],
     "videoId": "Hqxjk5Z35SM",
     "strength": false,
     "difficulty": "expert"
@@ -11395,7 +11395,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Barbell", "Adjustable bench"],
-    "needs": null,
+    "needs": ["barbell", "adjustableBench"],
     "videoId": "XRyzgA2zsZk",
     "strength": true,
     "difficulty": "beginner"
@@ -11421,7 +11421,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Barbell", "Squat rack"],
-    "needs": null,
+    "needs": ["barbell", "squatRack"],
     "videoId": "8DxlaI1dGho",
     "strength": false,
     "difficulty": "intermediate"
@@ -11434,7 +11434,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Barbell", "Adjustable bench"],
-    "needs": null,
+    "needs": ["barbell", "adjustableBench"],
     "videoId": "ceBWWifK11M",
     "strength": true,
     "difficulty": "intermediate"
@@ -11473,7 +11473,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine", "exerciseBall"],
     "videoId": "KUsvxlmpPoI",
     "strength": true,
     "difficulty": "beginner"
@@ -11538,7 +11538,7 @@
     "hasCues": true,
     "muscles": ["shoulders", "traps"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "U-KG4oahSLA",
     "strength": true,
     "difficulty": "intermediate"
@@ -11551,7 +11551,7 @@
     "hasCues": true,
     "muscles": ["chest"],
     "equipment": ["Sled"],
-    "needs": null,
+    "needs": ["sled"],
     "videoId": "u3RZXe1kqLA",
     "strength": false,
     "difficulty": "intermediate"
@@ -11564,7 +11564,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "mp9gtX-JqB0",
     "strength": false,
     "difficulty": "intermediate"
@@ -11590,7 +11590,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Machine"],
-    "needs": null,
+    "needs": ["hackSquatMachine"],
     "videoId": "0tn5K9NlCfo",
     "strength": true,
     "difficulty": "beginner"
@@ -11629,7 +11629,7 @@
     "hasCues": true,
     "muscles": ["quadriceps"],
     "equipment": ["Squat rack", "Barbell"],
-    "needs": null,
+    "needs": ["squatRack", "barbell"],
     "videoId": "iFc4l24llpw",
     "strength": true,
     "difficulty": "expert"
@@ -11642,7 +11642,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell", "squatRack"],
     "videoId": "UBmpZ7l5Nlk",
     "strength": false,
     "difficulty": "intermediate"
@@ -11655,7 +11655,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "VFdCGK8yk-8",
     "strength": false,
     "difficulty": "expert"
@@ -11681,7 +11681,7 @@
     "hasCues": true,
     "muscles": ["hamstrings"],
     "equipment": ["Barbell"],
-    "needs": null,
+    "needs": ["barbell"],
     "videoId": "6Gxc1XL9p0I",
     "strength": false,
     "difficulty": "intermediate"
@@ -11707,7 +11707,7 @@
     "hasCues": true,
     "muscles": ["abdominals"],
     "equipment": ["Kettlebells"],
-    "needs": null,
+    "needs": ["kettlebells"],
     "videoId": "xpHWMC2_e3c",
     "strength": true,
     "difficulty": "intermediate"
@@ -11720,7 +11720,7 @@
     "hasCues": true,
     "muscles": ["triceps"],
     "equipment": ["Cable"],
-    "needs": null,
+    "needs": ["cableMachine"],
     "videoId": "8rl4ioij6lc",
     "strength": true,
     "difficulty": "beginner"
@@ -11733,7 +11733,7 @@
     "hasCues": true,
     "muscles": ["lower-back"],
     "equipment": ["Barbell", "Squat rack"],
-    "needs": null,
+    "needs": ["barbell", "squatRack"],
     "videoId": "UtKj5WDFnUE",
     "strength": false,
     "difficulty": "intermediate"
@@ -11772,7 +11772,7 @@
     "hasCues": true,
     "muscles": ["shoulders"],
     "equipment": ["Battle Ropes"],
-    "needs": null,
+    "needs": ["battleRopes"],
     "videoId": "pQb2xIGioyQ",
     "strength": true,
     "difficulty": "beginner"

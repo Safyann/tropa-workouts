@@ -1,4 +1,5 @@
 import { kineticCatalog } from './kinetic';
+import type { HomeEquipment } from './preferences';
 
 const russianTerms: [RegExp, RegExp][] = [
   [/^гантел/, /\bdumbbells?\b/],
@@ -66,7 +67,11 @@ const searchableCatalog = kineticCatalog.map((exercise) => ({
 const prepositions = new Set(['в', 'во', 'на', 'с', 'со', 'и', 'для', 'к', 'по', 'от']);
 const bodyweightPhrase = /без\s+(?:инвентаря|оборудования|веса)|с\s+собственным\s+весом/;
 
-export function searchKineticExercises(query: string, group = '') {
+export function searchKineticExercises(
+  query: string,
+  group = '',
+  equipment?: readonly HomeEquipment[],
+) {
   const normalizedQuery = normalize(query);
   const bodyweightOnly = bodyweightPhrase.test(normalizedQuery);
   const words = normalizedQuery.replace(bodyweightPhrase, ' ').match(/[\p{L}\p{N}]+/gu) ?? [];
@@ -79,6 +84,7 @@ export function searchKineticExercises(query: string, group = '') {
       ({ exercise, text }) =>
         (!group || exercise.groups.some((value) => value === group)) &&
         (!bodyweightOnly || exercise.needs?.length === 0) &&
+        (!equipment || exercise.needs?.every((item) => equipment.includes(item))) &&
         terms.every(({ word, alias }) => text.includes(word) || alias?.test(text)),
     )
     .map(({ exercise }) => exercise);

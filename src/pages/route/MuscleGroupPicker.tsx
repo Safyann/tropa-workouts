@@ -1,5 +1,5 @@
 import {
-  availableExerciseByGroup,
+  availableExercisesByGroup,
   muscleGroups,
   type WorkoutPreferences,
 } from '../../entities/program';
@@ -14,7 +14,7 @@ export function MuscleGroupPicker({
   preferences: WorkoutPreferences;
   change: (preferences: WorkoutPreferences) => void;
 }) {
-  const available = availableExerciseByGroup(preferences);
+  const available = availableExercisesByGroup(preferences);
   const savedGroups = preferences.muscleGroups;
   const selected = muscleGroups.filter(
     (group) => available.has(group) && Array.isArray(savedGroups) && savedGroups.includes(group),

@@ -30,6 +30,15 @@ function isOptionalBlockActivity(value: unknown) {
   return value === undefined || value === 'walking' || value === 'stretching';
 }
 
+function isCompletedWarmup(value: unknown) {
+  return (
+    value === undefined ||
+    (isRecord(value) &&
+      (value.activity === 'walking' || value.activity === 'stretching') &&
+      isCount(value.seconds))
+  );
+}
+
 function isPlanExercise(value: unknown): value is PlanExercise {
   return (
     isRecord(value) &&
@@ -70,6 +79,7 @@ function isWorkoutDraft(value: unknown): value is Workout {
     !isCount(value.mainMinutes) ||
     !isCount(value.cooldownMinutes) ||
     !isOptionalBlockActivity(value.cooldownActivity) ||
+    !isCompletedWarmup(value.completedWarmup) ||
     typeof value.short !== 'boolean'
   )
     return false;

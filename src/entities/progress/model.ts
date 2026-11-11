@@ -2,6 +2,7 @@ import {
   cardioTitles,
   durations,
   homeEquipment,
+  isBodyWeight,
   levels,
   muscleGroups,
   route,
@@ -28,6 +29,8 @@ export interface Session {
   elapsed: number | null;
   cardioActivity?: CardioActivity;
   durationSeconds?: number;
+  activeCaloriesPerKg?: number;
+  bodyWeightKg?: number;
   skipped?: ExerciseId[];
   partial?: boolean;
 }
@@ -76,6 +79,8 @@ function readSession(value: unknown): Session | null {
     elapsed,
     cardioActivity,
     durationSeconds,
+    activeCaloriesPerKg,
+    bodyWeightKg,
     skipped,
     partial,
   } = value;
@@ -100,6 +105,10 @@ function readSession(value: unknown): Session | null {
     elapsed,
     ...(isKeyOf(cardioTitles, cardioActivity) && { cardioActivity }),
     ...(isCount(durationSeconds) && { durationSeconds }),
+    ...(typeof activeCaloriesPerKg === 'number' &&
+      Number.isFinite(activeCaloriesPerKg) &&
+      activeCaloriesPerKg >= 0 && { activeCaloriesPerKg }),
+    ...(isBodyWeight(bodyWeightKg) && { bodyWeightKg }),
     ...(Array.isArray(skipped) && {
       skipped: skipped.filter((item): item is ExerciseId => typeof item === 'string' && !!item),
     }),
@@ -117,6 +126,7 @@ function readPreferences(value: unknown): WorkoutPreferences | undefined {
     warmupActivity,
     cooldownActivity,
     weeklyGoal,
+    bodyWeightKg,
     equipment,
     muscleGroups: selected,
   } = value;
@@ -136,6 +146,7 @@ function readPreferences(value: unknown): WorkoutPreferences | undefined {
     ...(isOneOf(['walking', 'stretching'] as const, warmupActivity) && { warmupActivity }),
     ...(isOneOf(['walking', 'stretching'] as const, cooldownActivity) && { cooldownActivity }),
     ...(isOneOf(weeklyGoals, weeklyGoal) && { weeklyGoal }),
+    ...(isBodyWeight(bodyWeightKg) && { bodyWeightKg }),
     ...(Array.isArray(equipment) && {
       equipment: equipment.filter((item) => isOneOf(homeEquipment, item)),
     }),
@@ -190,4 +201,11 @@ export function weekCount(sessions: Session[]) {
 export function formatTime(seconds: number) {
   const value = Math.max(0, seconds);
   return `${String(Math.floor(value / 60)).padStart(2, '0')}:${String(value % 60).padStart(2, '0')}`;
+}
+
+export function estimatedCalories(session: Session) {
+  if (session.activeCaloriesPerKg === undefined) return undefined;
+  if (session.activeCaloriesPerKg === 0) return 0;
+  if (session.bodyWeightKg === undefined) return undefined;
+  return Math.round(session.activeCaloriesPerKg * session.bodyWeightKg);
 }

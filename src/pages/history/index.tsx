@@ -1,5 +1,5 @@
 import { cardioTitles, exercises, route } from '../../entities/program';
-import { formatTime, type Session } from '../../entities/progress';
+import { estimatedCalories, formatTime, type Session } from '../../entities/progress';
 import { Icon } from '../../shared/ui/Icon';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './History.module.css';
@@ -37,6 +37,7 @@ export function HistoryPage({ sessions, stopIndex }: { sessions: Session[]; stop
         ) : (
           [...entries].reverse().map((entry, index) => {
             const entryStop = route[entry.stop];
+            const calories = estimatedCalories(entry);
             const activity = entry.cardioActivity
               ? cardioTitles[entry.cardioActivity]
               : entryStop.type;
@@ -68,6 +69,9 @@ export function HistoryPage({ sessions, stopIndex }: { sessions: Session[]; stop
                     <p className={styles.historyDuration}>
                       Всё занятие · {formatTime(entry.durationSeconds)}
                     </p>
+                  )}
+                  {calories !== undefined && (
+                    <p className={styles.historyDuration}>Активный расход · ≈ {calories} ккал</p>
                   )}
                   {entry.elapsed !== null ? (
                     <>Основная часть · {formatTime(entry.elapsed)}</>

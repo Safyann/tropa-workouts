@@ -4,6 +4,7 @@ export {
   cardioTitles,
   durations,
   homeEquipment,
+  isBodyWeight,
   levels,
   muscleGroups,
   weeklyGoals,

@@ -1,11 +1,6 @@
 import { useState } from 'react';
-import {
-  ExerciseInstructions,
-  muscleGroups,
-  searchKineticExercises,
-  type HomeEquipment,
-  type KineticExerciseId,
-} from '../../entities/program';
+import { muscleGroups, searchKineticExercises, type HomeEquipment } from '../../entities/program';
+import { CatalogTechnique } from './CatalogTechnique';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './Catalog.module.css';
 
@@ -105,20 +100,5 @@ export function CatalogPage({ equipment }: { equipment: readonly HomeEquipment[]
         <a href="./kinetic-license.txt">Лицензия MIT</a>
       </footer>
     </section>
-  );
-}
-
-function CatalogTechnique({ id }: { id: KineticExerciseId }) {
-  const [opened, setOpened] = useState(false);
-  return (
-    <details
-      className={styles.catalogTechnique}
-      onToggle={(event) => {
-        if (event.currentTarget.open) setOpened(true);
-      }}
-    >
-      <summary>Техника выполнения</summary>
-      {opened && <ExerciseInstructions source={id} ordered />}
-    </details>
   );
 }

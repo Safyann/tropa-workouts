@@ -1,28 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useState } from 'react';
-import {
-  createWorkout,
-  replaceExercise,
-  selectExercise,
-  toggleSkip,
-  type Workout,
-} from '../../features/workout';
-import { WorkoutPage } from './index';
-
-function InteractiveWorkout({ initial }: { initial: Workout }) {
-  const [workout, update] = useState(initial);
-  const [completed, setCompleted] = useState(false);
-  if (completed) return <h1>Занятие завершено.</h1>;
-  return (
-    <WorkoutPage
-      workout={workout}
-      history={[]}
-      update={update}
-      finish={() => setCompleted(true)}
-      discard={() => update(initial)}
-    />
-  );
-}
+import { createWorkout, replaceExercise, selectExercise, toggleSkip } from '../../features/workout';
+import { InteractiveWorkout } from './InteractiveWorkout';
 
 const meta = {
   title: 'Страницы/Тренировка',

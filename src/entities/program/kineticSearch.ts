@@ -1,3 +1,4 @@
+import { normalizeSearchText } from '../../shared/lib/normalizeSearchText';
 import { kineticCatalog } from './kinetic';
 import type { HomeEquipment } from './preferences';
 
@@ -47,13 +48,9 @@ const russianTerms: [RegExp, RegExp][] = [
   [/^жук/, /\bbug\b/],
 ];
 
-function normalize(value: string) {
-  return value.toLowerCase().replaceAll('ё', 'е').replaceAll('-', ' ');
-}
-
 const searchableCatalog = kineticCatalog.map((exercise) => ({
   exercise,
-  text: normalize(
+  text: normalizeSearchText(
     [
       exercise.title,
       exercise.slug,
@@ -72,7 +69,7 @@ export function searchKineticExercises(
   group = '',
   equipment?: readonly HomeEquipment[],
 ) {
-  const normalizedQuery = normalize(query);
+  const normalizedQuery = normalizeSearchText(query);
   const bodyweightOnly = bodyweightPhrase.test(normalizedQuery);
   const words = normalizedQuery.replace(bodyweightPhrase, ' ').match(/[\p{L}\p{N}]+/gu) ?? [];
   const terms = words

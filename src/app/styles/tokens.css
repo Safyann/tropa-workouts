@@ -1,0 +1,17 @@
+:root {
+  --paper: #f5f3ea;
+  --surface: #fcfaf2;
+  --ink: #23372c;
+  --muted: #526459;
+  --border: #dcded1;
+  --forest: #263d30;
+  --moss: #dfe7cf;
+  --ember: #f5b75f;
+  --focus: #9c491a;
+  --motion-fast: 150ms;
+  --motion-panel: 240ms;
+  --motion-ease: cubic-bezier(0.2, 0.65, 0.35, 1);
+  --accent: #a6542c;
+  --control-hover: #e6e9db;
+  --input-border: #aab6a6;
+}

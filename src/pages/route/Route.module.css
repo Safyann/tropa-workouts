@@ -1,0 +1,292 @@
+.intro {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.signal {
+  display: inline-block;
+  background: var(--ember);
+  height: 0.5rem;
+  width: 0.5rem;
+  border-radius: 50%;
+  margin-right: 0.375rem;
+}
+.week {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  flex-wrap: wrap;
+}
+.week strong {
+  font-size: 1.125rem;
+}
+.goal {
+  color: var(--muted);
+  font-weight: 550;
+}
+.weekDots {
+  display: flex;
+  gap: 0.25rem;
+}
+.weekDots i {
+  width: 0.875rem;
+  height: 0.375rem;
+  background: var(--border);
+  border-radius: 0.5rem;
+}
+.weekDots .filled {
+  background: var(--accent);
+}
+.weekSettings {
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0;
+  text-underline-offset: 0.2em;
+}
+
+.dashboard {
+  display: grid;
+  gap: 1rem;
+}
+.equipmentIntro p {
+  flex-basis: 100%;
+  margin: 0;
+}
+.map {
+  background: var(--forest);
+  color: #f4f1df;
+  border-radius: 1rem;
+  min-height: 21rem;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.mapArt {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.mapCaption {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.25rem;
+  display: grid;
+  gap: 0.25rem;
+}
+.mapCaption span {
+  color: #c5d2b6;
+  font-size: 0.625rem;
+  font-weight: 750;
+  letter-spacing: 0.15em;
+}
+.mapCaption strong {
+  font-size: clamp(1rem, 3vw, 1.625rem);
+  font-weight: 750;
+  letter-spacing: -0.045em;
+}
+.mapLegend {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  background: #20362a;
+  border: 1px solid #58715b;
+  border-radius: 0.375rem;
+  padding: 0.375rem 0.625rem;
+  font-size: 0.75rem;
+  color: #e3ebd5;
+}
+.markers {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.marker {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+}
+.markerDot {
+  width: 2.125rem;
+  height: 2.125rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid #a0b096;
+  border-radius: 50%;
+  background: #324b3a;
+  color: #dce9d4;
+}
+.markerDot svg {
+  width: 1rem;
+  height: 1rem;
+}
+.marker[data-state='done'] .markerDot,
+.marker[data-state='current'] .markerDot {
+  background: var(--ember);
+  color: #402713;
+  border-color: #ffdda2;
+}
+.marker[data-state='done'] svg {
+  fill: currentColor;
+}
+.marker .markerLink {
+  border-color: var(--ember);
+  text-decoration: none;
+}
+.marker .markerLink:hover,
+.marker .markerLink:focus-visible {
+  background: var(--ember);
+  color: #402713;
+}
+.marker .markerLink:focus-visible {
+  outline-color: #f8d99e;
+}
+.marker[data-state='current'] .markerDot {
+  box-shadow: 0 0 0 0.3125rem #f5b75f40;
+}
+.markerLabel {
+  position: absolute;
+  top: calc(100% + 0.375rem);
+  width: max-content;
+  max-width: 9rem;
+  padding: 0.25rem 0.375rem;
+  font-size: 0.6875rem;
+  background: #20362a;
+  border-radius: 0.25rem;
+}
+.markerLabel b {
+  color: #eac089;
+}
+.markerName {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.nextCard {
+  composes: surface from '../../shared/ui/Common.module.css';
+  padding: clamp(1.125rem, 3vw, 2rem);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.sessionType {
+  color: var(--muted);
+  margin-top: 0.5rem;
+}
+.sessionDetail {
+  margin-top: 0.75rem;
+  color: var(--ink);
+  font-size: 0.875rem;
+  font-weight: 750;
+}
+.cardActions {
+  display: grid;
+  width: 100%;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 1.375rem;
+}
+.dayPreview {
+  width: 100%;
+  margin-top: 0.875rem;
+  font-size: 0.875rem;
+}
+.equipmentIntro {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+  margin-top: 1rem;
+}
+.stopIcon {
+  composes: typeIcon from '../../shared/ui/Common.module.css';
+  margin-block: 1rem 0.625rem;
+}
+.weekLabel {
+  composes: eyebrow from '../../shared/ui/Common.module.css';
+}
+.previewPlan {
+  composes: planList from '../../shared/ui/Common.module.css';
+}
+.dayPreview summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+.previewPlan li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .markerLink {
+    transition:
+      background-color var(--motion-fast) ease,
+      border-color var(--motion-fast) ease,
+      color var(--motion-fast) ease,
+      opacity var(--motion-fast) ease;
+  }
+}
+@media (max-width: 30rem) {
+  .map {
+    min-height: 15.5rem;
+  }
+}
+@media (min-width: 38rem) {
+  .intro {
+    grid-template-columns: 1fr auto;
+    align-items: end;
+  }
+  .week {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    display: grid;
+    grid-template-columns: auto auto;
+    align-items: center;
+    gap: 0.125rem 0.75rem;
+    padding: 0.75rem 1rem;
+  }
+  .week .weekLabel {
+    grid-column: 1 / -1;
+  }
+  .weekSettings {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+  .markerDot {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+  .markerName {
+    position: static;
+    width: auto;
+    height: auto;
+    clip-path: none;
+  }
+}
+@media (min-width: 52rem) {
+  .dashboard {
+    grid-template-columns: minmax(0, 2.05fr) minmax(0, 1fr);
+  }
+  .map {
+    grid-area: 1 / 1;
+    align-self: start;
+    min-height: clamp(22rem, 37vw, 29rem);
+  }
+  .nextCard {
+    grid-area: 1 / 2;
+  }
+  .mapCaption {
+    top: 1.625rem;
+    left: 1.625rem;
+  }
+  .nextCard .stopIcon {
+    margin-block: 1.5rem 0.875rem;
+  }
+}

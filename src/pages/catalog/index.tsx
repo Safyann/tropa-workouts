@@ -1,6 +1,12 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
-import { browseExercises, searchExercises, type CatalogExercise } from '../../shared/api/exerciseDb';
+import {
+  browseExercises,
+  searchExercises,
+  type CatalogExercise,
+} from '../../shared/api/exerciseDb';
 import { ExerciseGif } from '../../shared/ui/ExerciseGif';
+import ui from '../../shared/ui/Common.module.css';
+import styles from './Catalog.module.css';
 
 export function CatalogPage() {
   const [items, setItems] = useState<CatalogExercise[]>([]);
@@ -25,7 +31,7 @@ export function CatalogPage() {
         ? { items: await searchExercises(query, controller.signal), next: null }
         : await browseExercises(cursor, controller.signal);
       if (controller.signal.aborted) return;
-      setItems(previous => cursor ? [...previous, ...result.items] : result.items);
+      setItems((previous) => (cursor ? [...previous, ...result.items] : result.items));
       setNext(result.next);
       setStatus('loaded');
     } catch {
@@ -39,31 +45,78 @@ export function CatalogPage() {
     if (query) void load(query);
   }
 
-  return <section className="narrow">
-    <p className="eyebrow">ОНЛАЙН-КАТАЛОГ</p><h1 tabIndex={-1}>Упражнения<span>.</span></h1>
-    <p className="subtitle">Найди упражнение по английскому названию и посмотри движение.</p>
-    <form className="catalog-form" onSubmit={search}>
-      <label htmlFor="exercise-query">Название упражнения</label>
-      <div><input id="exercise-query" name="query" type="search" placeholder="dumbbell press" required maxLength={100}/>
-        <button className="primary" type="submit">Найти</button></div>
-    </form>
-    <button className="secondary catalog-browse" onClick={() => void load(null)}>Открыть всю базу</button>
-    <div aria-live="polite" className="catalog-status">
-      {status === 'loading' && 'Загружаем упражнения…'}
-      {status === 'failed' && 'Каталог сейчас недоступен. Проверь подключение и повтори запрос. Домашний маршрут доступен на карте.'}
-      {status === 'loaded' && (items.length ? `Показано: ${items.length}` : 'Ничего не нашлось. Попробуй другой запрос.')}
-    </div>
-    {items.length > 0 && <ul className="catalog-list">{items.map(item => {
-      const open = shown === item.exerciseId;
-      return <li className="history-row" key={item.exerciseId}>
-        <strong lang="en">{item.name}</strong>
-        <button className="secondary" aria-expanded={open} onClick={() => setShown(open ? null : item.exerciseId)}>
-          {open ? 'Скрыть' : 'Показать GIF'}
+  return (
+    <section className={ui.narrow}>
+      <p className={ui.eyebrow}>ОНЛАЙН-КАТАЛОГ</p>
+      <h1 tabIndex={-1}>
+        Упражнения<span>.</span>
+      </h1>
+      <p className={ui.subtitle}>Найди упражнение по английскому названию и посмотри движение.</p>
+      <form className={styles.catalogForm} onSubmit={search}>
+        <label htmlFor="exercise-query">Название упражнения</label>
+        <div>
+          <input
+            id="exercise-query"
+            name="query"
+            type="search"
+            placeholder="dumbbell press"
+            required
+            maxLength={100}
+          />
+          <button className={ui.primary} type="submit">
+            Найти
+          </button>
+        </div>
+      </form>
+      <button className={`${ui.secondary} ${styles.catalogBrowse}`} onClick={() => void load(null)}>
+        Открыть всю базу
+      </button>
+      <div aria-live="polite" className={styles.catalogStatus}>
+        {status === 'loading' && 'Загружаем упражнения…'}
+        {status === 'failed' &&
+          'Каталог сейчас недоступен. Проверь подключение и повтори запрос. Домашний маршрут доступен на карте.'}
+        {status === 'loaded' &&
+          (items.length
+            ? `Показано: ${items.length}`
+            : 'Ничего не нашлось. Попробуй другой запрос.')}
+      </div>
+      {items.length > 0 && (
+        <ul className={styles.catalogList}>
+          {items.map((item) => {
+            const open = shown === item.exerciseId;
+            return (
+              <li className={styles.catalogItem} key={item.exerciseId}>
+                <strong lang="en">{item.name}</strong>
+                <button
+                  className={ui.secondary}
+                  aria-expanded={open}
+                  onClick={() => setShown(open ? null : item.exerciseId)}
+                >
+                  {open ? 'Скрыть' : 'Показать GIF'}
+                </button>
+                {open && <ExerciseGif className={styles.gif} src={item.gifUrl} title={item.name} />}
+              </li>
+            );
+          })}
+        </ul>
+      )}
+      {next && (
+        <button
+          className={ui.secondary}
+          disabled={status === 'loading'}
+          onClick={() => void load(null, next)}
+        >
+          Показать ещё
         </button>
-        {open && <ExerciseGif src={item.gifUrl} title={item.name}/>}
-      </li>;
-    })}</ul>}
-    {next && <button className="secondary" disabled={status === 'loading'} onClick={() => void load(null, next)}>Показать ещё</button>}
-    <footer className="foot"><span>Данные и GIF — <a href="https://exercisedb.dev/docs" target="_blank" rel="noreferrer">ExerciseDB / AscendAPI ↗</a></span></footer>
-  </section>;
+      )}
+      <footer className={ui.foot}>
+        <span>
+          Данные и GIF —{' '}
+          <a href="https://exercisedb.dev/docs" target="_blank" rel="noreferrer">
+            ExerciseDB / AscendAPI ↗
+          </a>
+        </span>
+      </footer>
+    </section>
+  );
 }

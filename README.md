@@ -33,10 +33,9 @@ React, TypeScript и Vite. В FSD-слоях `app` собирает прилож
 
 ## GitHub Pages
 
-1. Собери `npm run build` и отправь файлы проекта, включая сборку `docs/`, в репозиторий GitHub.
-2. В настройках репозитория открой **Settings → Pages**.
-3. Выбери **Deploy from a branch**, опубликованную ветку и каталог **/docs**. Нажми **Save**.
-4. Открой адрес, который появится в настройках Pages.
+1. В настройках репозитория открой **Settings → Pages** и выбери **GitHub Actions** в поле **Source**.
+2. Отправь изменения в ветку `main`. GitHub Actions запустит `npm run build` и опубликует содержимое `dist/`.
+3. Открой адрес из настроек Pages после завершения публикации.
 
 На GitHub Free для такого размещения подходит публичный репозиторий. Прогресс с локального адреса и с GitHub Pages хранится отдельно. [Настройка источника публикации](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
 
@@ -46,3 +45,12 @@ React, TypeScript и Vite. В FSD-слоях `app` собирает прилож
 - **Этап 2. Личный прогресс.** Добавить журнал массы тела по датам и график изменений, чтобы видеть снижение, набор и колебания веса. Предусмотреть место для других замеров и хранить личные записи отдельно от программ, которыми делятся по ссылке.
 - **Монетизация.** [Проект подписки, оплаты и доступа](tasks/monetization.md).
 - **Google Play.** Для Android проверить упаковку PWA как Trusted Web Activity, подписать сборку и связать её с постоянным HTTPS-доменом через Digital Asset Links. Обычная страница проекта на GitHub Pages лежит в подкаталоге. Для TWA понадобится возможность разместить `/.well-known/assetlinks.json` в корне используемого домена. [Trusted Web Activity](https://developer.chrome.com/docs/android/trusted-web-activity)
+
+## Форматирование и линтеры
+
+- `npm run format` применяет Prettier к исходникам, стилям и конфигам.
+- `npm run lint` запускает ESLint для JavaScript, TypeScript и React Hooks, затем Stylelint для CSS.
+- `npm run check` проверяет форматирование, линтеры, типы и тесты.
+- Husky запускает `npm run check` и `npm run build:check` перед коммитом. Проверочная сборка попадает в `.build-check/`.
+
+Добавляй инструменты командой `npm install -D <имя-пакета>`. npm запишет диапазон версий в `package.json` и точные версии в `package-lock.json`. Для воспроизводимой установки используй `npm ci`, для обновления в пределах диапазонов — `npm update`.

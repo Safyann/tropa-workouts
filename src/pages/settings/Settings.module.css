@@ -1,0 +1,39 @@
+.profileSettings .levelGuide {
+  margin-top: 1rem;
+}
+.homeEquipment {
+  composes: panel from '../../shared/ui/Common.module.css';
+  min-width: 0;
+  margin-inline: 0;
+}
+.homeEquipment legend {
+  padding-inline: 0.375rem;
+  font-weight: 750;
+}
+.levelGuide dl {
+  display: grid;
+  gap: 0.5rem;
+  margin-block: 0.75rem;
+  font-size: 0.8125rem;
+}
+.levelGuide dt {
+  font-weight: 750;
+}
+.levelGuide dd {
+  margin: 0.125rem 0 0;
+  color: var(--muted);
+}
+.levelGuide summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+.equipmentHint {
+  composes: hint from '../../shared/ui/Common.module.css';
+}
+.homeEquipment .equipmentHint {
+  margin: 0;
+}
+.guideSubmit {
+  composes: secondary from '../../shared/ui/Common.module.css';
+  grid-column: 1 / -1;
+}

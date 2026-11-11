@@ -9,7 +9,7 @@ beforeEach(() => {
   const data = new Map<string, string>();
   vi.stubGlobal('localStorage', {
     getItem: (key: string) => data.get(key) ?? null,
-    setItem: (key: string, value: string) => data.set(key, value)
+    setItem: (key: string, value: string) => data.set(key, value),
   });
 });
 
@@ -37,7 +37,13 @@ describe('progress', () => {
   it('persists workout preferences alongside existing session history', () => {
     const previous = { ...readProgress(), sessions: [entry(0)] };
     saveProgress(previous);
-    const preferences = { minutes: 60, level: 'experienced', warmup: true, cooldown: false, weeklyGoal: 3 } as const;
+    const preferences = {
+      minutes: 60,
+      level: 'experienced',
+      warmup: true,
+      cooldown: false,
+      weeklyGoal: 3,
+    } as const;
     expect(saveProgress({ ...readProgress(), preferences })).toBe(true);
     expect(readProgress()).toEqual({ ...previous, preferences });
   });
@@ -46,15 +52,21 @@ describe('progress', () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date(2026, 10, 11, 12));
     const monday = new Date(2026, 10, 9).getTime();
-    expect(weekCount([entry(0, 0, monday - 1), entry(1, 0, monday), entry(2, 0, monday + 1)])).toBe(2);
+    expect(weekCount([entry(0, 0, monday - 1), entry(1, 0, monday), entry(2, 0, monday + 1)])).toBe(
+      2,
+    );
   });
 
   it('falls back to an empty route when storage is blocked or corrupted', () => {
     localStorage.setItem('tropa-workouts-v1', 'broken JSON');
     expect(readProgress().sessions).toEqual([]);
     vi.stubGlobal('localStorage', {
-      getItem: () => { throw new Error('blocked'); },
-      setItem: () => { throw new Error('blocked'); }
+      getItem: () => {
+        throw new Error('blocked');
+      },
+      setItem: () => {
+        throw new Error('blocked');
+      },
     });
     expect(nextStop(readProgress(), 4)).toBe(0);
     expect(saveProgress(readProgress())).toBe(false);

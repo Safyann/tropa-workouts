@@ -1,0 +1,105 @@
+.dayPlan {
+  margin-top: 1.25rem;
+}
+.planItem {
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  background: var(--surface);
+  padding: 0.5rem 0.75rem;
+}
+.planItem[data-selected] {
+  border-color: #8ea58b;
+  background: #e8ecdd;
+}
+.planItem[data-dragging] {
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 0.25rem 1rem #263d3033;
+}
+.planLine {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+.planLine > span {
+  margin-left: auto;
+  color: var(--muted);
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+.planPick {
+  color: var(--ink);
+  background: transparent;
+  border: 0;
+  padding: 0.375rem 0;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  font-weight: 750;
+}
+.dragHandle {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 0;
+  border-radius: 0.375rem;
+  color: var(--muted);
+  background: transparent;
+  cursor: grab;
+  touch-action: none;
+}
+.dragHandle:hover {
+  background: var(--moss);
+}
+.dragHandle:active {
+  cursor: grabbing;
+}
+.planOptions {
+  margin-top: 0.5rem;
+  font-size: 0.8125rem;
+}
+.optionHint {
+  composes: hint from '../../shared/ui/Common.module.css';
+}
+.planOptions .optionHint {
+  margin-bottom: 0.5rem;
+}
+.planAlternatives {
+  display: grid;
+  gap: 0.375rem;
+  margin-bottom: 0.5rem;
+}
+.alternative {
+  composes: secondary from '../../shared/ui/Common.module.css';
+}
+.planAlternatives .alternative {
+  display: grid;
+  justify-items: start;
+  justify-content: start;
+  gap: 0.125rem;
+  text-align: left;
+}
+.planAlternatives .alternative small {
+  margin-top: 0;
+}
+.planOptions summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .dragHandle {
+    transition:
+      background-color var(--motion-fast) ease,
+      border-color var(--motion-fast) ease,
+      color var(--motion-fast) ease,
+      opacity var(--motion-fast) ease;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .planItem {
+    transition: none !important;
+  }
+}

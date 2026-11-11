@@ -1,5 +1,17 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { createWorkout, moveExercise, recordSet, remaining, replaceExercise, selectExercise, startCooldown, summarize, toggleSkip, toggleTimer } from './model';
+import {
+  createWorkout,
+  isLastSet,
+  moveExercise,
+  recordSet,
+  remaining,
+  replaceExercise,
+  selectExercise,
+  startCooldown,
+  summarize,
+  toggleSkip,
+  toggleTimer,
+} from './model';
 import { defaultPreferences } from '../../entities/program';
 
 afterEach(() => vi.useRealTimers());
@@ -9,7 +21,7 @@ describe('workout', () => {
     const preferences = { ...defaultPreferences, equipment: [] };
     const workout = createWorkout(2, 0, true, preferences);
     if (workout.kind !== 'strength') throw new Error('Expected a strength workout');
-    expect(workout.plan.map(item => item.exercise)).toEqual(['bodySquat', 'wallPress', 'proneW']);
+    expect(workout.plan.map((item) => item.exercise)).toEqual(['bodySquat', 'wallPress', 'proneW']);
     expect(replaceExercise(workout, 1, 'floorPress')).toBe(workout);
     expect(replaceExercise(workout, 1, 'pushup').plan[1].exercise).toBe('pushup');
   });
@@ -21,9 +33,18 @@ describe('workout', () => {
   });
   it('uses one set each for two exercises in the short strength workout', () => {
     expect(createWorkout(0, 0, false)).toMatchObject({
-      plan: [{ exercise: 'squat', target: 2 }, { exercise: 'press', target: 2 }, { exercise: 'row', target: 2 }]
+      plan: [
+        { exercise: 'squat', target: 2 },
+        { exercise: 'press', target: 2 },
+        { exercise: 'row', target: 2 },
+      ],
     });
-    expect(createWorkout(0, 0, true)).toMatchObject({ plan: [{ exercise: 'squat', target: 1 }, { exercise: 'press', target: 1 }] });
+    expect(createWorkout(0, 0, true)).toMatchObject({
+      plan: [
+        { exercise: 'squat', target: 1 },
+        { exercise: 'press', target: 1 },
+      ],
+    });
   });
 
   it('records the actual set and starts a 60-second rest', () => {
@@ -37,7 +58,14 @@ describe('workout', () => {
     expect(workout.sets).toEqual([]);
     expect(updated.timer).toEqual({ remaining: 60, end: 61_000 });
     expect(summarize(updated)).toEqual({
-      date: 1_000, stop: 0, round: 1, short: true, sets: [set], elapsed: null, durationSeconds: 0, partial: true
+      date: 1_000,
+      stop: 0,
+      round: 1,
+      short: true,
+      sets: [set],
+      elapsed: null,
+      durationSeconds: 0,
+      partial: true,
     });
   });
 
@@ -45,8 +73,21 @@ describe('workout', () => {
     const workout = createWorkout(0, 0, false);
     if (workout.kind !== 'strength') throw new Error('Expected a strength workout');
     const updated = recordSet(selectExercise(workout, 2), { weight: 4, reps: 7 });
-    expect(updated.plan.map(item => item.completed)).toEqual([0, 0, 1]);
+    expect(updated.plan.map((item) => item.completed)).toEqual([0, 0, 1]);
     expect(updated.sets[0]).toEqual({ exercise: 'row', weight: 4, reps: 7 });
+  });
+
+  it('ends the workout without a rest timer after the last unskipped set', () => {
+    const workout = createWorkout(0, 0, true);
+    if (workout.kind !== 'strength') throw new Error('Expected a strength workout');
+    expect(isLastSet(workout)).toBe(false);
+
+    const lastSet = toggleSkip(workout, 1);
+    expect(isLastSet(lastSet)).toBe(true);
+    const completed = recordSet(lastSet, { weight: null, reps: 8 });
+    expect(completed.timer).toBeNull();
+    expect(completed.selected).toBeNull();
+    expect(summarize(completed).partial).toBeUndefined();
   });
 
   it('preserves the selected exercise and recorded sets when rows are dragged', () => {
@@ -54,7 +95,7 @@ describe('workout', () => {
     if (workout.kind !== 'strength') throw new Error('Expected a strength workout');
     const recorded = recordSet(selectExercise(workout, 1), { weight: 6, reps: 8 });
     const reordered = moveExercise(recorded, 1, 0);
-    expect(reordered.plan.map(item => item.exercise)).toEqual(['press', 'squat', 'row']);
+    expect(reordered.plan.map((item) => item.exercise)).toEqual(['press', 'squat', 'row']);
     expect(reordered.selected).toBe(0);
     expect(reordered.plan[0].completed).toBe(1);
     expect(reordered.sets).toEqual(recorded.sets);
@@ -69,7 +110,7 @@ describe('workout', () => {
     const replaced = replaceExercise(recorded, 1, 'floorPress');
     expect(replaced.plan[1]).toMatchObject({ exercise: 'floorPress', completed: 1, target: 2 });
     const finished = recordSet(selectExercise(replaced, 1), { weight: 4, reps: 8 });
-    expect(finished.sets.map(set => set.exercise)).toEqual(['press', 'floorPress']);
+    expect(finished.sets.map((set) => set.exercise)).toEqual(['press', 'floorPress']);
     expect(replaceExercise(finished, 1, 'press')).toBe(finished);
   });
 
@@ -109,21 +150,29 @@ describe('workout', () => {
     const options = { minutes: 60, level: 'experienced', warmup: true, cooldown: true } as const;
     const workout = createWorkout(0, 0, false, options);
     const beginner = createWorkout(0, 0, false, { ...options, level: 'beginner' });
-    if (workout.kind !== 'strength' || beginner.kind !== 'strength') throw new Error('Expected strength workouts');
+    if (workout.kind !== 'strength' || beginner.kind !== 'strength')
+      throw new Error('Expected strength workouts');
 
     expect(workout).toMatchObject({
-      mainMinutes: 50, cooldownMinutes: 5, block: { type: 'warmup', timer: { remaining: 300 } }
+      mainMinutes: 50,
+      cooldownMinutes: 5,
+      block: { type: 'warmup', timer: { remaining: 300 } },
     });
     expect(workout.plan).toHaveLength(6);
-    expect(workout.plan.every(item => item.target === 4)).toBe(true);
-    expect(beginner.plan.every(item => item.target === 3)).toBe(true);
+    expect(workout.plan.every((item) => item.target === 4)).toBe(true);
+    expect(beginner.plan.every((item) => item.target === 3)).toBe(true);
     expect(recordSet(workout, { weight: null, reps: 8 })).toBe(workout);
   });
 
   it('freezes cardio elapsed time when cooldown starts', () => {
     vi.useFakeTimers();
     vi.setSystemTime(1_000);
-    const cardio = createWorkout(1, 0, false, { minutes: 20, level: 'beginner', warmup: false, cooldown: true });
+    const cardio = createWorkout(1, 0, false, {
+      minutes: 20,
+      level: 'beginner',
+      warmup: false,
+      cooldown: true,
+    });
     if (cardio.kind !== 'cardio') throw new Error('Expected a cardio workout');
     expect(cardio.seconds).toBe(900);
     const running = { ...cardio, timer: toggleTimer(cardio.timer, 1_000) };

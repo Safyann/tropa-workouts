@@ -1,0 +1,50 @@
+.catalogForm {
+  margin-top: 1.25rem;
+}
+.catalogForm label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 700;
+  margin-bottom: 0.375rem;
+}
+.catalogForm div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.5rem;
+}
+.catalogForm input {
+  min-width: 0;
+  width: 100%;
+  border: 1px solid var(--input-border);
+  border-radius: 0.5rem;
+  background: var(--surface);
+  padding: 0.5rem 0.75rem;
+}
+.catalogBrowse {
+  margin-top: 0.625rem;
+}
+.catalogStatus {
+  color: var(--muted);
+  margin-top: 1rem;
+}
+.catalogList {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+.catalogItem {
+  composes: surface from '../../shared/ui/Common.module.css';
+  padding: 0.75rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.5rem;
+}
+.catalogList .gif {
+  grid-column: 1 / -1;
+  justify-self: center;
+}
+.catalogItem strong {
+  display: block;
+}

@@ -12,7 +12,8 @@ export function useAppUpdate(inWorkout: boolean) {
     let disposed = false;
     let registration: ServiceWorkerRegistration | undefined;
     function checkWaiting() {
-      if (!disposed && workers.controller && registration?.waiting) setWaiting(registration.waiting);
+      if (!disposed && workers.controller && registration?.waiting)
+        setWaiting(registration.waiting);
     }
     function watchInstall() {
       registration?.installing?.addEventListener('statechange', checkWaiting);
@@ -27,16 +28,20 @@ export function useAppUpdate(inWorkout: boolean) {
     workers.addEventListener('controllerchange', reloadOnUpdate);
     document.addEventListener('visibilitychange', checkForUpdate);
     const interval = window.setInterval(checkForUpdate, 15 * 60 * 1000);
-    workers.register('./sw.js').then(result => {
-      if (disposed) return;
-      registration = result;
-      result.addEventListener('updatefound', watchInstall);
-      watchInstall();
-      checkWaiting();
-      return workers.ready;
-    }).then(result => {
-      if (result && !disposed) setOfflineReady(true);
-    }).catch(() => {});
+    workers
+      .register('./sw.js')
+      .then((result) => {
+        if (disposed) return;
+        registration = result;
+        result.addEventListener('updatefound', watchInstall);
+        watchInstall();
+        checkWaiting();
+        return workers.ready;
+      })
+      .then((result) => {
+        if (result && !disposed) setOfflineReady(true);
+      })
+      .catch(() => {});
     return () => {
       disposed = true;
       registration?.removeEventListener('updatefound', watchInstall);
@@ -53,5 +58,10 @@ export function useAppUpdate(inWorkout: boolean) {
     }
   }, [requested, waiting, inWorkout]);
 
-  return { offlineReady, updateAvailable: !!waiting, requested, requestUpdate: () => setRequested(true) };
+  return {
+    offlineReady,
+    updateAvailable: !!waiting,
+    requested,
+    requestUpdate: () => setRequested(true),
+  };
 }

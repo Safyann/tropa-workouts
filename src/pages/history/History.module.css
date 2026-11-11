@@ -1,0 +1,57 @@
+.historyList {
+  display: grid;
+  gap: 0.625rem;
+  margin-top: 1.25rem;
+}
+.empty {
+  composes: surface from '../../shared/ui/Common.module.css';
+  padding: clamp(1rem, 3vw, 1.5rem);
+}
+.empty p {
+  color: var(--muted);
+  margin-block: 0.5rem 0.875rem;
+}
+.historyRow summary {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.75rem;
+  cursor: pointer;
+}
+.historyRow summary::-webkit-details-marker {
+  display: none;
+}
+.historyRow strong,
+.historyRow small {
+  display: block;
+}
+.historyRow small,
+.historyRow time {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+.historyDetail {
+  margin: 0 0.75rem 0.75rem;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  background: var(--paper);
+  font-size: 0.875rem;
+}
+.historyDetail ul {
+  margin: 0;
+  padding-left: 1.125rem;
+}
+.historyDuration {
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+.historyDetail li + li {
+  margin-top: 0.5rem;
+}
+.historyDetail li span {
+  color: var(--muted);
+}
+.historyRow {
+  composes: surface from '../../shared/ui/Common.module.css';
+}

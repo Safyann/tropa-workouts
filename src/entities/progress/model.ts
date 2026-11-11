@@ -50,15 +50,17 @@ export function saveProgress(progress: Progress) {
 }
 
 export function nextStop(progress: Progress, totalStops: number) {
-  return Array.from({ length: totalStops }).findIndex((_, index) => !progress.sessions.some(entry =>
-    entry.round === progress.round && entry.stop === index));
+  return Array.from({ length: totalStops }).findIndex(
+    (_, index) =>
+      !progress.sessions.some((entry) => entry.round === progress.round && entry.stop === index),
+  );
 }
 
 export function weekCount(sessions: Session[]) {
   const monday = new Date();
   monday.setHours(0, 0, 0, 0);
-  monday.setDate(monday.getDate() - (monday.getDay() + 6) % 7);
-  return sessions.filter(entry => entry.date >= monday.getTime()).length;
+  monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7));
+  return sessions.filter((entry) => entry.date >= monday.getTime()).length;
 }
 
 export function formatTime(seconds: number) {

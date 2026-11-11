@@ -1,6 +1,6 @@
 import { previousExerciseResult, type Session, type SetRecord } from './model';
 
-function bestSet(sets: readonly SetRecord[]) {
+export function bestSet(sets: readonly SetRecord[]) {
   // Берём вес и повторы из одного записанного подхода, чтобы сравнивать фактические результаты.
   return sets.reduce<SetRecord | undefined>((best, set) => {
     if (set.weight === null && set.reps === null) return best;

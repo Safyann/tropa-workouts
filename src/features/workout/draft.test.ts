@@ -71,6 +71,21 @@ it('restores recorded sets, timer, order and exercise replacement after reload',
   });
 });
 
+it('restores one note per exercise and includes it in the saved session', () => {
+  const workout = createWorkout(0, 0, false);
+  if (workout.kind !== 'strength') throw new Error('Expected a strength workout');
+  const first = recordSet(workout, { weight: 8, reps: 8 }, 'Первый подход с опорой');
+  const second = recordSet(
+    selectExercise(first, 0),
+    { weight: 8, reps: 9 },
+    'Оба подхода с опорой',
+  );
+  expect(saveWorkoutDraft(second)).toBe(true);
+  const resumed = readWorkoutDraft(progress);
+  if (!resumed) throw new Error('Expected a saved workout');
+  expect(summarize(resumed).notes).toEqual([{ exercise: 'squat', text: 'Оба подхода с опорой' }]);
+});
+
 it('ignores a draft once the session is saved, and removes a discarded draft', () => {
   const workout = createWorkout(0, 0, false);
   saveWorkoutDraft(workout);

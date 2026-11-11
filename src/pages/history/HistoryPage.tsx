@@ -8,6 +8,7 @@ import {
 } from '../../entities/program';
 import {
   estimatedCalories,
+  exerciseNote,
   effortLabels,
   exerciseProgress,
   formatTime,
@@ -15,11 +16,13 @@ import {
   sessionTitle,
   type PlannedWorkout,
   type Session,
+  type SessionChanges,
 } from '../../entities/progress';
 import { Icon } from '../../shared/ui/Icon';
 import { localDay } from '../../shared/lib/calendarDates';
 import { ExerciseProgress } from './ExerciseProgress';
 import { HistoryCalendar } from './HistoryCalendar';
+import { HistorySessionActions } from './HistorySessionActions';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './History.module.css';
 
@@ -33,11 +36,17 @@ export function HistoryPage({
   stopIndex,
   program,
   planned = noPlans,
+  editSession,
+  deleteSession,
+  reopensStop,
 }: {
   sessions: Session[];
   stopIndex?: number;
   program?: ProgramId;
   planned?: readonly PlannedWorkout[];
+  editSession?: (session: Session, changes: SessionChanges) => string | undefined;
+  deleteSession?: (session: Session) => string | undefined;
+  reopensStop?: (session: Session) => boolean;
 }) {
   const [selectedExercise, setSelectedExercise] = useState<ExerciseId>();
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
@@ -195,6 +204,7 @@ export function HistoryPage({
                         {[...new Set(entry.sets.map((set) => set.exercise))].map((id) => {
                           const sets = entry.sets.filter((set) => set.exercise === id);
                           const title = exercises[id]?.title ?? id;
+                          const note = exerciseNote(entry.notes, id);
                           return (
                             <li key={id}>
                               {entriesByExercise.has(id) ? (
@@ -222,6 +232,7 @@ export function HistoryPage({
                                   )
                                   .join(' / ')}
                               </span>
+                              {note && <p className={styles.note}>Заметка · {note}</p>}
                             </li>
                           );
                         })}
@@ -236,6 +247,28 @@ export function HistoryPage({
                         </p>
                       )}
                     </>
+                  )}
+                  {((entry.freeId && entry.elapsed === null) || entry.roundTotal) && (
+                    <a className={ui.secondary} href={`#result/${sessionIdentity(entry)}`}>
+                      {entry.roundTotal ? 'Итоги круга' : 'Итоги занятия'}
+                    </a>
+                  )}
+                  {editSession && deleteSession && (
+                    <HistorySessionActions
+                      session={entry}
+                      save={(changes) => {
+                        const error = editSession(entry, changes);
+                        if (
+                          !error &&
+                          selectedDay !== null &&
+                          localDay(changes.date) !== selectedDay
+                        )
+                          setSelectedDay(null);
+                        return error;
+                      }}
+                      remove={() => deleteSession(entry)}
+                      reopensStop={reopensStop?.(entry) ?? false}
+                    />
                   )}
                 </div>
               </details>

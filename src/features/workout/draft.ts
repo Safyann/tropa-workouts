@@ -5,7 +5,13 @@ import {
   programRoute,
   type ExerciseId,
 } from '../../entities/program';
-import { nextStop, routeLength, type Progress, type SetRecord } from '../../entities/progress';
+import {
+  isExerciseNote,
+  nextStop,
+  routeLength,
+  type Progress,
+  type SetRecord,
+} from '../../entities/progress';
 import { isPending, type PlanExercise, type Workout } from './model';
 
 export const workoutDraftKey = 'tropa-workout-draft-v1';
@@ -108,7 +114,7 @@ function isWorkoutDraft(value: unknown): value is Workout {
   }
   if (stop?.icon !== 'strength' || value.kind !== 'strength') return false;
 
-  const { plan, selected, sets, timer, restSeconds, equipment } = value;
+  const { plan, selected, sets, notes, timer, restSeconds, equipment } = value;
   if (
     !Array.isArray(plan) ||
     !plan.length ||
@@ -116,6 +122,7 @@ function isWorkoutDraft(value: unknown): value is Workout {
     new Set(plan.map((item) => item.id)).size !== plan.length ||
     !Array.isArray(sets) ||
     !sets.every(isSetRecord) ||
+    (notes !== undefined && (!Array.isArray(notes) || !notes.every(isExerciseNote))) ||
     !isCount(restSeconds) ||
     !Array.isArray(equipment) ||
     !equipment.every((item) => homeEquipment.some((known) => known === item)) ||

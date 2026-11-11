@@ -27,6 +27,17 @@ it('keeps route order when moving a workout and removes completed stops from the
     nextMonday,
     nextWednesday,
   ]);
+  const paused: Progress = {
+    ...progress,
+    preferences: {
+      level: 'beginner',
+      minutes: 20,
+      warmup: false,
+      cooldown: false,
+      schedule: { start: monday, days: [1, 3], paused: true },
+    },
+  };
+  expect(plannedWorkouts(paused)).toEqual([]);
   const moved = { ...progress, movedWorkout: { round: 0, stop: 0, day: friday } };
   expect(
     plannedWorkouts(moved)

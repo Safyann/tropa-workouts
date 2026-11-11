@@ -10,7 +10,7 @@ export interface PlannedWorkout {
 
 export function plannedWorkouts(progress: Progress, activeStop?: number): PlannedWorkout[] {
   const schedule = progress.preferences?.schedule;
-  if (!schedule?.days.length) return [];
+  if (!schedule?.days.length || schedule.paused) return [];
 
   const program = progress.preferences?.program;
   // Расписание сдвигают только завершённые остановки активной программы.

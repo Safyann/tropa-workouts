@@ -81,7 +81,7 @@ export interface WorkoutPreferences {
   weeklyGoal?: (typeof weeklyGoals)[number];
   routeWeeks?: (typeof routeWeeks)[number];
   program?: ProgramId;
-  schedule?: { days: readonly TrainingWeekday[]; start: number };
+  schedule?: { days: readonly TrainingWeekday[]; start: number; paused?: boolean };
   restSound?: boolean;
   bodyWeightKg?: number;
   equipment?: readonly HomeEquipment[];

@@ -16,8 +16,11 @@ import {
 import {
   nextStop,
   plannedWorkouts,
+  savedProgramRound,
   routeLength,
-  weekCount,
+  trainingReport,
+  TrainingSummary,
+  weeklyReport,
   type Progress,
 } from '../../entities/progress';
 import { Icon } from '../../shared/ui/Icon';
@@ -37,6 +40,7 @@ interface Props {
   restart: () => void;
   changePreferences: (preferences: WorkoutPreferences) => void;
   moveWorkout?: (day: number) => void;
+  updateSchedule?: (paused: boolean) => void;
   chooseProgram?: (program: ProgramId | undefined) => void;
 }
 
@@ -48,6 +52,7 @@ export function RoutePage({
   restart,
   changePreferences,
   moveWorkout,
+  updateSchedule,
   chooseProgram,
 }: Props) {
   const preferences = progress.preferences ?? defaultPreferences;
@@ -61,11 +66,13 @@ export function RoutePage({
   const routeSessions = progress.sessions.filter(
     (session) => !session.freeId && session.program === program,
   );
-  const completedStops = new Set(
-    routeSessions.filter((session) => session.round === progress.round).map(({ stop }) => stop),
-  );
+  const roundSessions = routeSessions.filter((session) => session.round === progress.round);
+  const completedStops = new Set(roundSessions.map(({ stop }) => stop));
   const historyStops = new Set(routeSessions.map(({ stop }) => stop));
-  const count = weekCount(progress.sessions);
+  const week = weeklyReport(progress.sessions);
+  const count = week.workouts;
+  const canResumeProgram =
+    savedProgramRound(progress, program ? undefined : 'dumbbell') !== undefined;
   const goal = program ? dumbbellWeeklyGoal : (preferences.weeklyGoal ?? defaultWeeklyGoal);
   const hasDumbbells = (preferences.equipment ?? defaultEquipment).includes('dumbbells');
   const equipment = (preferences.equipment ?? defaultEquipment).map(
@@ -114,8 +121,13 @@ export function RoutePage({
             <Icon name={stop?.icon ?? 'check'} />
           </span>
           <h2>{stop?.title ?? 'Все костры горят'}</h2>
-          {nextDate !== undefined && moveWorkout && (
-            <NextWorkoutDate day={nextDate} move={moveWorkout} />
+          {stop && preferences.schedule && moveWorkout && updateSchedule && (
+            <NextWorkoutDate
+              day={nextDate}
+              paused={preferences.schedule.paused}
+              move={moveWorkout}
+              updateSchedule={updateSchedule}
+            />
           )}
           {stop ? (
             <>
@@ -168,13 +180,19 @@ export function RoutePage({
             </>
           ) : (
             <>
-              <p className={styles.sessionType}>
-                Результаты сохранены в истории. Можно пройти тропу ещё раз.
-              </p>
+              <p className={styles.sessionType}>Итоги круга</p>
+              <TrainingSummary
+                report={trainingReport(roundSessions)}
+                goal={totalStops}
+                comparisonLabel="Изменения за круг"
+              />
               <div className={styles.cardActions}>
                 <button className={ui.primary} onClick={restart}>
                   Новый круг <Icon name="arrow" />
                 </button>
+                <a className={ui.secondary} href="#settings">
+                  Настройки частоты и расписания
+                </a>
               </div>
             </>
           )}
@@ -190,6 +208,17 @@ export function RoutePage({
           historyStops={historyStops}
         />
       </div>
+      <section className={ui.panel}>
+        <h2>Итоги недели</h2>
+        <TrainingSummary
+          report={week}
+          goal={goal}
+          comparisonLabel="Изменения к предыдущим занятиям"
+        />
+        {week.workouts !== week.routeWorkouts && (
+          <p className={ui.hint}>Занятий из маршрутов · {week.routeWorkouts}</p>
+        )}
+      </section>
       {chooseProgram && (
         <section className={ui.panel}>
           <h2>{program ? 'Стартовый маршрут «Войти в ритм»' : dumbbellProgramTitle}</h2>
@@ -198,9 +227,7 @@ export function RoutePage({
               ? 'Гибкий круг с силовыми и кардио.'
               : 'Восемь силовых тренировок. Понадобятся гантели и место для упражнений на полу.'}
           </p>
-          <p className={ui.hint}>
-            Смена программы начинает новый круг. Пройденные занятия останутся в истории.
-          </p>
+          <p className={ui.hint}>У каждой программы свой круг и расписание.</p>
           {inWorkout ? (
             <p className={ui.hint}>Заверши начатое занятие, чтобы сменить программу.</p>
           ) : !program && !hasDumbbells ? (
@@ -213,7 +240,13 @@ export function RoutePage({
               type="button"
               onClick={() => chooseProgram(program ? undefined : 'dumbbell')}
             >
-              {program ? 'Начать стартовый маршрут' : 'Начать программу с гантелями'}
+              {program
+                ? canResumeProgram
+                  ? 'Вернуться к стартовому маршруту'
+                  : 'Начать стартовый маршрут'
+                : canResumeProgram
+                  ? 'Вернуться к программе с гантелями'
+                  : 'Начать программу с гантелями'}
             </button>
           )}
         </section>

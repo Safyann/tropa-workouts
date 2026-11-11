@@ -1,4 +1,4 @@
-import { addDays, localDay } from '../../shared/lib/calendarDates';
+import { addDays, dateInputValue, localDay } from '../../shared/lib/calendarDates';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './Route.module.css';
 
@@ -8,16 +8,32 @@ const dateFormat = new Intl.DateTimeFormat('ru', {
   month: 'long',
 });
 
-function inputDate(day: number) {
-  const date = new Date(day);
-  return [
-    date.getFullYear(),
-    String(date.getMonth() + 1).padStart(2, '0'),
-    String(date.getDate()).padStart(2, '0'),
-  ].join('-');
-}
-
-export function NextWorkoutDate({ day, move }: { day: number; move: (day: number) => void }) {
+export function NextWorkoutDate({
+  day,
+  paused,
+  move,
+  updateSchedule,
+}: {
+  day: number | undefined;
+  paused?: boolean;
+  move: (day: number) => void;
+  updateSchedule: (paused: boolean) => void;
+}) {
+  if (paused) {
+    return (
+      <div className={styles.scheduleDate}>
+        <p>Расписание на паузе</p>
+        <button
+          className={`${ui.secondary} ${styles.tomorrow}`}
+          type="button"
+          onClick={() => updateSchedule(false)}
+        >
+          Возобновить с сегодня
+        </button>
+      </div>
+    );
+  }
+  if (day === undefined) return null;
   const today = localDay(Date.now());
   const tomorrow = addDays(today, 1);
   return (
@@ -32,6 +48,15 @@ export function NextWorkoutDate({ day, move }: { day: number; move: (day: number
           onClick={() => move(tomorrow)}
         >
           Перенести на завтра
+        </button>
+      )}
+      {day < today && (
+        <button
+          className={`${ui.secondary} ${styles.tomorrow}`}
+          type="button"
+          onClick={() => updateSchedule(false)}
+        >
+          Пересчитать даты с сегодня
         </button>
       )}
       <details>
@@ -51,8 +76,8 @@ export function NextWorkoutDate({ day, move }: { day: number; move: (day: number
             <input
               name="day"
               type="date"
-              min={inputDate(today)}
-              defaultValue={inputDate(Math.max(day, today))}
+              min={dateInputValue(today)}
+              defaultValue={dateInputValue(Math.max(day, today))}
               required
             />
           </label>
@@ -61,6 +86,9 @@ export function NextWorkoutDate({ day, move }: { day: number; move: (day: number
           </button>
         </form>
       </details>
+      <button className={styles.pauseSchedule} type="button" onClick={() => updateSchedule(true)}>
+        Приостановить расписание
+      </button>
     </div>
   );
 }

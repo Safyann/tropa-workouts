@@ -15,12 +15,14 @@ import {
 } from '@dnd-kit/sortable';
 import { exercises } from '../../entities/program';
 import {
+  addExercise,
   moveExercise,
   replaceExercise,
   toggleSkip,
   type StrengthWorkout,
 } from '../../features/workout';
 import { SortableExercise } from './SortableExercise';
+import { AddExerciseForm } from './AddExerciseForm';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './WorkoutPlan.module.css';
 
@@ -88,6 +90,10 @@ export function WorkoutPlan({
           </ul>
         </SortableContext>
       </DndContext>
+      <AddExerciseForm
+        equipment={workout.equipment}
+        add={(exercise) => update(addExercise(workout, exercise))}
+      />
     </section>
   );
 }

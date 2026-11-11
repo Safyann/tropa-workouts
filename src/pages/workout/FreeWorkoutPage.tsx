@@ -1,28 +1,32 @@
 import { useRef, useState, type FormEvent } from 'react';
-import { exercises, type ExerciseId } from '../../entities/program';
-import { formatSet, type Session, type SetRecord } from '../../entities/progress';
-import { normalizeSearchText } from '../../shared/lib/normalizeSearchText';
+import { exercises } from '../../entities/program';
+import {
+  formatSet,
+  type Session,
+  type SetRecord,
+  type WorkoutTemplate,
+} from '../../entities/progress';
+import { ExercisePicker, useExerciseChoice } from './ExercisePicker';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './Workout.module.css';
 
-const exerciseOptions = Object.entries(exercises).map(([id, exercise]) => ({
-  id: id as ExerciseId,
-  title: exercise.title,
-  search: normalizeSearchText(exercise.title),
-}));
-
-export function FreeWorkoutPage({ save }: { save: (session: Omit<Session, 'round'>) => boolean }) {
+export function FreeWorkoutPage({
+  save,
+  templates,
+  removeTemplate,
+}: {
+  save: (session: Omit<Session, 'round'>) => boolean;
+  templates?: readonly WorkoutTemplate[];
+  removeTemplate: (id: string) => boolean;
+}) {
   const [mode, setMode] = useState<'strength' | 'walking'>('strength');
-  const [query, setQuery] = useState('');
-  const [exerciseId, setExerciseId] = useState<ExerciseId>();
+  const [templateId, setTemplateId] = useState('');
   const [sets, setSets] = useState<SetRecord[]>([]);
   const freeId = useRef<string | undefined>(undefined);
-  const search = normalizeSearchText(query);
-  const choices = exerciseOptions
-    .filter((exercise) => exercise.search.includes(search))
-    .slice(0, 15);
-  const selected = choices.find(({ id }) => id === exerciseId) ?? choices[0];
-  const exercise = selected ? exercises[selected.id] : undefined;
+  const template = templates?.find(({ id }) => id === templateId);
+  const choice = useExerciseChoice(template?.exercises);
+  const { selected } = choice;
+  const exercise = selected ? exercises[selected] : undefined;
 
   function addSet(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -33,7 +37,7 @@ export function FreeWorkoutPage({ save }: { save: (session: Omit<Session, 'round
     setSets((current) => [
       ...current,
       {
-        exercise: selected.id,
+        exercise: selected,
         weight: typeof weight === 'string' && weight !== '' ? Number(weight) : null,
         reps: typeof reps === 'string' && reps !== '' ? Number(reps) : null,
       },
@@ -98,33 +102,46 @@ export function FreeWorkoutPage({ save }: { save: (session: Omit<Session, 'round
           </form>
         ) : (
           <>
+            {!!templates?.length && (
+              <div className={styles.freeFields}>
+                <label>
+                  Шаблон тренировки
+                  <select
+                    value={template?.id ?? ''}
+                    onChange={(event) => {
+                      setTemplateId(event.target.value);
+                      choice.setQuery('');
+                      choice.select(undefined);
+                    }}
+                  >
+                    <option value="">Выбрать упражнения вручную</option>
+                    {templates.map(({ id, title }) => (
+                      <option key={id} value={id}>
+                        {title}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                {template && (
+                  <button
+                    className={ui.secondary}
+                    type="button"
+                    onClick={() => {
+                      if (
+                        window.confirm(`Удалить шаблон «${template.title}»?`) &&
+                        removeTemplate(template.id)
+                      )
+                        setTemplateId('');
+                    }}
+                  >
+                    Удалить шаблон
+                  </button>
+                )}
+              </div>
+            )}
             <form className={styles.freeFields} onSubmit={addSet}>
-              <label>
-                Поиск упражнения
-                <input
-                  type="search"
-                  value={query}
-                  onChange={(event) => setQuery(event.target.value)}
-                />
-              </label>
-              <label>
-                Упражнение
-                <select
-                  value={selected?.id ?? ''}
-                  disabled={!selected}
-                  onChange={(event) =>
-                    setExerciseId(choices.find(({ id }) => id === event.target.value)?.id)
-                  }
-                >
-                  {!selected && <option value="">Ничего не найдено</option>}
-                  {choices.map(({ id, title }) => (
-                    <option key={id} value={id}>
-                      {title}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <div className={styles.fields} key={selected?.id}>
+              <ExercisePicker choice={choice} />
+              <div className={styles.fields} key={selected}>
                 {exercise?.weighted && (
                   <label>
                     {exercise.needs?.includes('dumbbells') ? 'Вес одной гантели, кг' : 'Вес, кг'}

@@ -14,6 +14,27 @@ export function addDays(timestamp: number, offset: number) {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate() + offset).getTime();
 }
 
+export function dateInputValue(timestamp: number) {
+  const date = new Date(timestamp);
+  return [
+    date.getFullYear(),
+    String(date.getMonth() + 1).padStart(2, '0'),
+    String(date.getDate()).padStart(2, '0'),
+  ].join('-');
+}
+
+export function changeLocalDate(timestamp: number, day: string) {
+  const date = new Date(`${day}T00:00:00`);
+  if (!Number.isFinite(date.getTime()) || dateInputValue(date.getTime()) !== day) return null;
+  const original = new Date(timestamp);
+  return date.setHours(
+    original.getHours(),
+    original.getMinutes(),
+    original.getSeconds(),
+    original.getMilliseconds(),
+  );
+}
+
 export function calendarWeeks(month: number) {
   const first = new Date(month);
   const leadingDays = (first.getDay() + 6) % 7;

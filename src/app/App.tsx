@@ -2,25 +2,31 @@ import { useEffect, useRef, useState } from 'react';
 import {
   defaultEquipment,
   defaultPreferences,
-  defaultWeeklyGoal,
-  dumbbellWeeklyGoal,
+  exercises,
   route,
   type WorkoutPreferences,
   type ProgramId,
 } from '../entities/program';
 import {
   nextStop,
+  nextRoundNumber,
+  editSavedSession,
   mergeProgressBackup,
   parseProgress,
   plannedWorkouts,
   progressStorageKey,
   readProgress,
+  readSavedProgress,
   routeLength,
   saveProgress,
   sessionIdentity,
+  switchProgram,
+  trainingReport,
+  workoutTemplateTitleLimit,
   type Effort,
   type Progress,
   type Session,
+  type SessionChanges,
 } from '../entities/progress';
 import {
   createWorkout,
@@ -116,10 +122,7 @@ export function App() {
   }
 
   function latestProgress() {
-    const saved = readProgress();
-    if (saved.sessions.length > progress.sessions.length || saved.round > progress.round)
-      return saved;
-    return progress;
+    return progressSaveFailed ? progress : (readSavedProgress() ?? progress);
   }
 
   function updateWorkout(next: Workout) {
@@ -152,6 +155,9 @@ export function App() {
     const entry = summarize(completed, latest.preferences?.bodyWeightKg);
     if (!latest.sessions.some((item) => sessionIdentity(item) === sessionIdentity(entry))) {
       const next = { ...latest, sessions: [...latest.sessions, entry] };
+      const total = routeLength(latest, completed.index);
+      if (isCurrentRouteSession(entry, latest) && nextStop(next, total) === -1)
+        entry.roundTotal = total;
       if (!saveProgress(next)) {
         updateWorkout(completed);
         setProgressSaveFailed(true);
@@ -177,6 +183,41 @@ export function App() {
     return true;
   }
 
+  function saveTemplate(session: Session, title: string) {
+    if (!session.freeId || session.elapsed !== null) return false;
+    const name = title.trim().slice(0, workoutTemplateTitleLimit);
+    const ids = [...new Set(session.sets.map(({ exercise }) => exercise))].filter((id) =>
+      Object.hasOwn(exercises, id),
+    );
+    if (!name || !ids.length) return false;
+    const latest = latestProgress();
+    const templates = (latest.templates ?? []).filter(({ id }) => id !== session.freeId);
+    return storeProgress(
+      { ...latest, templates: [...templates, { id: session.freeId, title: name, exercises: ids }] },
+      true,
+    );
+  }
+
+  function removeTemplate(id: string) {
+    const latest = latestProgress();
+    return storeProgress(
+      { ...latest, templates: (latest.templates ?? []).filter((template) => template.id !== id) },
+      true,
+    );
+  }
+
+  function roundReportFor(session: Session) {
+    if (session.freeId) return;
+    const current = isCurrentRouteSession(session, progress);
+    const goal = current ? routeLength(progress) : session.roundTotal;
+    if (!goal || (current && nextStop(progress, goal) !== -1)) return;
+    const sessions = progress.sessions.filter(
+      (entry) =>
+        !entry.freeId && entry.round === session.round && entry.program === session.program,
+    );
+    return { goal, report: trainingReport(sessions) };
+  }
+
   function saveResultWeight(session: Session, bodyWeightKg: number) {
     const latest = latestProgress();
     storeProgress({
@@ -198,18 +239,56 @@ export function App() {
     });
   }
 
+  function editHistorySession(session: Session, changes: SessionChanges) {
+    const latest = latestProgress();
+    const next = editSavedSession(latest, sessionIdentity(session), changes);
+    if (!next) return 'Занятие уже удалено.';
+    if (!storeProgress(next, true)) return 'Браузер не сохранил изменения.';
+  }
+
+  function isCurrentRouteSession(session: Session, source: Progress) {
+    return (
+      !session.freeId &&
+      session.round === source.round &&
+      session.program === source.preferences?.program
+    );
+  }
+
+  function withoutSession(source: Progress, session: Session): Progress {
+    return {
+      ...source,
+      sessions: source.sessions.filter(
+        (entry) => sessionIdentity(entry) !== sessionIdentity(session),
+      ),
+    };
+  }
+
+  function reopensStop(session: Session) {
+    return (
+      isCurrentRouteSession(session, progress) &&
+      session.stop < routeLength(withoutSession(progress, session))
+    );
+  }
+
+  function deleteHistorySession(session: Session) {
+    const latest = latestProgress();
+    const currentRoute = isCurrentRouteSession(session, latest);
+    // Удаление предыдущей остановки меняет порядок прохождения и может сделать черновик недействительным.
+    if (currentRoute && (workout || readWorkoutDraft(latest)))
+      return 'Заверши начатую тренировку перед удалением занятия из текущего маршрута.';
+    const next = withoutSession(latest, session);
+    if (currentRoute) next.movedWorkout = undefined;
+    if (!storeProgress(next, true)) return 'Браузер не удалил занятие.';
+  }
+
   function restart() {
     const latest = latestProgress();
     if (workout || nextStop(latest, routeLength(latest)) !== -1) return;
-    const lastRound = latest.sessions.reduce(
-      (last, { round, freeId }) => (freeId ? last : Math.max(last, round)),
-      latest.round,
-    );
     const preferences = latest.preferences;
     const schedule = preferences?.schedule;
     storeProgress({
       ...latest,
-      round: lastRound + 1,
+      round: nextRoundNumber(latest),
       movedWorkout: undefined,
       preferences:
         preferences && schedule
@@ -221,23 +300,7 @@ export function App() {
   function chooseProgram(program: ProgramId | undefined) {
     const latest = latestProgress();
     if (workout || readWorkoutDraft(latest) || program === latest.preferences?.program) return;
-    const current = latest.preferences ?? defaultPreferences;
-    // При смене программы начинаем новый круг, сохраняя программу и ссылки завершённых занятий.
-    const goal = program ? dumbbellWeeklyGoal : (current.weeklyGoal ?? defaultWeeklyGoal);
-    const schedule =
-      current.schedule?.days.length === goal
-        ? { ...current.schedule, start: localDay(Date.now()) }
-        : undefined;
-    const lastRound = latest.sessions.reduce(
-      (last, { round, freeId }) => (freeId ? last : Math.max(last, round)),
-      latest.round,
-    );
-    storeProgress({
-      ...latest,
-      round: lastRound + 1,
-      movedWorkout: undefined,
-      preferences: { ...current, program, schedule },
-    });
+    storeProgress(switchProgram(latest, program));
   }
 
   function changePreferences(preferences: WorkoutPreferences) {
@@ -245,7 +308,9 @@ export function App() {
     const prior = latest.preferences?.schedule;
     const next = preferences.schedule;
     const sameSchedule =
-      prior?.start === next?.start && prior?.days.join(',') === next?.days.join(',');
+      prior?.start === next?.start &&
+      prior?.days.join(',') === next?.days.join(',') &&
+      prior?.paused === next?.paused;
     storeProgress({
       ...latest,
       preferences,
@@ -258,6 +323,25 @@ export function App() {
     const next = plannedWorkouts(latest, workout?.index)[0];
     if (next && day >= localDay(Date.now()))
       storeProgress({ ...latest, movedWorkout: { round: latest.round, stop: next.stop, day } });
+  }
+
+  function updateSchedule(paused: boolean) {
+    const latest = latestProgress();
+    const preferences = latest.preferences;
+    const schedule = preferences?.schedule;
+    if (!preferences || !schedule) return;
+    storeProgress({
+      ...latest,
+      movedWorkout: undefined,
+      preferences: {
+        ...preferences,
+        schedule: {
+          ...schedule,
+          start: paused ? schedule.start : localDay(Date.now()),
+          paused: paused || undefined,
+        },
+      },
+    });
   }
 
   function restoreBackup(contents: string) {
@@ -295,10 +379,19 @@ export function App() {
             stopIndex={screen.stopIndex}
             program={screen.program}
             planned={plannedWorkouts(progress, workout?.index)}
+            editSession={editHistorySession}
+            deleteSession={deleteHistorySession}
+            reopensStop={reopensStop}
           />
         );
       case 'free':
-        return <FreeWorkoutPage save={saveFreeWorkout} />;
+        return (
+          <FreeWorkoutPage
+            save={saveFreeWorkout}
+            templates={progress.templates}
+            removeTemplate={removeTemplate}
+          />
+        );
       case 'result':
       case 'free-result': {
         const session = progress.sessions.find((entry) =>
@@ -312,6 +405,9 @@ export function App() {
             history={progress.sessions}
             saveWeight={(weight) => saveResultWeight(session, weight)}
             saveEffort={(effort) => saveResultEffort(session, effort)}
+            templateTitle={progress.templates?.find(({ id }) => id === session.freeId)?.title}
+            saveTemplate={(title) => saveTemplate(session, title)}
+            roundSummary={roundReportFor(session)}
           />
         ) : (
           <section className={ui.narrow}>
@@ -343,6 +439,7 @@ export function App() {
             restart={restart}
             changePreferences={changePreferences}
             moveWorkout={moveWorkout}
+            updateSchedule={updateSchedule}
             chooseProgram={chooseProgram}
           />
         );

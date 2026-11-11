@@ -1,6 +1,7 @@
 import {
   cardioActivity,
   defaultPreferences,
+  exercises,
   exerciseAlternatives,
   defaultEquipment,
   optionalBlockMinutes,
@@ -14,7 +15,12 @@ import {
   type WorkoutBlockActivity,
   type WorkoutBlockType,
 } from '../../entities/program';
-import type { Session, SetRecord } from '../../entities/progress';
+import {
+  updateExerciseNotes,
+  type ExerciseNote,
+  type Session,
+  type SetRecord,
+} from '../../entities/progress';
 
 interface Timer {
   remaining: number;
@@ -53,6 +59,7 @@ export type StrengthWorkout = WorkoutInfo & {
   plan: PlanExercise[];
   selected: number | null;
   sets: SetRecord[];
+  notes?: ExerciseNote[];
   timer: Timer | null;
   restSeconds: number;
   equipment: readonly HomeEquipment[];
@@ -197,6 +204,19 @@ export function moveExercise(workout: StrengthWorkout, from: number, to: number)
   };
 }
 
+export function addExercise(workout: StrengthWorkout, exercise: ExerciseId): StrengthWorkout {
+  if (workout.block || !Object.hasOwn(exercises, exercise)) return workout;
+  const needs = exercises[exercise].needs ?? [];
+  if (!needs.every((need) => workout.equipment.includes(need))) return workout;
+  const id = workout.plan.reduce((max, item) => Math.max(max, item.id), -1) + 1;
+  const plan = [...workout.plan, { id, exercise, target: 1, completed: 0, skipped: false }];
+  return {
+    ...workout,
+    plan,
+    selected: workout.selected ?? (workout.timer ? null : plan.length - 1),
+  };
+}
+
 function updateExercise(workout: StrengthWorkout, index: number, item: PlanExercise) {
   return workout.plan.map((entry, position) => (position === index ? item : entry));
 }
@@ -228,6 +248,7 @@ export function toggleSkip(workout: StrengthWorkout, index: number): StrengthWor
 export function recordSet(
   workout: StrengthWorkout,
   values: Omit<SetRecord, 'exercise'>,
+  note?: string,
 ): StrengthWorkout {
   const index = workout.selected;
   if (index === null || workout.timer || workout.block) return workout;
@@ -239,11 +260,14 @@ export function recordSet(
   const timer = isLastSet(workout)
     ? null
     : { remaining: workout.restSeconds, end: Date.now() + workout.restSeconds * 1000 };
+  const notes =
+    note === undefined ? workout.notes : updateExerciseNotes(workout.notes, item.exercise, note);
   return {
     ...workout,
     plan,
     selected,
     sets: [...workout.sets, { ...values, exercise: item.exercise }],
+    ...(notes?.length ? { notes } : workout.notes && { notes: undefined }),
     timer,
   };
 }
@@ -289,6 +313,7 @@ export function summarize(workout: Workout, bodyWeightKg?: number): Session {
     activeCaloriesPerKg: energy,
     ...(bodyWeightKg !== undefined && { bodyWeightKg }),
     sets: workout.kind === 'strength' ? workout.sets : [],
+    ...(workout.kind === 'strength' && workout.notes?.length && { notes: workout.notes }),
     elapsed,
     ...(workout.kind === 'cardio' ? { cardioActivity: workout.activity } : {}),
     ...(workout.kind === 'strength' && workout.plan.some(isPending) ? { partial: true } : {}),

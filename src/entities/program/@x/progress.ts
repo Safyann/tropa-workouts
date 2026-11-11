@@ -1,8 +1,9 @@
 export type { ExerciseId } from '../model';
-export { programRoute, route } from '../model';
+export { dumbbellWeeklyGoal, exercises, programRoute, route } from '../model';
 export {
   cardioTitles,
   defaultRouteWeeks,
+  defaultPreferences,
   defaultWeeklyGoal,
   durations,
   homeEquipment,

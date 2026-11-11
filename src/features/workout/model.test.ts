@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   createWorkout,
+  addExercise,
   extendRest,
   finishWarmup,
   isLastSet,
@@ -20,6 +21,16 @@ import { estimatedCalories } from '../../entities/progress';
 afterEach(() => vi.useRealTimers());
 
 describe('workout', () => {
+  it('adds a catalogue exercise without interrupting active rest', () => {
+    const workout = createWorkout(0, 0, false);
+    if (workout.kind !== 'strength') throw new Error('Expected a strength workout');
+    const rest = recordSet(workout, { weight: 5, reps: 8 });
+    const extended = addExercise(rest, 'deadBug');
+    expect(extended.timer).toBe(rest.timer);
+    expect(extended.selected).toBe(rest.selected);
+    expect(extended.plan.at(-1)).toMatchObject({ exercise: 'deadBug', target: 1, completed: 0 });
+    expect(addExercise({ ...rest, equipment: [] }, 'floorPress').plan).toBe(rest.plan);
+  });
   it('adds fifteen seconds to running and paused rest', () => {
     const workout = createWorkout(0, 0, false);
     if (workout.kind !== 'strength') throw new Error('Expected a strength workout');

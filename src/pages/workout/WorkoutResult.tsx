@@ -3,11 +3,14 @@ import {
   estimatedCalories,
   formatTime,
   sessionTitle,
+  TrainingSummary,
   type Effort,
   type Session,
+  type TrainingReport,
 } from '../../entities/progress';
 import { BodyWeightForm } from '../../features/workout/BodyWeightForm';
 import { WorkoutComparison } from './WorkoutComparison';
+import { WorkoutTemplateForm } from './WorkoutTemplateForm';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './Workout.module.css';
 
@@ -16,11 +19,17 @@ export function WorkoutResult({
   history,
   saveWeight,
   saveEffort,
+  templateTitle,
+  saveTemplate,
+  roundSummary,
 }: {
   session: Session;
   history: readonly Session[];
   saveWeight: (weight: number) => void;
   saveEffort: (effort: Effort | undefined) => void;
+  templateTitle?: string;
+  saveTemplate: (title: string) => boolean;
+  roundSummary?: { report: TrainingReport; goal: number };
 }) {
   const calories = estimatedCalories(session);
 
@@ -57,6 +66,22 @@ export function WorkoutResult({
         )}
       </div>
       <WorkoutComparison session={session} history={history} />
+      {roundSummary && (
+        <section className={ui.panel}>
+          <h2>Итоги круга</h2>
+          <TrainingSummary
+            report={roundSummary.report}
+            goal={roundSummary.goal}
+            comparisonLabel="Изменения за круг"
+          />
+          <p className={ui.hint}>
+            На карте можно повторить программу, изменить частоту или выбрать другой маршрут.
+          </p>
+        </section>
+      )}
+      {session.freeId && session.elapsed === null && session.sets.length > 0 && (
+        <WorkoutTemplateForm key={session.freeId} title={templateTitle} save={saveTemplate} />
+      )}
       <fieldset className={styles.effort}>
         <legend>Как далась тренировка?</legend>
         {(Object.keys(effortLabels) as Effort[]).map((effort) => (

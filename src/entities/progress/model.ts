@@ -28,14 +28,24 @@ export interface SetRecord {
   reps: number | null;
 }
 
+export interface ExerciseNote {
+  exercise: ExerciseId;
+  text: string;
+}
+
+export const exerciseNoteLimit = 500;
+
 export interface Session {
   stop: number;
   round: number;
   program?: ProgramId;
+  roundTotal?: number;
   freeId?: string;
   date: number;
+  originalDate?: number;
   short: boolean;
   sets: SetRecord[];
+  notes?: ExerciseNote[];
   elapsed: number | null;
   cardioActivity?: CardioActivity;
   durationSeconds?: number;
@@ -51,8 +61,30 @@ export interface Progress {
   round: number;
   sessions: Session[];
   preferences?: WorkoutPreferences;
-  movedWorkout?: { round: number; stop: number; day: number };
+  movedWorkout?: MovedWorkout;
+  savedRoutes?: Partial<Record<'home' | ProgramId, RouteCheckpoint>>;
+  templates?: WorkoutTemplate[];
 }
+
+interface MovedWorkout {
+  round: number;
+  stop: number;
+  day: number;
+}
+
+export interface RouteCheckpoint {
+  round: number;
+  schedule?: WorkoutPreferences['schedule'];
+  movedWorkout?: MovedWorkout;
+}
+
+export interface WorkoutTemplate {
+  id: string;
+  title: string;
+  exercises: ExerciseId[];
+}
+
+export const workoutTemplateTitleLimit = 60;
 
 export function isFreeSessionId(value: unknown): value is string {
   return typeof value === 'string' && /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(value);
@@ -66,6 +98,38 @@ export function sessionIdentity(session: Session) {
 export function sessionTitle(session: Session) {
   if (session.freeId) return session.elapsed === null ? 'Свободная тренировка' : 'Прогулка';
   return programRoute(session.program)[session.stop].title;
+}
+
+export function exerciseNote(notes: readonly ExerciseNote[] | undefined, exercise: ExerciseId) {
+  return notes?.find((note) => note.exercise === exercise)?.text;
+}
+
+export function updateExerciseNotes(
+  notes: readonly ExerciseNote[] | undefined,
+  exercise: ExerciseId,
+  value: string,
+) {
+  const text = value.trim().slice(0, exerciseNoteLimit);
+  const others = (notes ?? []).filter((note) => note.exercise !== exercise);
+  return text ? [...others, { exercise, text }] : others;
+}
+
+export function previousExerciseNote(sessions: readonly Session[], exercise: ExerciseId) {
+  for (let index = sessions.length - 1; index >= 0; index--) {
+    const note = exerciseNote(sessions[index].notes, exercise);
+    if (note) return note;
+  }
+}
+
+export function isExerciseNote(value: unknown): value is ExerciseNote {
+  return (
+    isRecord(value) &&
+    typeof value.exercise === 'string' &&
+    !!value.exercise &&
+    typeof value.text === 'string' &&
+    !!value.text.trim() &&
+    value.text.length <= exerciseNoteLimit
+  );
 }
 
 export function previousExerciseResult(sessions: readonly Session[], exercise: ExerciseId) {
@@ -113,10 +177,13 @@ function readSession(value: unknown): Session | null {
     stop,
     round,
     program,
+    roundTotal,
     freeId,
     date,
+    originalDate,
     short,
     sets,
+    notes,
     elapsed,
     cardioActivity,
     durationSeconds,
@@ -143,10 +210,15 @@ function readSession(value: unknown): Session | null {
     stop,
     round,
     ...(program && { program }),
+    ...(isCount(roundTotal) &&
+      roundTotal >= 1 &&
+      roundTotal <= programRoute(program).length && { roundTotal }),
     ...(freeId && { freeId }),
     date,
+    ...(isTimestamp(originalDate) && { originalDate }),
     short,
     sets: sets.filter(isSetRecord),
+    ...(Array.isArray(notes) && { notes: notes.filter(isExerciseNote) }),
     elapsed,
     ...(isKeyOf(cardioTitles, cardioActivity) && { cardioActivity }),
     ...(isCount(durationSeconds) && { durationSeconds }),
@@ -188,8 +260,7 @@ function readPreferences(value: unknown): WorkoutPreferences | undefined {
   )
     return;
 
-  const scheduleDays = isRecord(schedule) && Array.isArray(schedule.days) ? schedule.days : [];
-  const trainingDays = trainingWeekdays.filter((day) => scheduleDays.includes(day));
+  const savedSchedule = readSchedule(schedule);
   return {
     level,
     minutes,
@@ -200,9 +271,7 @@ function readPreferences(value: unknown): WorkoutPreferences | undefined {
     ...(isOneOf(weeklyGoals, weeklyGoal) && { weeklyGoal }),
     ...(isOneOf(routeWeeks, weeks) && { routeWeeks: weeks }),
     ...(program === 'dumbbell' && { program }),
-    ...(isRecord(schedule) &&
-      isTimestamp(schedule.start) &&
-      trainingDays.length > 0 && { schedule: { days: trainingDays, start: schedule.start } }),
+    ...(savedSchedule && { schedule: savedSchedule }),
     ...(typeof restSound === 'boolean' && { restSound }),
     ...(isBodyWeight(bodyWeightKg) && { bodyWeightKg }),
     ...(Array.isArray(equipment) && {
@@ -212,6 +281,55 @@ function readPreferences(value: unknown): WorkoutPreferences | undefined {
       muscleGroups: selected.filter((item) => isOneOf(muscleGroups, item)),
     }),
   };
+}
+
+function readSchedule(value: unknown): WorkoutPreferences['schedule'] {
+  if (!isRecord(value) || !Array.isArray(value.days) || !isTimestamp(value.start)) return;
+  const days: unknown[] = value.days;
+  const trainingDays = trainingWeekdays.filter((day) => days.includes(day));
+  if (trainingDays.length)
+    return {
+      days: trainingDays,
+      start: value.start,
+      ...(value.paused === true && { paused: true }),
+    };
+}
+
+function readMovedWorkout(value: unknown, round: number): MovedWorkout | undefined {
+  if (
+    isRecord(value) &&
+    value.round === round &&
+    isCount(value.stop) &&
+    value.stop < route.length &&
+    isTimestamp(value.day)
+  )
+    return { round, stop: value.stop, day: value.day };
+}
+
+function readCheckpoint(value: unknown): RouteCheckpoint | undefined {
+  if (!isRecord(value) || !isCount(value.round)) return;
+  const schedule = readSchedule(value.schedule);
+  const movedWorkout = readMovedWorkout(value.movedWorkout, value.round);
+  return {
+    round: value.round,
+    ...(schedule && { schedule }),
+    ...(movedWorkout && { movedWorkout }),
+  };
+}
+
+function readTemplate(value: unknown): WorkoutTemplate | null {
+  if (
+    !isRecord(value) ||
+    !isFreeSessionId(value.id) ||
+    typeof value.title !== 'string' ||
+    !Array.isArray(value.exercises)
+  )
+    return null;
+  const title = value.title.trim().slice(0, workoutTemplateTitleLimit);
+  const exercises = [
+    ...new Set(value.exercises.filter((id): id is ExerciseId => typeof id === 'string' && !!id)),
+  ];
+  return title && exercises.length ? { id: value.id, title, exercises } : null;
 }
 
 export function parseProgress(data: string, strict = false): Progress | null {
@@ -237,19 +355,32 @@ export function parseProgress(data: string, strict = false): Progress | null {
           ))
       )
         return null;
-      const moved = saved.movedWorkout;
+      const movedWorkout = readMovedWorkout(saved.movedWorkout, saved.round);
+      const checkpoints = isRecord(saved.savedRoutes) ? saved.savedRoutes : {};
+      const home = preferences?.program ? readCheckpoint(checkpoints.home) : undefined;
+      const dumbbell = preferences?.program ? undefined : readCheckpoint(checkpoints.dumbbell);
+      const savedRoutes = {
+        ...(home && home.round !== saved.round && { home }),
+        ...(dumbbell && dumbbell.round !== saved.round && { dumbbell }),
+      };
+      const templates = Array.isArray(saved.templates)
+        ? [
+            ...new Map(
+              saved.templates
+                .map(readTemplate)
+                .filter((template) => template !== null)
+                .map((template) => [template.id, template]),
+            ).values(),
+          ]
+        : [];
       return {
         version: 1,
         round: saved.round,
         sessions,
         ...(preferences && { preferences }),
-        ...(isRecord(moved) &&
-          isCount(moved.round) &&
-          isCount(moved.stop) &&
-          moved.stop < route.length &&
-          isTimestamp(moved.day) && {
-            movedWorkout: { round: moved.round, stop: moved.stop, day: moved.day },
-          }),
+        ...(movedWorkout && { movedWorkout }),
+        ...(Object.keys(savedRoutes).length > 0 && { savedRoutes }),
+        ...(templates.length > 0 && { templates }),
       };
     }
   } catch {
@@ -259,11 +390,14 @@ export function parseProgress(data: string, strict = false): Progress | null {
 }
 
 export function readProgress(): Progress {
-  const empty: Progress = { version: 1, round: 0, sessions: [] };
+  return readSavedProgress() ?? { version: 1, round: 0, sessions: [] };
+}
+
+export function readSavedProgress(): Progress | null {
   try {
-    return parseProgress(localStorage.getItem(progressStorageKey) ?? '') ?? empty;
+    return parseProgress(localStorage.getItem(progressStorageKey) ?? '');
   } catch {
-    return empty;
+    return null;
   }
 }
 

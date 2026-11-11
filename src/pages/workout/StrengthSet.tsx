@@ -2,9 +2,12 @@ import { useRef, type FormEvent, type Ref } from 'react';
 import { ExerciseInstructions, exercises } from '../../entities/program';
 import {
   effortLabels,
+  exerciseNote,
+  exerciseNoteLimit,
   formatSet,
   formatWeight,
   previousExerciseResult,
+  previousExerciseNote,
   type Session,
 } from '../../entities/progress';
 import {
@@ -50,6 +53,8 @@ export function StrengthSet({
   const finalSet = isLastSet(workout);
   const previous = previousExerciseResult(history, id);
   const previousSets = previous?.sets ?? [];
+  const previousNote = previousExerciseNote(history, id);
+  const currentNote = exerciseNote(workout.notes, id);
   const previousWeight = [...previousSets].reverse().find((set) => set.weight !== null)?.weight;
   const currentSets = workout.sets.filter((set) => set.exercise === id).reverse();
   const repeat = currentSets.find(
@@ -81,10 +86,14 @@ export function StrengthSet({
     if (restSound && !finalSet) prepareRestSound();
     const data = new FormData(event.currentTarget);
     const number = (name: string) => (data.get(name) === '' ? null : Number(data.get(name)));
-    const updated = recordSet(workout, {
-      weight: canAddWeight ? number('weight') : null,
-      reps: number('reps'),
-    });
+    const updated = recordSet(
+      workout,
+      {
+        weight: canAddWeight ? number('weight') : null,
+        reps: number('reps'),
+      },
+      String(data.get('note') ?? ''),
+    );
     if (finalSet) finish(updated);
     else update(updated);
   }
@@ -116,11 +125,14 @@ export function StrengthSet({
           </a>
         )}
         <form onSubmit={submit}>
-          {previousSets.length > 0 && (
+          {(previousSets.length > 0 || previousNote) && (
             <div className={styles.previousResult}>
               <div>
                 <strong>В прошлый раз</strong>
-                <p>{previousSets.map(formatSet).join(' / ')}</p>
+                {previousSets.length > 0 && <p>{previousSets.map(formatSet).join(' / ')}</p>}
+                {previousNote && (
+                  <p className={styles.noteText}>Последняя заметка · {previousNote}</p>
+                )}
                 {previous?.effort && <p>Тренировка далась · {effortLabels[previous.effort]}</p>}
                 {exercise.perSide && previousSets.some(({ reps }) => reps !== null) && (
                   <p>Повторы на сторону</p>
@@ -174,6 +186,18 @@ export function StrengthSet({
               Повторить подход · {formatSet(repeat)}
             </button>
           )}
+          <details className={styles.exerciseNote} open={currentNote ? true : undefined}>
+            <summary>Заметка к упражнению</summary>
+            <label>
+              <span className={ui.srOnly}>Заметка к упражнению</span>
+              <textarea
+                name="note"
+                rows={2}
+                maxLength={exerciseNoteLimit}
+                defaultValue={currentNote}
+              />
+            </label>
+          </details>
           <p className={ui.hint}>
             Ориентир — {targetReps} повторов. Можно записать фактический результат или оставить поля
             пустыми.

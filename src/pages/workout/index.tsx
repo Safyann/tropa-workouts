@@ -26,7 +26,7 @@ function Timer({ seconds, running, label, toggle }: {
   </div>;
 }
 
-export function WorkoutPage({ workout, history, update, finish }: Props) {
+export function WorkoutPage({ workout, history, update, finish, discard }: Props & { discard: () => void }) {
   const [now, setNow] = useState(Date.now);
   const exerciseHeading = useRef<HTMLHeadingElement>(null);
   const focusExercise = useRef(false);
@@ -106,9 +106,16 @@ export function WorkoutPage({ workout, history, update, finish }: Props) {
         : !workout.plan.some(isPending) && <div className="workout-card workout-step">
           {workout.sets.length > 0
             ? <button className="primary" onClick={() => finishMain(workout)}>{workout.cooldownMinutes ? endLabel : 'Сохранить занятие'} <Icon name="check"/></button>
-            : <p className="subtitle">Все упражнения пропущены. Можно вернуться к карте или вернуть упражнение в план.</p>}
+            : <p className="subtitle">Все упражнения пропущены. Можно вернуть упражнение в план или сбросить занятие.</p>}
         </div>}
     </>}
+    <div className="workout-exit">
+      {workout.kind === 'strength' && workout.sets.length > 0 && workout.plan.some(isPending) &&
+        <button type="button" className="secondary" onClick={() => finish(workout)}>Закончить и сохранить</button>}
+      <button type="button" className="secondary" onClick={() => {
+        if (window.confirm('Сбросить это занятие? Записанные в нём подходы будут удалены.')) discard();
+      }}>Сбросить занятие</button>
+    </div>
   </section>;
 }
 

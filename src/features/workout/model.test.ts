@@ -9,7 +9,7 @@ describe('workout', () => {
     const preferences = { ...defaultPreferences, equipment: [] };
     const workout = createWorkout(2, 0, true, preferences);
     if (workout.kind !== 'strength') throw new Error('Expected a strength workout');
-    expect(workout.plan.map(item => item.exercise)).toEqual(['bodySquat', 'wallPress']);
+    expect(workout.plan.map(item => item.exercise)).toEqual(['bodySquat', 'wallPress', 'proneW']);
     expect(replaceExercise(workout, 1, 'floorPress')).toBe(workout);
     expect(replaceExercise(workout, 1, 'pushup').plan[1].exercise).toBe('pushup');
   });
@@ -37,7 +37,7 @@ describe('workout', () => {
     expect(workout.sets).toEqual([]);
     expect(updated.timer).toEqual({ remaining: 60, end: 61_000 });
     expect(summarize(updated)).toEqual({
-      date: 1_000, stop: 0, round: 1, short: true, sets: [set], elapsed: null, durationSeconds: 0
+      date: 1_000, stop: 0, round: 1, short: true, sets: [set], elapsed: null, durationSeconds: 0, partial: true
     });
   });
 

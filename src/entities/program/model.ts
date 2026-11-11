@@ -20,7 +20,7 @@ export interface Exercise {
 
 export type ExerciseId =
   | 'squat' | 'press' | 'row' | 'bodySquat' | 'gobletSquat' | 'floorPress' | 'wallPress' | 'pushup' | 'freeRow' | 'singleFreeRow'
-  | 'rdl' | 'gluteBridge' | 'shoulderPress' | 'standingPress' | 'deadBug' | 'birdDog';
+  | 'rdl' | 'gluteBridge' | 'shoulderPress' | 'standingPress' | 'deadBug' | 'birdDog' | 'proneW';
 
 export const exercises: Record<ExerciseId, Exercise> = {
   squat: {
@@ -113,6 +113,12 @@ export const exercises: Record<ExerciseId, Exercise> = {
     reference: 'https://oss.exercisedb.dev/api/v1/exercises/v2DfH14',
     cues: ['Наклони корпус и сохраняй устойчивое положение.', 'Подтяни гантель к боку, удерживая корпус неподвижно. Повтори другой рукой.']
   },
+  proneW: {
+    title: 'Подъём рук буквой W лёжа',
+    group: 'Спина', gear: 'Без инвентаря', weighted: false,
+    reference: 'https://www.acefitness.org/resources/everyone/exercise-library/249/prone-scapular-shoulder-stabilization-series-i-y-t-w-o-formation/',
+    cues: ['Ляг на живот и согни руки так, чтобы они образовали букву W.', 'Слегка приподними руки, мягко сведи лопатки и плавно опусти руки.']
+  },
   rdl: {
     needs: ['dumbbells'],
     title: 'Румынская тяга с гантелями',
@@ -182,6 +188,7 @@ export const route: Stop[] = [
 ];
 
 const extendedMoves: ExerciseId[] = ['rdl', 'shoulderPress', 'deadBug'];
+const bodyweightMoves: ExerciseId[] = ['bodySquat', 'wallPress', 'proneW', 'gluteBridge', 'deadBug'];
 
 export function workoutTiming(stop: Stop, short: boolean, preferences = defaultPreferences) {
   const warmup = preferences.warmup ? optionalBlockMinutes : 0;
@@ -194,13 +201,14 @@ export function workoutTiming(stop: Stop, short: boolean, preferences = defaultP
 export function strengthPlan(stop: Extract<Stop, { icon: 'strength' }>, short: boolean, preferences = defaultPreferences) {
   const budget = mainBudget(preferences);
   const extraCount = budget >= 45 ? 3 : budget >= 30 ? 2 : 0;
-  const moves = [...stop.moves, ...extendedMoves.slice(0, extraCount)];
   const equipment = preferences.equipment ?? homeEquipment;
+  const bodyweight = !equipment.includes('dumbbells') && !equipment.includes('bench');
+  const moves = bodyweight ? bodyweightMoves : [...stop.moves, ...extendedMoves.slice(0, extraCount)];
   const available = moves.flatMap(exercise => {
     if (hasEquipment(exercise, equipment)) return [exercise];
     return exerciseAlternatives(exercise, equipment).slice(0, 1);
   });
-  if (short) return available.slice(0, 2).map(exercise => ({ exercise, target: 1 }));
+  if (short) return available.slice(0, bodyweight ? 3 : 2).map(exercise => ({ exercise, target: 1 }));
   const extraSets = {
     beginner: Number(budget >= 45),
     basic: Number(budget >= 30),

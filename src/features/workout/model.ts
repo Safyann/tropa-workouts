@@ -142,6 +142,7 @@ export function summarize(workout: Workout): Session {
     sets: workout.kind === 'strength' ? workout.sets : [],
     elapsed: workout.kind === 'cardio' ? workout.seconds - remaining(workout.timer, date) : null,
     ...(workout.kind === 'cardio' ? { cardioActivity: workout.activity } : {}),
+    ...(workout.kind === 'strength' && workout.plan.some(isPending) ? { partial: true } : {}),
     ...(skipped.length ? { skipped } : {})
   };
 }

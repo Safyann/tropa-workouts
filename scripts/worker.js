@@ -9,6 +9,10 @@ self.addEventListener('install', event => {
     cache.addAll([...files].map(url => new Request(url, { cache: 'reload' })))));
 });
 
+self.addEventListener('message', event => {
+  if (event.data?.type === 'ACTIVATE_UPDATE') event.waitUntil(self.skipWaiting());
+});
+
 self.addEventListener('activate', event => {
   event.waitUntil((async () => {
     const keys = await caches.keys();

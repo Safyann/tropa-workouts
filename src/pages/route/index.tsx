@@ -36,6 +36,34 @@ export function RoutePage({ progress, inWorkout, offlineReady, start, restart, c
       </div>
     </div>
     <div className="dashboard">
+      <section className="next-card">
+        <p className="eyebrow">{stop ? `ОСТАНОВКА 0${next + 1} / 04` : 'МАРШРУТ ЗАВЕРШЁН'}</p>
+        <span className="type-icon"><Icon name={stop?.icon ?? 'check'}/></span>
+        <h2>{stop?.title ?? 'Все костры горят'}</h2>
+        {stop ? <>
+          {!inWorkout && <>
+            <p className="session-type">{stop.icon === 'cardio' ? cardioTitles[cardioActivity(preferences.equipment)] : stop.type}</p>
+            <p className="session-detail">{workoutDetail(stop, false, preferences)} · {levels[preferences.level].title}</p>
+          </>}
+          <div className="card-actions">
+            <button className="primary" onClick={() => start(false)}>{inWorkout ? 'Продолжить занятие' : 'Начать занятие'} <Icon name="arrow"/></button>
+            {!inWorkout && <button className="secondary" onClick={() => start(true)}>Короткий вариант</button>}
+          </div>
+          {!inWorkout && <>
+            {!progress.sessions.length && !preferences.equipment && <div className="equipment-intro">
+              <p className="hint">Подбери план под свой домашний инвентарь.</p>
+              <a className="secondary" href="#settings">Выбрать инвентарь</a>
+              <button type="button" className="secondary" onClick={() =>
+                changePreferences({ ...preferences, equipment: [] })}>Без инвентаря</button>
+            </div>}
+            <WorkoutSettings preferences={preferences} change={changePreferences}/>
+            <DayPreview key={next} stop={stop} preferences={preferences}/>
+          </>}
+        </> : <>
+          <p className="session-type">Четыре занятия в истории. Можно пройти тропу ещё раз.</p>
+          <div className="card-actions"><button className="primary" onClick={restart}>Новый круг <Icon name="arrow"/></button></div>
+        </>}
+      </section>
       <section className="map" aria-label="Карта из четырёх остановок">
         <img className="map-art" src="./map.svg" alt=""/>
         <div className="map-caption"><span>01 / МАРШРУТ</span><strong>Тропа костров</strong></div>
@@ -56,26 +84,6 @@ export function RoutePage({ progress, inWorkout, offlineReady, start, restart, c
         })}</ol>
         <div className="map-legend"><span className="signal"/> {completed} из 4 остановок пройдено</div>
       </section>
-      <section className="next-card">
-        <p className="eyebrow">{stop ? `ОСТАНОВКА 0${next + 1} / 04` : 'МАРШРУТ ЗАВЕРШЁН'}</p>
-        <span className="type-icon"><Icon name={stop?.icon ?? 'check'}/></span>
-        <h2>{stop?.title ?? 'Все костры горят'}</h2>
-        {stop ? <>
-          {!inWorkout && <>
-            <p className="session-type">{stop.icon === 'cardio' ? cardioTitles[cardioActivity(preferences.equipment)] : stop.type}</p>
-            <p className="session-detail">{workoutDetail(stop, false, preferences)} · {levels[preferences.level].title}</p>
-            <WorkoutSettings preferences={preferences} change={changePreferences}/>
-            <DayPreview key={next} stop={stop} preferences={preferences}/>
-          </>}
-          <div className="card-actions">
-            <button className="primary" onClick={() => start(false)}>{inWorkout ? 'Продолжить занятие' : 'Начать занятие'} <Icon name="arrow"/></button>
-            {!inWorkout && <button className="secondary" onClick={() => start(true)}>Короткий вариант</button>}
-          </div>
-        </> : <>
-          <p className="session-type">Четыре занятия в истории. Можно пройти тропу ещё раз.</p>
-          <div className="card-actions"><button className="primary" onClick={restart}>Новый круг <Icon name="arrow"/></button></div>
-        </>}
-      </section>
     </div>
     <footer className="foot">
       <span>{equipment.join(' · ') || 'Без инвентаря'}</span>
@@ -94,7 +102,7 @@ function DayPreview({ stop, preferences }: { stop: Stop; preferences: WorkoutPre
         const exercise = exercises[item.exercise];
         return <li key={item.exercise}><strong>{exercise.title}</strong><small>{item.target === 1 ? '1 подход' : `${item.target} подхода`} · {exercise.group}</small></li>;
       })}</ul>
-      <p className="hint">Ориентир для основной части — {timing.main} мин. В коротком варианте — первые два упражнения по одному подходу.</p>
+      <p className="hint">Ориентир для основной части — {timing.main} мин. В коротком варианте — первые {strengthPlan(stop, true, preferences).length} упражнения по одному подходу.</p>
     </> : <p className="hint">{cardioTitles[cardioActivity(preferences.equipment)]} · {timing.main} мин. Короткий вариант целиком · {workoutDetail(stop, true, preferences)}.</p>}
     {timing.cooldown > 0 && <p className="hint">Заминка · {timing.cooldown} мин</p>}
   </details>;

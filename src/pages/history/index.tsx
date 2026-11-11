@@ -20,6 +20,7 @@ export function HistoryPage({ sessions, stopIndex }: { sessions: Session[]; stop
         return <details className="history-row" key={`${entry.round}-${entry.stop}`} open={stop && index === 0 ? true : undefined}>
           <summary><span className="type-icon"><Icon name={entryStop.icon}/></span>
             <span><strong>{entryStop.title}</strong><small>{activity} · {entry.short ? 'Короткое занятие' : 'Обычное занятие'}
+              {entry.partial && ' · Досрочно'}
               {entry.durationSeconds !== undefined && ` · ${formatTime(entry.durationSeconds)}`}</small></span>
             <time dateTime={new Date(entry.date).toISOString()}>{dateFormat.format(entry.date)}</time>
           </summary>

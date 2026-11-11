@@ -1,6 +1,6 @@
 import type { CardioActivity, ExerciseId, WorkoutPreferences } from '../program/@x/progress';
 
-const key = 'tropa-workouts-v1';
+export const progressStorageKey = 'tropa-workouts-v1';
 
 export interface SetRecord {
   exercise: ExerciseId;
@@ -18,6 +18,7 @@ export interface Session {
   cardioActivity?: CardioActivity;
   durationSeconds?: number;
   skipped?: ExerciseId[];
+  partial?: boolean;
 }
 
 export interface Progress {
@@ -29,7 +30,7 @@ export interface Progress {
 
 export function readProgress(): Progress {
   try {
-    const saved = JSON.parse(localStorage.getItem(key) ?? 'null') as Progress | null;
+    const saved = JSON.parse(localStorage.getItem(progressStorageKey) ?? 'null') as Progress | null;
     if (saved?.version === 1 && Number.isInteger(saved.round) && Array.isArray(saved.sessions)) {
       return saved;
     }
@@ -41,7 +42,7 @@ export function readProgress(): Progress {
 
 export function saveProgress(progress: Progress) {
   try {
-    localStorage.setItem(key, JSON.stringify(progress));
+    localStorage.setItem(progressStorageKey, JSON.stringify(progress));
     return true;
   } catch {
     return false;

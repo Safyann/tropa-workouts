@@ -1,5 +1,5 @@
-const version = "626b8a365e2f4cee";
-const assets = ["assets/index-B-o43REp.js","assets/index-CIRDGwau.css","icon-192.png","icon-512.png","icon.svg","index.html","manifest.webmanifest","map.svg"];
+const version = "a73d6e5e7f7115a8";
+const assets = ["assets/index-CQKmkj0h.js","assets/index-bSGuXGMN.css","icon-192.png","icon-512.png","icon.svg","index.html","manifest.webmanifest","map.svg"];
 const scope = self.registration.scope;
 const prefix = `tropa-shell:${scope}:`;
 const cacheName = prefix + version;
@@ -9,6 +9,10 @@ const files = new Set(assets.map(path => new URL(path, scope).href));
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(cacheName).then(cache =>
     cache.addAll([...files].map(url => new Request(url, { cache: 'reload' })))));
+});
+
+self.addEventListener('message', event => {
+  if (event.data?.type === 'ACTIVATE_UPDATE') event.waitUntil(self.skipWaiting());
 });
 
 self.addEventListener('activate', event => {

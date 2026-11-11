@@ -2,7 +2,7 @@ import {
   cardioTitles,
   exercises,
   homeEquipment,
-  route,
+  programRoute,
   type ExerciseId,
 } from '../../entities/program';
 import { nextStop, routeLength, type Progress, type SetRecord } from '../../entities/progress';
@@ -63,9 +63,11 @@ function isSetRecord(value: unknown): value is SetRecord {
 }
 
 function isCurrentWorkoutDraft(draft: Workout, progress: Progress): boolean {
+  // Пока черновик открыт, другая вкладка может завершить остановку или начать новый круг.
   return (
     isCount(draft.index) &&
     draft.round === progress.round &&
+    draft.program === progress.preferences?.program &&
     draft.index === nextStop(progress, routeLength(progress, draft.index))
   );
 }
@@ -74,6 +76,7 @@ function isWorkoutDraft(value: unknown): value is Workout {
   if (
     !isRecord(value) ||
     !isCount(value.index) ||
+    (value.program !== undefined && value.program !== 'dumbbell') ||
     !isCount(value.round) ||
     !isCount(value.startedAt) ||
     !isCount(value.mainMinutes) ||
@@ -93,7 +96,7 @@ function isWorkoutDraft(value: unknown): value is Workout {
   )
     return false;
 
-  const stop = route[value.index];
+  const stop = programRoute(value.program)[value.index];
   if (stop?.icon === 'cardio') {
     return (
       value.kind === 'cardio' &&

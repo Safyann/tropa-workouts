@@ -2,11 +2,13 @@ import { useEffect, useRef, useState } from 'react';
 import {
   blockActivityLabel,
   cardioTitles,
-  route,
+  exercises,
+  programRoute,
   workoutBlockTitles,
 } from '../../entities/program';
 import type { Session } from '../../entities/progress';
 import {
+  extendRest,
   finishWarmup,
   isPending,
   playRestSound,
@@ -78,8 +80,11 @@ export function WorkoutPage({
     }
   }, [workout]);
 
-  const stop = route[workout.index];
+  const stop = programRoute(workout.program)[workout.index];
   const left = timer ? remaining(timer, now) : 0;
+  const nextSetIndex =
+    workout.kind === 'strength' ? (workout.selected ?? workout.plan.findIndex(isPending)) : -1;
+  const nextSet = workout.kind === 'strength' ? workout.plan[nextSetIndex] : undefined;
   const toggle = () => {
     if (!timer) return;
     if (soundForTimer) prepareRestSound();
@@ -159,12 +164,31 @@ export function WorkoutPage({
           <WorkoutPlan workout={workout} update={update} choose={choose} />
           {workout.timer ? (
             <div className={styles.step}>
+              {nextSet && (
+                <p className={styles.stepDescription}>
+                  Дальше · {exercises[nextSet.exercise].title} · подход {nextSet.completed + 1} из{' '}
+                  {nextSet.target}
+                </p>
+              )}
               {timerView('ОТДЫХ МЕЖДУ ПОДХОДАМИ')}
               <button
-                className={styles.stepAction}
-                onClick={() => choose(workout.selected ?? workout.plan.findIndex(isPending))}
+                className={`${ui.secondary} ${styles.extendRest}`}
+                type="button"
+                onClick={() => {
+                  if (soundForTimer) prepareRestSound();
+                  const timestamp = Date.now();
+                  setNow(timestamp);
+                  update(extendRest(workout, timestamp));
+                }}
               >
-                Следующий подход <Icon name="arrow" />
+                +15 сек
+              </button>
+              <button
+                className={styles.stepAction}
+                onClick={() => choose(nextSetIndex)}
+                disabled={!nextSet}
+              >
+                Начать подход <Icon name="arrow" />
               </button>
             </div>
           ) : workout.selected !== null ? (
@@ -178,6 +202,7 @@ export function WorkoutPage({
               finish={finishMain}
               headingRef={exerciseHeading}
               endLabel={endLabel}
+              targetReps={stop.icon === 'strength' ? stop.targetReps : undefined}
             />
           ) : (
             !workout.plan.some(isPending) && (

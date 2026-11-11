@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   createWorkout,
+  extendRest,
   finishWarmup,
   isLastSet,
   moveExercise,
@@ -19,6 +20,32 @@ import { estimatedCalories } from '../../entities/progress';
 afterEach(() => vi.useRealTimers());
 
 describe('workout', () => {
+  it('adds fifteen seconds to running and paused rest', () => {
+    const workout = createWorkout(0, 0, false);
+    if (workout.kind !== 'strength') throw new Error('Expected a strength workout');
+    const running = { ...workout, timer: { remaining: 60, end: 61_000 } };
+    expect(extendRest(running, 11_000).timer).toEqual({ remaining: 65, end: 76_000 });
+    const paused = { ...workout, timer: { remaining: 20, end: null } };
+    expect(extendRest(paused, 11_000).timer).toEqual({ remaining: 35, end: null });
+    expect(extendRest(running, 62_000).timer).toEqual({ remaining: 15, end: 77_000 });
+  });
+
+  it('creates the program plans with dumbbells and preserves the program in history', () => {
+    const preferences = {
+      ...defaultPreferences,
+      program: 'dumbbell',
+      equipment: ['dumbbells'],
+    } as const;
+    const workout = createWorkout(1, 3, false, preferences);
+    if (workout.kind !== 'strength') throw new Error('Expected a strength workout');
+    expect(workout.plan.map(({ exercise }) => exercise)).toEqual([
+      'gobletSquat',
+      'standingPress',
+      'singleFreeRow',
+      'gluteBridge',
+    ]);
+    expect(summarize(workout).program).toBe('dumbbell');
+  });
   it('plans both strength stops without equipment and rejects unavailable replacements', () => {
     const preferences = { ...defaultPreferences, equipment: [] };
     const workout = createWorkout(2, 0, true, preferences);

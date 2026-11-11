@@ -1,7 +1,10 @@
 export {
   availableExercisesByGroup,
   exerciseAlternatives,
+  dumbbellProgramTitle,
+  dumbbellWeeklyGoal,
   exercises,
+  programRoute,
   route,
   strengthSchedule,
   workoutDetail,
@@ -37,6 +40,7 @@ export type {
   HomeEquipment,
   TrainingWeekday,
   MuscleGroup,
+  ProgramId,
   WorkoutBlockActivity,
   WorkoutBlockType,
   WorkoutLevel,

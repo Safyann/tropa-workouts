@@ -33,7 +33,7 @@ const sourceEquipment = {
   'Weight Plate': 'weightPlate',
 };
 
-// The upstream "Machine" and "Other" entries cover incompatible kinds of equipment.
+// Категории Machine и Other в исходном каталоге объединяют разные виды инвентаря.
 const equipmentByExercise = {
   'ab-crunch-machine': 'abCrunchMachine',
   'atlas-stone-trainer': 'atlasStoneTrainer',

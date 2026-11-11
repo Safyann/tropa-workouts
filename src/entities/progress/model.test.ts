@@ -2,10 +2,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { route } from '../program/@x/progress';
 import {
   nextStop,
+  parseProgress,
   previousExerciseResult,
   progressStorageKey,
   readProgress,
   routeLength,
+  sessionIdentity,
   saveProgress,
   weekCount,
   type Session,
@@ -29,6 +31,23 @@ afterEach(() => {
 });
 
 describe('progress', () => {
+  it('keeps free entries separate from route stops and uses the selected program length', () => {
+    const progress = readProgress();
+    const free = { ...entry(0), freeId: '00000000-0000-4000-8000-000000000001' };
+    const planned = { ...entry(0), program: 'dumbbell' } as const;
+    const preferences = { level: 'beginner', minutes: 20, warmup: false, cooldown: false } as const;
+    const withFree = { ...progress, sessions: [free] };
+    expect(nextStop(withFree, routeLength(withFree))).toBe(0);
+    expect(parseProgress(JSON.stringify(withFree), true)?.sessions).toEqual([free]);
+    expect(sessionIdentity(free)).not.toBe(sessionIdentity(planned));
+    const dumbbell = {
+      ...withFree,
+      preferences: { ...preferences, program: 'dumbbell' as const },
+      sessions: [free, planned],
+    };
+    expect(routeLength(dumbbell)).toBe(8);
+    expect(nextStop(dumbbell, 8)).toBe(1);
+  });
   it('uses the latest session with recorded values for the exercise', () => {
     const first = { exercise: 'squat', weight: 10, reps: 8 } as const;
     const last = { exercise: 'squat', weight: 0, reps: 9 } as const;

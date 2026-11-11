@@ -193,6 +193,9 @@
   color: var(--muted);
   margin-top: 0.5rem;
 }
+.freeLink {
+  margin-top: 0.75rem;
+}
 .scheduleDate {
   margin-top: 0.625rem;
   font-size: 0.875rem;

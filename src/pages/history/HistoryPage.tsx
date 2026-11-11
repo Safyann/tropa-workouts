@@ -1,10 +1,18 @@
 import { useMemo, useRef, useState } from 'react';
-import { cardioTitles, exercises, route, type ExerciseId } from '../../entities/program';
+import {
+  cardioTitles,
+  exercises,
+  programRoute,
+  type ExerciseId,
+  type ProgramId,
+} from '../../entities/program';
 import {
   estimatedCalories,
   effortLabels,
   exerciseProgress,
   formatTime,
+  sessionIdentity,
+  sessionTitle,
   type PlannedWorkout,
   type Session,
 } from '../../entities/progress';
@@ -23,26 +31,34 @@ const noPlans: readonly PlannedWorkout[] = [];
 export function HistoryPage({
   sessions,
   stopIndex,
+  program,
   planned = noPlans,
 }: {
   sessions: Session[];
   stopIndex?: number;
+  program?: ProgramId;
   planned?: readonly PlannedWorkout[];
 }) {
   const [selectedExercise, setSelectedExercise] = useState<ExerciseId>();
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const progressHeading = useRef<HTMLHeadingElement>(null);
-  const stop = stopIndex === undefined ? undefined : route[stopIndex];
+  const stop = stopIndex === undefined ? undefined : programRoute(program)[stopIndex];
   const entries = useMemo(
     () =>
-      stopIndex === undefined ? sessions : sessions.filter((entry) => entry.stop === stopIndex),
-    [sessions, stopIndex],
+      stopIndex === undefined
+        ? sessions
+        : sessions.filter(
+            (entry) => !entry.freeId && entry.program === program && entry.stop === stopIndex,
+          ),
+    [sessions, stopIndex, program],
   );
   const entriesByExercise = useMemo(() => exerciseProgress(entries), [entries]);
   const visibleEntries =
     selectedDay === null ? entries : entries.filter(({ date }) => localDay(date) === selectedDay);
   const applicablePlans =
-    stopIndex === undefined ? planned : planned.filter(({ stop }) => stop === stopIndex);
+    stopIndex === undefined
+      ? planned
+      : planned.filter((entry) => entry.program === program && entry.stop === stopIndex);
   const selectedPlans = applicablePlans.filter(({ day }) => day === selectedDay);
   const selected =
     selectedExercise && entriesByExercise.has(selectedExercise)
@@ -102,9 +118,9 @@ export function HistoryPage({
             </button>
           </div>
         )}
-        {selectedPlans.map(({ stop }) => (
+        {selectedPlans.map(({ stop, program }) => (
           <p className={styles.plannedWorkout} key={stop}>
-            Запланировано · {route[stop].title}
+            Запланировано · {programRoute(program)[stop].title}
           </p>
         ))}
         {selectedDay !== null && visibleEntries.length === 0 && selectedPlans.length === 0 ? (
@@ -119,25 +135,35 @@ export function HistoryPage({
           </div>
         ) : (
           [...visibleEntries].reverse().map((entry, index) => {
-            const entryStop = route[entry.stop];
+            const entryStop = programRoute(entry.program)[entry.stop];
             const calories = estimatedCalories(entry);
             const activity = entry.cardioActivity
               ? cardioTitles[entry.cardioActivity]
               : entryStop.type;
+            const icon = entry.freeId
+              ? entry.elapsed === null
+                ? 'strength'
+                : 'cardio'
+              : entryStop.icon;
             return (
               <details
                 className={styles.historyRow}
-                key={`${entry.round}-${entry.stop}`}
+                key={sessionIdentity(entry)}
                 open={stop && index === 0 ? true : undefined}
               >
                 <summary>
                   <span className={ui.typeIcon}>
-                    <Icon name={entryStop.icon} />
+                    <Icon name={icon} />
                   </span>
                   <span>
-                    <strong>{entryStop.title}</strong>
+                    <strong>{sessionTitle(entry)}</strong>
                     <small>
-                      {activity} · {entry.short ? 'Короткое занятие' : 'Обычное занятие'}
+                      {activity} ·{' '}
+                      {entry.freeId
+                        ? 'Вне маршрута'
+                        : entry.short
+                          ? 'Короткое занятие'
+                          : 'Обычное занятие'}
                       {entry.partial && ' · Досрочно'}
                       {entry.durationSeconds !== undefined &&
                         ` · ${formatTime(entry.durationSeconds)}`}

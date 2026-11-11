@@ -1,5 +1,5 @@
 export type { ExerciseId } from '../model';
-export { route } from '../model';
+export { programRoute, route } from '../model';
 export {
   cardioTitles,
   defaultRouteWeeks,
@@ -13,4 +13,4 @@ export {
   trainingWeekdays,
   weeklyGoals,
 } from '../preferences';
-export type { CardioActivity, WorkoutPreferences } from '../preferences';
+export type { CardioActivity, ProgramId, WorkoutPreferences } from '../preferences';

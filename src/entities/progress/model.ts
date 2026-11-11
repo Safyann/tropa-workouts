@@ -7,12 +7,14 @@ import {
   isBodyWeight,
   levels,
   muscleGroups,
+  programRoute,
   route,
   routeWeeks,
   trainingWeekdays,
   weeklyGoals,
   type CardioActivity,
   type ExerciseId,
+  type ProgramId,
   type WorkoutPreferences,
 } from '../program/@x/progress';
 
@@ -29,6 +31,8 @@ export interface SetRecord {
 export interface Session {
   stop: number;
   round: number;
+  program?: ProgramId;
+  freeId?: string;
   date: number;
   short: boolean;
   sets: SetRecord[];
@@ -48,6 +52,20 @@ export interface Progress {
   sessions: Session[];
   preferences?: WorkoutPreferences;
   movedWorkout?: { round: number; stop: number; day: number };
+}
+
+export function isFreeSessionId(value: unknown): value is string {
+  return typeof value === 'string' && /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(value);
+}
+
+export function sessionIdentity(session: Session) {
+  // Свободным записям нужен отдельный ключ, чтобы они не занимали остановку маршрута.
+  return session.freeId ? `free/${session.freeId}` : `${session.round}/${session.stop + 1}`;
+}
+
+export function sessionTitle(session: Session) {
+  if (session.freeId) return session.elapsed === null ? 'Свободная тренировка' : 'Прогулка';
+  return programRoute(session.program)[session.stop].title;
 }
 
 export function previousExerciseResult(sessions: readonly Session[], exercise: ExerciseId) {
@@ -80,7 +98,7 @@ function isKeyOf<T extends object>(values: T, value: unknown): value is keyof T 
 }
 
 function isSetRecord(value: unknown): value is SetRecord {
-  // Keep old exercise IDs so that previous workouts still appear in history.
+  // Сохраняем старые идентификаторы упражнений, чтобы записи оставались доступны в истории.
   if (!isRecord(value) || typeof value.exercise !== 'string' || !value.exercise) return false;
   const { reps, weight } = value;
   return (
@@ -94,6 +112,8 @@ function readSession(value: unknown): Session | null {
   const {
     stop,
     round,
+    program,
+    freeId,
     date,
     short,
     sets,
@@ -108,7 +128,9 @@ function readSession(value: unknown): Session | null {
   } = value;
   if (
     !isCount(stop) ||
-    stop >= route.length ||
+    (program !== undefined && program !== 'dumbbell') ||
+    stop >= programRoute(program).length ||
+    (freeId !== undefined && !isFreeSessionId(freeId)) ||
     !isCount(round) ||
     !isTimestamp(date) ||
     typeof short !== 'boolean' ||
@@ -120,6 +142,8 @@ function readSession(value: unknown): Session | null {
   return {
     stop,
     round,
+    ...(program && { program }),
+    ...(freeId && { freeId }),
     date,
     short,
     sets: sets.filter(isSetRecord),
@@ -149,6 +173,7 @@ function readPreferences(value: unknown): WorkoutPreferences | undefined {
     cooldownActivity,
     weeklyGoal,
     routeWeeks: weeks,
+    program,
     schedule,
     restSound,
     bodyWeightKg,
@@ -174,6 +199,7 @@ function readPreferences(value: unknown): WorkoutPreferences | undefined {
     ...(isOneOf(['walking', 'stretching'] as const, cooldownActivity) && { cooldownActivity }),
     ...(isOneOf(weeklyGoals, weeklyGoal) && { weeklyGoal }),
     ...(isOneOf(routeWeeks, weeks) && { routeWeeks: weeks }),
+    ...(program === 'dumbbell' && { program }),
     ...(isRecord(schedule) &&
       isTimestamp(schedule.start) &&
       trainingDays.length > 0 && { schedule: { days: trainingDays, start: schedule.start } }),
@@ -202,7 +228,7 @@ export function parseProgress(data: string, strict = false): Progress | null {
       if (
         strict &&
         (sessions.length !== saved.sessions.length ||
-          new Set(sessions.map(({ round, stop }) => `${round}/${stop}`)).size !== sessions.length ||
+          new Set(sessions.map(sessionIdentity)).size !== sessions.length ||
           saved.sessions.some(
             (session) =>
               !isRecord(session) ||
@@ -251,12 +277,18 @@ export function saveProgress(progress: Progress) {
 }
 
 export function routeLength(progress: Progress, activeStop = -1) {
-  const { weeklyGoal = defaultWeeklyGoal, routeWeeks: weeks = defaultRouteWeeks } =
-    progress.preferences ?? {};
-  // A shorter plan still includes the stops already completed or started in this round.
+  const {
+    weeklyGoal = defaultWeeklyGoal,
+    routeWeeks: weeks = defaultRouteWeeks,
+    program,
+  } = progress.preferences ?? {};
+  if (program) return programRoute(program).length;
+  // При сокращении маршрута сохраняем завершённые и уже начатые остановки текущего круга.
   return progress.sessions.reduce(
     (length, session) =>
-      session.round === progress.round ? Math.max(length, session.stop + 1) : length,
+      !session.freeId && session.round === progress.round && !session.program
+        ? Math.max(length, session.stop + 1)
+        : length,
     Math.max(weeklyGoal * weeks, activeStop + 1),
   );
 }
@@ -264,7 +296,13 @@ export function routeLength(progress: Progress, activeStop = -1) {
 export function nextStop(progress: Progress, totalStops: number) {
   return Array.from({ length: totalStops }).findIndex(
     (_, index) =>
-      !progress.sessions.some((entry) => entry.round === progress.round && entry.stop === index),
+      !progress.sessions.some(
+        (entry) =>
+          !entry.freeId &&
+          entry.program === progress.preferences?.program &&
+          entry.round === progress.round &&
+          entry.stop === index,
+      ),
   );
 }
 

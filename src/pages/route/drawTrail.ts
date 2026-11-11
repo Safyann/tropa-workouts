@@ -55,6 +55,7 @@ export function drawTrail(canvas: HTMLCanvasElement, points: readonly TrailPoint
     const previous = trail[index - 1];
     const current = trail[index];
     const middle = (previous.x + current.x) / 2;
+    // Завершаем кривую в центре HTML-маркера, чтобы линия совпадала с остановками.
     context.bezierCurveTo(middle, previous.y, middle, current.y, current.x, current.y);
   }
   context.quadraticCurveTo(last.x + 14, last.y, last.x + 24, last.y - 14);

@@ -33,7 +33,7 @@ export default defineConfig(
     languageOptions: {
       globals: {
         ...globals.serviceworker,
-        // prepare-offline.mjs declares these in the generated service worker.
+        // Эти переменные добавляет prepare-offline.mjs при генерации сервис-воркера.
         assets: 'readonly',
         version: 'readonly',
       },

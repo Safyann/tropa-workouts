@@ -28,6 +28,7 @@ export function StrengthSet({
   headingRef,
   endLabel,
   restSound,
+  targetReps = 8,
 }: {
   workout: StrengthWorkout;
   history: Session[];
@@ -37,8 +38,10 @@ export function StrengthSet({
   headingRef: Ref<HTMLHeadingElement>;
   endLabel: string;
   restSound?: boolean;
+  targetReps?: number;
 }) {
   const weightInput = useRef<HTMLInputElement>(null);
+  const repsInput = useRef<HTMLInputElement>(null);
   const item = workout.plan[itemIndex];
   const id = item.exercise;
   const exercise = exercises[id];
@@ -48,8 +51,12 @@ export function StrengthSet({
   const previous = previousExerciseResult(history, id);
   const previousSets = previous?.sets ?? [];
   const previousWeight = [...previousSets].reverse().find((set) => set.weight !== null)?.weight;
+  const currentSets = workout.sets.filter((set) => set.exercise === id).reverse();
+  const repeat = currentSets.find(
+    ({ weight, reps }) => (canAddWeight && weight !== null) || reps !== null,
+  );
   const prior =
-    [...workout.sets].reverse().find((set) => set.exercise === id && set.weight !== null) ??
+    currentSets.find((set) => set.weight !== null) ??
     [...history]
       .reverse()
       .flatMap((entry) => [...entry.sets].reverse())
@@ -60,6 +67,13 @@ export function StrengthSet({
     if (!input) return;
     input.value = String(weight);
     input.focus();
+  }
+
+  function repeatSet() {
+    if (!repeat) return;
+    if (weightInput.current) weightInput.current.value = repeat.weight?.toString() ?? '';
+    if (repsInput.current) repsInput.current.value = repeat.reps?.toString() ?? '';
+    (weightInput.current ?? repsInput.current)?.focus();
   }
 
   function submit(event: FormEvent<HTMLFormElement>) {
@@ -141,17 +155,28 @@ export function StrengthSet({
             <label>
               Повторы{exercise.perSide ? ' на сторону' : ''}
               <input
+                ref={repsInput}
                 name="reps"
                 type="number"
                 inputMode="numeric"
                 min="1"
                 step="1"
-                placeholder="8"
+                placeholder={String(targetReps)}
               />
             </label>
           </div>
+          {repeat && (
+            <button
+              className={`${ui.secondary} ${styles.repeatSet}`}
+              type="button"
+              onClick={repeatSet}
+            >
+              Повторить подход · {formatSet(repeat)}
+            </button>
+          )}
           <p className={ui.hint}>
-            Ориентир — 8 повторов. Можно записать фактический результат или оставить поля пустыми.
+            Ориентир — {targetReps} повторов. Можно записать фактический результат или оставить поля
+            пустыми.
           </p>
           <button className={styles.stepAction} type="submit">
             {finalSet ? endLabel : 'Записать подход'} <Icon name="check" />

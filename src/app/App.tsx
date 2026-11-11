@@ -2,8 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import {
   defaultEquipment,
   defaultPreferences,
+  defaultWeeklyGoal,
+  dumbbellWeeklyGoal,
   route,
   type WorkoutPreferences,
+  type ProgramId,
 } from '../entities/program';
 import {
   nextStop,
@@ -14,6 +17,7 @@ import {
   readProgress,
   routeLength,
   saveProgress,
+  sessionIdentity,
   type Effort,
   type Progress,
   type Session,
@@ -35,6 +39,7 @@ import { RoadmapPage } from '../pages/roadmap';
 import { RoutePage } from '../pages/route';
 import { SettingsPage } from '../pages/settings';
 import { WorkoutPage } from '../pages/workout';
+import { FreeWorkoutPage } from '../pages/workout/FreeWorkoutPage';
 import { WorkoutResult } from '../pages/workout/WorkoutResult';
 import { resolveRoute } from './route';
 import { localDay } from '../shared/lib/calendarDates';
@@ -66,10 +71,12 @@ export function App() {
   const screenElement = useRef<HTMLElement>(null);
   const firstRender = useRef(true);
   const screen = resolveRoute(hash, workout, route.length);
-  const activeTab = screen.page === 'workout' || screen.page === 'result' ? 'map' : screen.page;
+  const activeTab = ['workout', 'result', 'free', 'free-result'].includes(screen.page)
+    ? 'map'
+    : screen.page;
   const screenKey =
     screen.page === 'history' && screen.stopIndex !== undefined
-      ? `history/${screen.stopIndex + 1}`
+      ? `history/${screen.program ?? 'home'}/${screen.stopIndex + 1}`
       : screen.page;
 
   useEffect(() => {
@@ -119,7 +126,7 @@ export function App() {
     setDraft({ workout: next, saveFailed: !saveWorkoutDraft(next) });
   }
 
-  function navigate(page: 'map' | 'workout' | `result/${number}/${number}`) {
+  function navigate(page: 'map' | 'workout' | `result/${string}`) {
     location.hash = page;
     setHash(location.hash);
   }
@@ -143,7 +150,7 @@ export function App() {
   function finish(completed: Workout) {
     const latest = latestProgress();
     const entry = summarize(completed, latest.preferences?.bodyWeightKg);
-    if (!latest.sessions.some((item) => item.stop === entry.stop && item.round === entry.round)) {
+    if (!latest.sessions.some((item) => sessionIdentity(item) === sessionIdentity(entry))) {
       const next = { ...latest, sessions: [...latest.sessions, entry] };
       if (!saveProgress(next)) {
         updateWorkout(completed);
@@ -158,15 +165,25 @@ export function App() {
     leaveWorkout(`result/${entry.round}/${entry.stop + 1}`);
   }
 
+  function saveFreeWorkout(session: Omit<Session, 'round'>) {
+    const latest = latestProgress();
+    const entry = { ...session, round: latest.round };
+    if (
+      !latest.sessions.some((item) => sessionIdentity(item) === sessionIdentity(entry)) &&
+      !storeProgress({ ...latest, sessions: [...latest.sessions, entry] }, true)
+    )
+      return false;
+    navigate(`result/${sessionIdentity(entry)}`);
+    return true;
+  }
+
   function saveResultWeight(session: Session, bodyWeightKg: number) {
     const latest = latestProgress();
     storeProgress({
       ...latest,
       preferences: { ...(latest.preferences ?? defaultPreferences), bodyWeightKg },
       sessions: latest.sessions.map((entry) =>
-        entry.round === session.round && entry.stop === session.stop
-          ? { ...entry, bodyWeightKg }
-          : entry,
+        sessionIdentity(entry) === sessionIdentity(session) ? { ...entry, bodyWeightKg } : entry,
       ),
     });
   }
@@ -176,7 +193,7 @@ export function App() {
     storeProgress({
       ...latest,
       sessions: latest.sessions.map((entry) =>
-        entry.round === session.round && entry.stop === session.stop ? { ...entry, effort } : entry,
+        sessionIdentity(entry) === sessionIdentity(session) ? { ...entry, effort } : entry,
       ),
     });
   }
@@ -185,7 +202,7 @@ export function App() {
     const latest = latestProgress();
     if (workout || nextStop(latest, routeLength(latest)) !== -1) return;
     const lastRound = latest.sessions.reduce(
-      (last, { round }) => Math.max(last, round),
+      (last, { round, freeId }) => (freeId ? last : Math.max(last, round)),
       latest.round,
     );
     const preferences = latest.preferences;
@@ -198,6 +215,28 @@ export function App() {
         preferences && schedule
           ? { ...preferences, schedule: { ...schedule, start: localDay(Date.now()) } }
           : preferences,
+    });
+  }
+
+  function chooseProgram(program: ProgramId | undefined) {
+    const latest = latestProgress();
+    if (workout || readWorkoutDraft(latest) || program === latest.preferences?.program) return;
+    const current = latest.preferences ?? defaultPreferences;
+    // При смене программы начинаем новый круг, сохраняя программу и ссылки завершённых занятий.
+    const goal = program ? dumbbellWeeklyGoal : (current.weeklyGoal ?? defaultWeeklyGoal);
+    const schedule =
+      current.schedule?.days.length === goal
+        ? { ...current.schedule, start: localDay(Date.now()) }
+        : undefined;
+    const lastRound = latest.sessions.reduce(
+      (last, { round, freeId }) => (freeId ? last : Math.max(last, round)),
+      latest.round,
+    );
+    storeProgress({
+      ...latest,
+      round: lastRound + 1,
+      movedWorkout: undefined,
+      preferences: { ...current, program, schedule },
     });
   }
 
@@ -254,16 +293,23 @@ export function App() {
           <HistoryPage
             sessions={progress.sessions}
             stopIndex={screen.stopIndex}
+            program={screen.program}
             planned={plannedWorkouts(progress, workout?.index)}
           />
         );
-      case 'result': {
-        const session = progress.sessions.find(
-          (entry) => entry.round === screen.round && entry.stop === screen.stopIndex,
+      case 'free':
+        return <FreeWorkoutPage save={saveFreeWorkout} />;
+      case 'result':
+      case 'free-result': {
+        const session = progress.sessions.find((entry) =>
+          screen.page === 'free-result'
+            ? entry.freeId === screen.freeId
+            : !entry.freeId && entry.round === screen.round && entry.stop === screen.stopIndex,
         );
         return session ? (
           <WorkoutResult
             session={session}
+            history={progress.sessions}
             saveWeight={(weight) => saveResultWeight(session, weight)}
             saveEffort={(effort) => saveResultEffort(session, effort)}
           />
@@ -297,6 +343,7 @@ export function App() {
             restart={restart}
             changePreferences={changePreferences}
             moveWorkout={moveWorkout}
+            chooseProgram={chooseProgram}
           />
         );
     }

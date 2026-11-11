@@ -49,6 +49,7 @@ const russianTerms: [RegExp, RegExp][] = [
 ];
 
 const searchableCatalog = kineticCatalog.map((exercise) => ({
+  // Нормализуем каталог заранее, чтобы при вводе запроса только фильтровать записи.
   exercise,
   text: normalizeSearchText(
     [

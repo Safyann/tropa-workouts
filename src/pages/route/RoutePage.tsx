@@ -3,12 +3,15 @@ import {
   cardioTitles,
   defaultPreferences,
   defaultWeeklyGoal,
+  dumbbellProgramTitle,
+  dumbbellWeeklyGoal,
   equipmentLabels,
   defaultEquipment,
   levels,
-  route,
+  programRoute,
   workoutDetail,
   type WorkoutPreferences,
+  type ProgramId,
 } from '../../entities/program';
 import {
   nextStop,
@@ -34,6 +37,7 @@ interface Props {
   restart: () => void;
   changePreferences: (preferences: WorkoutPreferences) => void;
   moveWorkout?: (day: number) => void;
+  chooseProgram?: (program: ProgramId | undefined) => void;
 }
 
 export function RoutePage({
@@ -44,19 +48,26 @@ export function RoutePage({
   restart,
   changePreferences,
   moveWorkout,
+  chooseProgram,
 }: Props) {
+  const preferences = progress.preferences ?? defaultPreferences;
+  const program = preferences.program;
+  const route = programRoute(program);
   const inWorkout = activeStop !== undefined;
   const totalStops = routeLength(progress, activeStop);
   const next = nextStop(progress, totalStops);
   const stop = route[next];
   const nextDate = plannedWorkouts(progress, activeStop)[0]?.day;
-  const completedStops = new Set(
-    progress.sessions.filter((session) => session.round === progress.round).map(({ stop }) => stop),
+  const routeSessions = progress.sessions.filter(
+    (session) => !session.freeId && session.program === program,
   );
-  const historyStops = new Set(progress.sessions.map(({ stop }) => stop));
+  const completedStops = new Set(
+    routeSessions.filter((session) => session.round === progress.round).map(({ stop }) => stop),
+  );
+  const historyStops = new Set(routeSessions.map(({ stop }) => stop));
   const count = weekCount(progress.sessions);
-  const preferences = progress.preferences ?? defaultPreferences;
-  const goal = preferences.weeklyGoal ?? defaultWeeklyGoal;
+  const goal = program ? dumbbellWeeklyGoal : (preferences.weeklyGoal ?? defaultWeeklyGoal);
+  const hasDumbbells = (preferences.equipment ?? defaultEquipment).includes('dumbbells');
   const equipment = (preferences.equipment ?? defaultEquipment).map(
     (item) => equipmentLabels[item],
   );
@@ -65,12 +76,18 @@ export function RoutePage({
       <div className={styles.intro}>
         <div>
           <p className={ui.eyebrow}>
-            <span className={styles.signal} /> ПРОГРАММА 01 / ДОМА
+            <span className={styles.signal} />{' '}
+            {program ? 'ПРОГРАММА 02 / ДОМА' : 'ПРОГРАММА 01 / ДОМА'}
           </p>
           <h1 tabIndex={-1}>
-            Войти в ритм<span>.</span>
+            {program ? dumbbellProgramTitle : 'Войти в ритм'}
+            <span>.</span>
           </h1>
-          <p className={ui.subtitle}>Чередуй силовые и кардио в своём темпе.</p>
+          <p className={ui.subtitle}>
+            {program
+              ? 'Две силовые в неделю. Чередуй тренировки А и Б.'
+              : 'Чередуй силовые и кардио в своём темпе.'}
+          </p>
         </div>
         <div className={styles.week}>
           <p className={styles.weekLabel}>ЦЕЛЬ НЕДЕЛИ</p>
@@ -114,7 +131,7 @@ export function RoutePage({
                   </p>
                 </>
               )}
-              {!inWorkout && stop.icon === 'strength' && (
+              {!program && !inWorkout && stop.icon === 'strength' && (
                 <MuscleGroupPicker preferences={preferences} change={changePreferences} />
               )}
               <div className={styles.cardActions}>
@@ -129,7 +146,7 @@ export function RoutePage({
               </div>
               {!inWorkout && (
                 <>
-                  {!progress.sessions.length && !preferences.equipment && (
+                  {!program && !progress.sessions.length && !preferences.equipment && (
                     <div className={styles.equipmentIntro}>
                       <p className={ui.hint}>Подбери план под свой домашний инвентарь.</p>
                       <a className={ui.secondary} href="#settings">
@@ -161,14 +178,46 @@ export function RoutePage({
               </div>
             </>
           )}
+          <a className={`${ui.secondary} ${styles.freeLink}`} href="#free">
+            Записать занятие вне маршрута
+          </a>
         </section>
         <RouteMap
+          program={program}
           next={next}
           totalStops={totalStops}
           completedStops={completedStops}
           historyStops={historyStops}
         />
       </div>
+      {chooseProgram && (
+        <section className={ui.panel}>
+          <h2>{program ? 'Стартовый маршрут «Войти в ритм»' : dumbbellProgramTitle}</h2>
+          <p className={ui.subtitle}>
+            {program
+              ? 'Гибкий круг с силовыми и кардио.'
+              : 'Восемь силовых тренировок. Понадобятся гантели и место для упражнений на полу.'}
+          </p>
+          <p className={ui.hint}>
+            Смена программы начинает новый круг. Пройденные занятия останутся в истории.
+          </p>
+          {inWorkout ? (
+            <p className={ui.hint}>Заверши начатое занятие, чтобы сменить программу.</p>
+          ) : !program && !hasDumbbells ? (
+            <a className={ui.secondary} href="#settings">
+              Отметить гантели в настройках
+            </a>
+          ) : (
+            <button
+              className={ui.secondary}
+              type="button"
+              onClick={() => chooseProgram(program ? undefined : 'dumbbell')}
+            >
+              {program ? 'Начать стартовый маршрут' : 'Начать программу с гантелями'}
+            </button>
+          )}
+        </section>
+      )}
       <footer className={ui.foot}>
         <span>{equipment.join(' · ') || 'Без инвентаря'}</span>
         <span>

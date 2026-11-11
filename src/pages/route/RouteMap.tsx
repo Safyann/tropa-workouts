@@ -1,21 +1,24 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
-import { route } from '../../entities/program';
+import { programRoute, type ProgramId } from '../../entities/program';
 import { Icon } from '../../shared/ui/Icon';
 import { drawTrail } from './drawTrail';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './Route.module.css';
 
 export function RouteMap({
+  program,
   next,
   totalStops,
   completedStops,
   historyStops,
 }: {
+  program?: ProgramId;
   next: number;
   totalStops: number;
   completedStops: ReadonlySet<number>;
   historyStops: ReadonlySet<number>;
 }) {
+  const route = programRoute(program);
   const track = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
   const [scrollable, setScrollable] = useState(false);
@@ -79,7 +82,7 @@ export function RouteMap({
                   {historyStops.has(index) ? (
                     <a
                       className={`${styles.markerDot} ${styles.markerLink}`}
-                      href={`#history/${index + 1}`}
+                      href={`#history/${program ? `${program}/` : ''}${index + 1}`}
                       aria-label={`История остановки «${stop.title}»`}
                       title="Открыть историю"
                     >

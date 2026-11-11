@@ -4,12 +4,13 @@ import {
   exerciseAlternatives,
   defaultEquipment,
   optionalBlockMinutes,
-  route,
+  programRoute,
   strengthSchedule,
   workoutTiming,
   type CardioActivity,
   type ExerciseId,
   type HomeEquipment,
+  type ProgramId,
   type WorkoutBlockActivity,
   type WorkoutBlockType,
 } from '../../entities/program';
@@ -22,6 +23,7 @@ interface Timer {
 
 interface WorkoutInfo {
   index: number;
+  program?: ProgramId;
   round: number;
   short: boolean;
   startedAt: number;
@@ -66,10 +68,11 @@ export function createWorkout(
   short: boolean,
   preferences = defaultPreferences,
 ): Workout {
-  const stop = route[index];
+  const stop = programRoute(preferences.program)[index];
   const timing = workoutTiming(stop, short, preferences);
   const info: WorkoutInfo = {
     index,
+    ...(preferences.program && { program: preferences.program }),
     round,
     short,
     startedAt: Date.now(),
@@ -147,6 +150,17 @@ export function finishWarmup(workout: Workout, now = Date.now()): Workout {
 export function toggleTimer(timer: Timer, now: number): Timer {
   const left = remaining(timer, now);
   return { remaining: left, end: timer.end === null && left > 0 ? now + left * 1000 : null };
+}
+
+export function extendRest(workout: StrengthWorkout, now = Date.now()): StrengthWorkout {
+  const { timer, block } = workout;
+  if (!timer || block) return workout;
+  const seconds = remaining(timer, now) + 15;
+  // Прибавка сохраняет паузу. Если запущенный таймер истёк, прибавка начинает новый отсчёт.
+  return {
+    ...workout,
+    timer: { remaining: seconds, end: timer.end === null ? null : now + seconds * 1000 },
+  };
 }
 
 export function isPending(item: PlanExercise) {
@@ -234,7 +248,7 @@ export function recordSet(
   };
 }
 
-// 2024 Adult Compendium codes 02048, 02054, 02101 and 17152.
+// Коды активностей из Adult Compendium 2024 года: 02048, 02054, 02101 и 17152.
 const activityMet = { elliptical: 5, strength: 3.5, stretching: 2.3, walking: 2.8 };
 const activeSetSeconds = 40;
 
@@ -269,6 +283,7 @@ export function summarize(workout: Workout, bodyWeightKg?: number): Session {
     date,
     stop: workout.index,
     round: workout.round,
+    ...(workout.program && { program: workout.program }),
     short: workout.short,
     durationSeconds,
     activeCaloriesPerKg: energy,

@@ -7,6 +7,7 @@ import {
   optionalBlockMinutes,
   type HomeEquipment,
   type MuscleGroup,
+  type ProgramId,
   type WorkoutPreferences,
 } from './preferences';
 import { kineticStrengthExercises, kineticVideo, type KineticExerciseId } from './kinetic';
@@ -403,7 +404,7 @@ interface StopInfo {
 
 export type Stop = StopInfo &
   (
-    | { icon: 'strength'; moves: ExerciseId[]; sets: number }
+    | { icon: 'strength'; moves: ExerciseId[]; sets: number; targetReps?: number }
     | { icon: 'cardio'; shortMinutes: number }
   );
 
@@ -461,6 +462,27 @@ export const route: Stop[] = [
   })),
 ];
 
+export const dumbbellProgramTitle = 'Четыре недели с домашними гантелями';
+export const dumbbellWeeklyGoal = 2;
+const dumbbellMoves: ExerciseId[][] = [
+  ['gobletSquat', 'floorPress', 'freeRow', 'rdl'],
+  ['gobletSquat', 'standingPress', 'singleFreeRow', 'gluteBridge'],
+];
+const dumbbellRoute: Stop[] = [8, 9, 10, 10].flatMap((targetReps, week) =>
+  dumbbellMoves.map((moves, index) => ({
+    title: `Неделя ${week + 1} · Силовая ${index === 0 ? 'А' : 'Б'}`,
+    type: 'Силовая',
+    icon: 'strength',
+    moves,
+    sets: 2,
+    targetReps,
+  })),
+);
+
+export function programRoute(program?: ProgramId): readonly Stop[] {
+  return program === 'dumbbell' ? dumbbellRoute : route;
+}
+
 const extendedMoves: ExerciseId[] = ['rdl', 'shoulderPress', 'deadBug'];
 const bodyweightMoves: ExerciseId[] = [
   'bodySquat',
@@ -507,8 +529,8 @@ function focusedStrengthSchedule(
 
   const budget = mainMinutes * 60;
   const usualRest = levels[preferences.level].rest;
-  // A full set estimate includes setup and logging. Use a quicker pace for short sessions
-  // or when the main block needs to fit at least one set for many selected groups.
+  // Оценка подхода учитывает подготовку и запись. Сокращённый темп позволяет уместить
+  // по подходу на каждую выбранную группу при небольшом бюджете времени.
   const minimumRestCount = groups.length - 1;
   const quickPace =
     short || groups.length * regularSetSeconds + minimumRestCount * usualRest > budget;
@@ -517,7 +539,7 @@ function focusedStrengthSchedule(
     minimumRestCount === 0
       ? usualRest
       : Math.min(usualRest, Math.floor((budget - groups.length * setSeconds) / minimumRestCount));
-  // The final set has no rest after it.
+  // После последнего подхода отдых не входит в оценку.
   const setBudget = Math.floor((budget + baseRest) / (setSeconds + baseRest));
   const exerciseBudget = short
     ? setBudget
@@ -539,7 +561,7 @@ function focusedStrengthSchedule(
   }
   const workSeconds = totalSets * setSeconds;
   const restCount = totalSets - 1;
-  // Spread a small remainder across rests without stretching a short plan with long pauses.
+  // Распределяем остаток времени между паузами и ограничиваем прибавку для короткого плана.
   const restSeconds =
     restCount > 0
       ? Math.min(baseRest + maxExtraRestSeconds, Math.floor((budget - workSeconds) / restCount))
@@ -554,6 +576,20 @@ export function strengthSchedule(
   preferences = defaultPreferences,
 ): StrengthSchedule {
   const { main } = workoutTiming(stop, short, preferences);
+  if (stop.targetReps !== undefined) {
+    const equipment = preferences.equipment ?? defaultEquipment;
+    const moves = stop.moves.flatMap((exercise) =>
+      hasEquipment(exercise, equipment) ? [exercise] : exerciseAlternatives(exercise, equipment, 1),
+    );
+    return {
+      plan: (short ? moves.slice(0, 2) : moves).map((exercise) => ({
+        exercise,
+        target: short ? 1 : stop.sets,
+      })),
+      restSeconds: levels[preferences.level].rest,
+      estimatedMainMinutes: null,
+    };
+  }
   const focused = focusedStrengthSchedule(main, short, preferences);
   if (focused) return focused;
 

@@ -2,6 +2,7 @@ import {
   defaultWeeklyGoal,
   defaultRouteWeeks,
   defaultEquipment,
+  dumbbellWeeklyGoal,
   levels,
   routeWeeks,
   weeklyGoals,
@@ -38,7 +39,9 @@ export function SettingsPage({
         Настройки профиля<span>.</span>
       </h1>
       <p className={ui.subtitle}>
-        Число занятий в неделю и длительность в неделях задают длину маршрута.
+        {preferences.program
+          ? 'В программе с гантелями две тренировки в неделю на протяжении четырёх недель.'
+          : 'Число занятий в неделю и длительность в неделях задают длину маршрута.'}
       </p>
       <div className={`${ui.panel} ${styles.profileSettings}`}>
         <div className={formStyles.fields}>
@@ -61,7 +64,8 @@ export function SettingsPage({
           <label>
             Недель в маршруте
             <select
-              value={preferences.routeWeeks ?? defaultRouteWeeks}
+              value={preferences.program ? 4 : (preferences.routeWeeks ?? defaultRouteWeeks)}
+              disabled={Boolean(preferences.program)}
               onChange={(event) => {
                 const weeks = routeWeeks.find((value) => String(value) === event.target.value);
                 if (weeks) change({ ...preferences, routeWeeks: weeks });
@@ -77,7 +81,12 @@ export function SettingsPage({
           <label>
             Занятий в неделю
             <select
-              value={preferences.weeklyGoal ?? defaultWeeklyGoal}
+              value={
+                preferences.program
+                  ? dumbbellWeeklyGoal
+                  : (preferences.weeklyGoal ?? defaultWeeklyGoal)
+              }
+              disabled={Boolean(preferences.program)}
               onChange={(event) => {
                 const weeklyGoal = weeklyGoals.find(
                   (value) => String(value) === event.target.value,

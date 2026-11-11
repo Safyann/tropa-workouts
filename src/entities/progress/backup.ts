@@ -1,7 +1,7 @@
 import type { Progress, Session } from './model';
 
-function sessionKey({ date, stop }: Session) {
-  return `${date}/${stop}`;
+function sessionKey({ date, stop, freeId, program }: Session) {
+  return freeId ? `free/${freeId}` : `${program ?? 'home'}/${date}/${stop}`;
 }
 
 export function mergeProgressBackup(current: Progress, backup: Progress): Progress {
@@ -21,6 +21,11 @@ export function mergeProgressBackup(current: Progress, backup: Progress): Progre
         sessions.set(key, { ...existing, effort: session.effort });
       continue;
     }
+    if (session.freeId) {
+      sessions.set(key, session);
+      continue;
+    }
+    // Отдельные номера импортированных кругов защищают текущий маршрут от случайного продвижения.
     let round = rounds.get(session.round);
     if (round === undefined) {
       round = ++lastRound;

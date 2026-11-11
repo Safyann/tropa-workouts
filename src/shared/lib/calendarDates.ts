@@ -9,6 +9,7 @@ export function monthStart(timestamp: number, offset = 0) {
 }
 
 export function addDays(timestamp: number, offset: number) {
+  // При переводе часов календарный день может длиться больше или меньше 24 часов.
   const date = new Date(timestamp);
   return new Date(date.getFullYear(), date.getMonth(), date.getDate() + offset).getTime();
 }

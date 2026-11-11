@@ -1,6 +1,11 @@
 import { Fragment, useState, type Ref } from 'react';
-import { exercises, route, type ExerciseId } from '../../entities/program';
-import { formatSet, type ExerciseProgressEntry } from '../../entities/progress';
+import { exercises, type ExerciseId } from '../../entities/program';
+import {
+  formatSet,
+  sessionIdentity,
+  sessionTitle,
+  type ExerciseProgressEntry,
+} from '../../entities/progress';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './ExerciseProgress.module.css';
 
@@ -72,7 +77,7 @@ export function ExerciseProgress({
         </thead>
         <tbody>
           {entries.map(({ session, weight, reps }) => {
-            const id = `sets-${session.round}-${session.stop}`;
+            const id = `sets-${sessionIdentity(session).replaceAll('/', '-')}`;
             const selection = `${selected}-${id}`;
             const expanded = expandedSession === selection;
             return (
@@ -96,7 +101,7 @@ export function ExerciseProgress({
                 </tr>
                 <tr id={id} hidden={!expanded} className={styles.setDetail}>
                   <td colSpan={1 + Number(showsWeight) + Number(showsReps)}>
-                    <strong>{route[session.stop].title} · Подходы</strong>
+                    <strong>{sessionTitle(session)} · Подходы</strong>
                     <ol>
                       {expanded &&
                         session.sets

@@ -1,4 +1,5 @@
 const scope = self.registration.scope;
+// Префикс включает область регистрации, чтобы приложения по разным путям не удаляли кэш друг друга.
 const prefix = `tropa-shell:${scope}:`;
 const cacheName = prefix + version;
 const shell = new URL('index.html', scope).href;

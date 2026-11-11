@@ -19,3 +19,15 @@ it('opens the public roadmap with or without an active workout', () => {
   expect(resolveRoute('#roadmap', null, 4)).toEqual({ page: 'roadmap' });
   expect(resolveRoute('#roadmap', createWorkout(0, 0, false), 4)).toEqual({ page: 'roadmap' });
 });
+
+it('opens free workout results and dumbbell stop history by their own links', () => {
+  const freeId = '00000000-0000-4000-8000-000000000001';
+  expect(resolveRoute('#free', null, 28)).toEqual({ page: 'free' });
+  expect(resolveRoute(`#result/free/${freeId}`, null, 28)).toEqual({ page: 'free-result', freeId });
+  expect(resolveRoute('#history/dumbbell/8', null, 28)).toEqual({
+    page: 'history',
+    program: 'dumbbell',
+    stopIndex: 7,
+  });
+  expect(resolveRoute('#history/dumbbell/9', null, 28)).toEqual({ page: 'map' });
+});

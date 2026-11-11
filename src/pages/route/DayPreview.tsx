@@ -27,6 +27,11 @@ export function DayPreview({ stop, preferences }: { stop: Stop; preferences: Wor
       )}
       {schedule ? (
         <>
+          {stop.icon === 'strength' && stop.targetReps !== undefined && (
+            <p className={ui.hint}>
+              Ориентир для этой тренировки — {stop.targetReps} повторов за подход.
+            </p>
+          )}
           <ul className={styles.previewPlan}>
             {schedule.plan.map((item) => {
               const exercise = exercises[item.exercise];

@@ -2,19 +2,23 @@ import {
   effortLabels,
   estimatedCalories,
   formatTime,
+  sessionTitle,
   type Effort,
   type Session,
 } from '../../entities/progress';
 import { BodyWeightForm } from '../../features/workout/BodyWeightForm';
+import { WorkoutComparison } from './WorkoutComparison';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './Workout.module.css';
 
 export function WorkoutResult({
   session,
+  history,
   saveWeight,
   saveEffort,
 }: {
   session: Session;
+  history: readonly Session[];
   saveWeight: (weight: number) => void;
   saveEffort: (effort: Effort | undefined) => void;
 }) {
@@ -25,6 +29,7 @@ export function WorkoutResult({
       <h1 tabIndex={-1}>
         Итоги занятия<span>.</span>
       </h1>
+      {session.freeId && <p className={ui.subtitle}>{sessionTitle(session)} · вне маршрута</p>}
       <div className={styles.step}>
         <p className={ui.eyebrow}>ВСЁ ЗАНЯТИЕ</p>
         {session.durationSeconds !== undefined ? (
@@ -51,6 +56,7 @@ export function WorkoutResult({
           </>
         )}
       </div>
+      <WorkoutComparison session={session} history={history} />
       <fieldset className={styles.effort}>
         <legend>Как далась тренировка?</legend>
         {(Object.keys(effortLabels) as Effort[]).map((effort) => (

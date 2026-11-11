@@ -6,7 +6,7 @@ export function prepareRestSound() {
     context ??= new AudioContext();
     if (context.state !== 'running') void context.resume().catch(() => {});
   } catch {
-    // The visual timer remains available when audio is blocked.
+    // Таймер продолжает работать, если браузер заблокировал звук.
   }
 }
 

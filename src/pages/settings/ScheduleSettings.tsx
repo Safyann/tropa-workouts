@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import {
   defaultWeeklyGoal,
+  dumbbellWeeklyGoal,
   trainingWeekdays,
   type TrainingWeekday,
   type WorkoutPreferences,
@@ -20,7 +21,9 @@ export function ScheduleSettings({
 }) {
   const savedDays = preferences.schedule?.days ?? [];
   const [days, setDays] = useState<readonly TrainingWeekday[]>(savedDays);
-  const goal = preferences.weeklyGoal ?? defaultWeeklyGoal;
+  const goal = preferences.program
+    ? dumbbellWeeklyGoal
+    : (preferences.weeklyGoal ?? defaultWeeklyGoal);
   const changed = days.length !== savedDays.length || days.some((day) => !savedDays.includes(day));
 
   function toggle(day: TrainingWeekday) {

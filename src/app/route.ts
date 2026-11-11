@@ -1,12 +1,16 @@
 import type { Workout } from '../features/workout';
+import { isFreeSessionId } from '../entities/progress';
+import { programRoute, type ProgramId } from '../entities/program';
 
 export type AppRoute =
-  | { page: 'map' | 'catalog' | 'roadmap' | 'settings' }
+  | { page: 'map' | 'catalog' | 'roadmap' | 'settings' | 'free' }
   | { page: 'workout'; workout: Workout }
   | { page: 'result'; round: number; stopIndex: number }
-  | { page: 'history'; stopIndex?: number };
+  | { page: 'free-result'; freeId: string }
+  | { page: 'history'; stopIndex?: number; program?: ProgramId };
 
 export function resolveRoute(hash: string, workout: Workout | null, stopCount: number): AppRoute {
+  // Ссылки с хешем работают в подкаталоге GitHub Pages без серверных перенаправлений.
   const path = hash.slice(1);
   switch (path) {
     case 'workout':
@@ -14,8 +18,14 @@ export function resolveRoute(hash: string, workout: Workout | null, stopCount: n
     case 'catalog':
     case 'roadmap':
     case 'settings':
+    case 'free':
     case 'history':
       return { page: path };
+  }
+
+  if (path.startsWith('result/free/')) {
+    const freeId = path.slice('result/free/'.length);
+    if (isFreeSessionId(freeId)) return { page: 'free-result', freeId };
   }
 
   const result = /^result\/(\d+)\/(\d+)$/.exec(path);
@@ -27,10 +37,12 @@ export function resolveRoute(hash: string, workout: Workout | null, stopCount: n
     }
   }
 
-  const historyMatch = /^history\/(\d+)$/.exec(path);
+  const historyMatch = /^history\/(?:(dumbbell)\/)?(\d+)$/.exec(path);
   if (historyMatch) {
-    const stopIndex = Number(historyMatch[1]) - 1;
-    if (stopIndex >= 0 && stopIndex < stopCount) return { page: 'history', stopIndex };
+    const program = historyMatch[1] === 'dumbbell' ? 'dumbbell' : undefined;
+    const stopIndex = Number(historyMatch[2]) - 1;
+    if (stopIndex >= 0 && stopIndex < (program ? programRoute(program).length : stopCount))
+      return { page: 'history', stopIndex, ...(program && { program }) };
   }
   return { page: 'map' };
 }

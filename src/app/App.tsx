@@ -61,7 +61,7 @@ const navigation = [
   ['map', 'Карта'],
   ['history', 'История'],
   ['catalog', 'Упражнения'],
-  ['roadmap', 'Дорожная карта'],
+  ['roadmap', 'Планы'],
 ] as const;
 
 export function App() {

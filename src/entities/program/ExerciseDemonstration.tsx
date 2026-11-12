@@ -5,10 +5,12 @@ import styles from './ExerciseDemonstration.module.css';
 export function ExerciseDemonstration({
   title,
   demo,
+  videoUrl,
   autoPlay = false,
 }: {
   title: string;
   demo: string | undefined;
+  videoUrl?: string;
   autoPlay?: boolean;
 }) {
   const [playing, setPlaying] = useState(
@@ -16,16 +18,16 @@ export function ExerciseDemonstration({
   );
 
   if (!demo) {
-    const query = encodeURIComponent(`${title} техника выполнения на русском`);
+    if (!videoUrl) return null;
     return (
       <a
-        className={styles.videoSearch}
-        href={`https://yandex.ru/video/search?text=${query}`}
+        className={styles.videoLink}
+        href={videoUrl}
         target="_blank"
         rel="noreferrer"
-        aria-label={`Найти видео техники упражнения «${title}» в Яндексе`}
+        aria-label={`Смотреть технику упражнения «${title}» на YouTube`}
       >
-        Найти видео техники в Яндексе ↗
+        Смотреть на YouTube ↗
       </a>
     );
   }

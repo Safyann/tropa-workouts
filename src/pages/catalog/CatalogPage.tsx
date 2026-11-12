@@ -93,7 +93,11 @@ export function CatalogPage({ equipment }: { equipment: readonly HomeEquipment[]
                 <strong>{item.title}</strong>
                 <small>{[...item.groups, item.gear].join(' · ')}</small>
               </div>
-              <ExerciseDemonstration title={item.title} demo={item.demonstration} />
+              <ExerciseDemonstration
+                title={item.title}
+                demo={item.demonstration}
+                videoUrl={item.videoUrl}
+              />
               {item.hasCues && <CatalogTechnique id={item.id} />}
             </li>
           ))}

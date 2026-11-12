@@ -21,6 +21,7 @@ export interface Exercise {
   perSide?: boolean;
   cues: readonly string[] | KineticExerciseId;
   demonstration?: string;
+  videoUrl?: string;
 }
 
 type RouteExerciseId =

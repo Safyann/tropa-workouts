@@ -181,7 +181,11 @@ export function StrengthSet({
         </form>
         <details className={styles.workoutDetails}>
           <summary>Техника выполнения</summary>
-          <ExerciseDemonstration title={exercise.title} demo={exerciseDemonstration(id)} />
+          <ExerciseDemonstration
+            title={exercise.title}
+            demo={exerciseDemonstration(id)}
+            videoUrl={exercise.videoUrl}
+          />
           <ExerciseInstructions source={exercise.cues} className={styles.cues} />
         </details>
       </div>

@@ -22,7 +22,7 @@
 .demo button:focus-visible {
   outline-color: var(--ember);
 }
-.videoSearch {
+.videoLink {
   display: inline-block;
   justify-self: start;
   color: var(--muted);

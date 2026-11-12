@@ -178,6 +178,7 @@ export function FreeWorkoutPage({
                   key={`demo-${selected}`}
                   title={exercise.title}
                   demo={exerciseDemonstration(selected)}
+                  videoUrl={exercise.videoUrl}
                 />
               )}
               <div className={styles.fields} key={selected}>

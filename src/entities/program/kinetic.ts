@@ -93,7 +93,7 @@ const demonstrations: Partial<Record<string, string>> = {
 };
 
 export const kineticCatalog = catalog.map((item) => {
-  const { title, hasCues } = item;
+  const { title, hasCues, videoId } = item;
   const needs = item.needs as HomeEquipment[] | null;
   const groups = item.muscles.flatMap((muscle) => groupsByMuscle[muscle] ?? []);
   return {
@@ -109,6 +109,10 @@ export const kineticCatalog = catalog.map((item) => {
     needs,
     hasCues,
     demonstration: demonstrations[item.slug],
+    videoUrl:
+      videoId && /^[\w-]{11}$/.test(videoId)
+        ? `https://www.youtube.com/watch?v=${videoId}`
+        : undefined,
     strength: item.strength,
     difficulty: item.difficulty,
   };
@@ -148,6 +152,7 @@ export const kineticStrengthExercises = kineticCatalog.flatMap((item) => {
       weighted: item.needs.some((equipment) => weightedEquipment.includes(equipment)),
       cues: item.id,
       demonstration: item.demonstration,
+      videoUrl: item.videoUrl,
       difficulty: item.difficulty,
     } satisfies Exercise & { id: KineticExerciseId; difficulty: string | null },
   ];

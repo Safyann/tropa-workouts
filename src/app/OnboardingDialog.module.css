@@ -1,0 +1,95 @@
+.dialog {
+  composes: surface from '../shared/ui/Common.module.css';
+  width: min(100% - 2rem, 32rem);
+  max-height: calc(100% - 2rem);
+  padding: 0;
+  color: var(--ink);
+  box-shadow: 0 1rem 4rem var(--drag-shadow);
+  overscroll-behavior: contain;
+}
+
+.dialog::backdrop {
+  background: rgb(17 28 21 / 65%);
+}
+
+.scene {
+  display: grid;
+  min-height: clamp(6rem, 24vw, 9rem);
+  place-items: center;
+  background: var(--scene-background) url('/map.svg') center 57% / cover;
+}
+
+.marker {
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  aspect-ratio: 1;
+  border: 2px solid var(--ember);
+  border-radius: 50%;
+  background: var(--scene-background);
+  color: var(--ember);
+}
+
+.marker svg {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+.content {
+  padding: clamp(1rem, 4vw, 1.5rem);
+}
+
+.progress {
+  display: flex;
+  gap: 0.375rem;
+  margin-bottom: 1rem;
+}
+
+.progress span {
+  flex: 1;
+  height: 0.25rem;
+  border-radius: 0.25rem;
+  background: var(--border);
+}
+
+.progress .filled {
+  background: var(--forest);
+}
+
+.step {
+  composes: eyebrow from '../shared/ui/Common.module.css';
+  display: block;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.title:focus {
+  outline: none;
+}
+
+.description {
+  composes: subtitle from '../shared/ui/Common.module.css';
+  margin-top: 0.625rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+.skip {
+  margin-inline-end: auto;
+  min-height: 2.875rem;
+  padding: 0 0.25rem;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.875rem;
+  font-weight: 650;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}

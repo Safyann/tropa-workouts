@@ -2,6 +2,7 @@ import { defaultEquipment, type WorkoutPreferences } from '../../entities/progra
 import type { Progress } from '../../entities/progress';
 import type { ThemePreference } from '../../shared/lib/theme';
 import { BackLink, ButtonLink } from '../../shared/ui/NavigationLinks';
+import { Button } from '../../shared/ui/Controls';
 import { PageTitle } from '../../shared/ui/PageTitle';
 import { BackupSettings } from './BackupSettings';
 import { EquipmentPicker } from './EquipmentPicker';
@@ -20,6 +21,7 @@ export function SettingsPage({
   change,
   progress,
   restore,
+  openOnboarding,
 }: {
   section?: SettingsSection;
   theme: ThemePreference;
@@ -28,6 +30,7 @@ export function SettingsPage({
   change: (preferences: WorkoutPreferences) => void;
   progress: Progress;
   restore: (contents: string) => string;
+  openOnboarding: () => void;
 }) {
   function renderSection() {
     switch (section) {
@@ -64,6 +67,11 @@ export function SettingsPage({
                   </ButtonLink>
                 </li>
               ))}
+              <li>
+                <Button className={styles.settingsLink} onClick={openOnboarding}>
+                  Знакомство с «Тропой»
+                </Button>
+              </li>
             </ul>
           </nav>
         );

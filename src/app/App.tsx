@@ -31,6 +31,7 @@ import {
 import {
   createWorkout,
   prepareRestSound,
+  readFreeStrengthDraft,
   readWorkoutDraft,
   saveWorkoutDraft,
   summarize,
@@ -47,6 +48,8 @@ import { SettingsPage } from '../pages/settings';
 import { WorkoutPage } from '../pages/workout';
 import { FreeWorkoutPage } from '../pages/workout/FreeWorkoutPage';
 import { WorkoutResult } from '../pages/workout/WorkoutResult';
+import { OnboardingDialog } from './OnboardingDialog';
+import { dismissOnboarding, hasDismissedOnboarding } from './onboardingStorage';
 import { resolveRoute } from './route';
 import { Button } from '../shared/ui/Controls';
 import { localDay } from '../shared/lib/calendarDates';
@@ -81,6 +84,17 @@ export function App() {
   const screenElement = useRef<HTMLElement>(null);
   const firstRender = useRef(true);
   const screen = resolveRoute(hash, workout, route.length);
+  const [onboarding, setOnboarding] = useState<'first-run' | 'replay' | null>(() => {
+    if (
+      screen.page !== 'map' ||
+      hasDismissedOnboarding() ||
+      workout ||
+      readSavedProgress() ||
+      readFreeStrengthDraft()
+    )
+      return null;
+    return 'first-run';
+  });
   const activeTab = ['workout', 'result', 'free', 'free-result'].includes(screen.page)
     ? 'map'
     : screen.page;
@@ -441,6 +455,7 @@ export function App() {
             change={changePreferences}
             progress={progress}
             restore={restoreBackup}
+            openOnboarding={() => setOnboarding('replay')}
           />
         );
       case 'map':
@@ -500,6 +515,17 @@ export function App() {
           {renderScreen()}
         </div>
       </main>
+      {((onboarding === 'first-run' && screen.page === 'map') || onboarding === 'replay') && (
+        <OnboardingDialog
+          onDismiss={() => {
+            dismissOnboarding();
+            setOnboarding(null);
+            if (onboarding === 'first-run') {
+              screenElement.current?.querySelector('h1')?.focus({ preventScroll: true });
+            }
+          }}
+        />
+      )}
     </>
   );
 }

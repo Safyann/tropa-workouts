@@ -20,6 +20,7 @@ export type { PlanExercise, StrengthWorkout, Workout } from './model';
 export { stretchingPlan } from './stretching';
 export { playRestSound, prepareRestSound } from './restSound';
 export {
+  readFreeStrengthDraft,
   readWorkoutDraft,
   saveWorkoutDraft,
   syncWorkoutDraft,

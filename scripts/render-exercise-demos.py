@@ -1,4 +1,5 @@
 """Render the local exercise demonstrations. Run with Python and Pillow."""
+from argparse import ArgumentParser
 from math import cos, pi
 from pathlib import Path
 
@@ -31,6 +32,11 @@ def adjust(joints, **changes):
 
 def rep(start, end):
     return (start, end, start)
+
+
+def swap_sides(joints):
+    head, shoulder, hip, elbow, hand, knee, ankle, far_elbow, far_hand, far_knee, far_ankle = joints
+    return (head, shoulder, hip, far_elbow, far_hand, far_knee, far_ankle, elbow, hand, knee, ankle)
 
 
 stand = pose(118, 35, 116, 52, 114, 91, 120, 75, 121, 94, 120, 115, 117, 139)
@@ -99,6 +105,8 @@ RING_ANCHOR = (((79, 5), (162, 5)),)
 CABLE_TOWER = (((186, 29), (186, 142)), ((178, 30), (186, 30)))
 DIP_BARS = (((72, 90), (135, 90)), ((96, 96), (162, 96)), ((83, 90), (83, 142)),
             ((151, 96), (151, 142)))
+STEP_BOX = (((143, 143), (143, 105), (189, 105), (189, 143)),)
+CALF_BOARD = (((119, 143), (119, 135), (144, 135), (144, 143)),)
 
 elliptical_start = pose(122, 33, 118, 50, 109, 88, 139, 70, 160, 62, 132, 106, 138, 125,
                         134, 66, 148, 52, 101, 108, 84, 134)
@@ -142,6 +150,44 @@ plank_hold = adjust(plank_kneeling, hip=(100, 120), knee=(75, 125), ankle=(48, 1
                     far_knee=(69, 123), far_ankle=(45, 132))
 lateral_raise = pose(119, 34, 119, 51, 119, 91, 143, 72, 151, 92, 130, 115, 133, 139,
                      96, 72, 88, 92, 107, 115, 105, 139)
+
+split_landing = pose(115, 53, 113, 69, 108, 104, 131, 84, 141, 71, 143, 116, 143, 139,
+                     94, 83, 81, 96, 84, 130, 70, 131)
+split_jump = pose(115, 25, 114, 41, 110, 76, 117, 59, 118, 80, 126, 97, 129, 123,
+                  105, 59, 102, 78, 100, 99, 91, 122)
+rear_lunge = pose(124, 56, 121, 71, 117, 105, 123, 89, 124, 108, 142, 116, 121, 139,
+                  114, 88, 113, 107, 93, 132, 76, 133)
+forward_lunge = pose(133, 56, 130, 72, 125, 107, 113, 90, 119, 73, 154, 115, 153, 139,
+                      144, 89, 139, 72, 114, 133, 116, 135)
+front_rack = adjust(stand, elbow=(145, 56), hand=(126, 51),
+                    far_elbow=(140, 58), far_hand=(118, 50))
+front_squat_low = adjust(squat, elbow=(150, 79), hand=(130, 74),
+                         far_elbow=(144, 81), far_hand=(122, 73))
+good_morning_low = adjust(hinge_end, elbow=(120, 87), hand=(131, 77),
+                          far_elbow=(151, 86), far_hand=(140, 78))
+crunch_start = pose(63, 129, 83, 135, 129, 136, 97, 123, 72, 127, 148, 105, 171, 139,
+                    93, 119, 69, 125, 141, 103, 164, 138)
+crunch_end = adjust(crunch_start, head=(87, 96), shoulder=(99, 111), elbow=(115, 100),
+                    hand=(95, 94), far_elbow=(111, 95), far_hand=(90, 91))
+superman_start = pose(152, 125, 139, 134, 99, 136, 162, 136, 186, 139, 73, 136, 50, 136,
+                      158, 131, 182, 134, 69, 131, 46, 131)
+superman_top = adjust(superman_start, head=(157, 104), shoulder=(140, 117),
+                      elbow=(163, 112), hand=(186, 108), far_elbow=(159, 108),
+                      far_hand=(183, 104), knee=(75, 126), ankle=(51, 117),
+                      far_knee=(71, 121), far_ankle=(47, 112))
+single_bridge = adjust(bridge, far_knee=(108, 102), far_ankle=(133, 93))
+single_bridge_top = adjust(single_bridge, hip=(125, 105), far_knee=(104, 71), far_ankle=(130, 65))
+climber_left = adjust(floor_push, knee=(122, 124), ankle=(98, 137))
+climber_right = adjust(floor_push, far_knee=(116, 119), far_ankle=(93, 133))
+concentration_curl = pose(126, 52, 114, 68, 94, 100, 129, 103, 118, 128, 135, 108, 144, 139,
+                          105, 89, 112, 110, 114, 112, 111, 139)
+step_up_start = adjust(stand, knee=(132, 103), ankle=(154, 101))
+step_up_top = pose(159, 3, 156, 20, 151, 56, 158, 42, 159, 65, 155, 80, 154, 101,
+                   151, 40, 152, 63, 148, 79, 148, 100)
+calf_raise_start = adjust(stand, knee=(116, 114), far_knee=(110, 112), far_ankle=(110, 137))
+calf_raise_top = adjust(calf_raise_start, head=(118, 25), shoulder=(116, 42), hip=(114, 81),
+                        elbow=(120, 65), hand=(121, 84), far_elbow=(113, 63), far_hand=(114, 82),
+                        knee=(117, 104), far_knee=(111, 102), ankle=(117, 129), far_ankle=(110, 127))
 
 # Motion, fixed equipment paths and hands holding weights.
 DEMOS = {
@@ -245,6 +291,26 @@ DEMOS = {
     "sideBend": (rep(adjust(stand, elbow=(126, 31), hand=(133, 14)),
                      adjust(stand, head=(104, 42), shoulder=(107, 57), elbow=(111, 33),
                             hand=(100, 15), far_elbow=(103, 79), far_hand=(103, 97))), (), ()),
+    "splitSquatJump": ((split_landing, split_jump, swap_sides(split_landing),
+                        swap_sides(split_jump), split_landing), (), ()),
+    "dumbbellRearLunge": ((stand, rear_lunge, stand, swap_sides(rear_lunge), stand), (), (4, 8)),
+    "barbellForwardLunge": (rep(squat_bar, forward_lunge), (), "barbell"),
+    "cleanGripFrontSquat": (rep(front_rack, front_squat_low), (), "barbell"),
+    "goodMorning": (rep(squat_bar, good_morning_low), (), "barbell"),
+    "standingDumbbellCalfRaise": (rep(calf_raise_start, calf_raise_top), CALF_BOARD, (4, 8)),
+    "abdominalCrunch": (rep(crunch_start, crunch_end), (), ()),
+    "superman": ((superman_start, superman_top, superman_top, superman_start), (), ()),
+    "singleLegBridge": (rep(single_bridge, single_bridge_top), (), ()),
+    "mountainClimber": ((climber_left, floor_push, climber_right, floor_push, climber_left), (), ()),
+    "concentrationCurl": (rep(concentration_curl, adjust(concentration_curl, hand=(121, 78))),
+                          SEAT, (4,)),
+    "dumbbellShrug": (rep(stand, adjust(stand, shoulder=(116, 43), elbow=(120, 66),
+                                       hand=(121, 85), far_elbow=(113, 64), far_hand=(114, 83))),
+                      (), (4, 8)),
+    "alternatingFrontRaise": ((stand, adjust(stand, elbow=(141, 51), hand=(164, 47)),
+                               stand, adjust(stand, far_elbow=(138, 49), far_hand=(160, 45)),
+                               stand), (), (4, 8)),
+    "dumbbellStepUp": ((stand, step_up_start, step_up_top, step_up_start, stand), STEP_BOX, (4, 8)),
 }
 
 def framing(motion, equipment):
@@ -298,6 +364,8 @@ def render(joints, equipment, weights, frame):
         knee_x, _ = joints[knee]
         ankle_x, ankle_y = joints[ankle]
         toe_y = 141 if equipment != RING_ANCHOR and 126 <= ankle_y <= 141 else ankle_y + 2
+        if equipment == CALF_BOARD:
+            toe_y = 134
         toe_x = ankle_x + (9 if knee_x >= ankle_x - 3 else -9)
         line(((ankle_x, ankle_y), (toe_x, toe_y)), color, 4)
     for indices, color in (
@@ -345,6 +413,12 @@ def save_demo(name, motion, equipment, weights):
 
 
 if __name__ == "__main__":
+    parser = ArgumentParser(description=__doc__)
+    parser.add_argument("demos", nargs="*", metavar="NAME", help="Render only the named demos.")
+    names = parser.parse_args().demos
+    unknown = sorted(set(names) - DEMOS.keys())
+    if unknown:
+        parser.error(f"Unknown demonstrations: {', '.join(unknown)}")
     OUT.mkdir(parents=True, exist_ok=True)
-    for name, (motion, equipment, weights) in DEMOS.items():
-        save_demo(name, motion, equipment, weights)
+    for name in names or DEMOS:
+        save_demo(name, *DEMOS[name])

@@ -90,6 +90,20 @@ const demonstrations: Partial<Record<string, string>> = {
   'dumbbell-shoulder-press': 'shoulderPress',
   'standing-dumbbell-press': 'standingPress',
   'dead-bug': 'deadBug',
+  'split-squats': 'splitSquatJump',
+  'dumbbell-rear-lunge': 'dumbbellRearLunge',
+  'barbell-lunge': 'barbellForwardLunge',
+  'front-squat-clean-grip': 'cleanGripFrontSquat',
+  'good-morning': 'goodMorning',
+  'standing-dumbbell-calf-raise': 'standingDumbbellCalfRaise',
+  crunches: 'abdominalCrunch',
+  superman: 'superman',
+  'single-leg-glute-bridge': 'singleLegBridge',
+  'mountain-climbers': 'mountainClimber',
+  'concentration-curls': 'concentrationCurl',
+  'dumbbell-shrug': 'dumbbellShrug',
+  'front-dumbbell-raise': 'alternatingFrontRaise',
+  'dumbbell-step-ups': 'dumbbellStepUp',
 };
 
 export const kineticCatalog = catalog.map((item) => {

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
-import { exercises } from '../../entities/program';
+import { ExerciseDemonstration, exerciseDemonstration, exercises } from '../../entities/program';
 import {
   formatSet,
   type Session,
@@ -124,6 +124,7 @@ export function FreeWorkoutPage({
                 saveWorkout(minutes);
             }}
           >
+            <ExerciseDemonstration title="Ходьба" demo="walk" />
             <label>
               Длительность, мин
               <Input type="number" inputMode="numeric" name="minutes" min="1" max="1440" required />
@@ -172,6 +173,13 @@ export function FreeWorkoutPage({
             )}
             <form className={styles.freeFields} onSubmit={addSet}>
               <ExercisePicker choice={choice} />
+              {selected && exercise && (
+                <ExerciseDemonstration
+                  key={selected}
+                  title={exercise.title}
+                  demo={exerciseDemonstration(selected)}
+                />
+              )}
               <div className={styles.fields} key={selected}>
                 <SetFields exercise={exercise} />
               </div>

@@ -7,12 +7,6 @@
 .cues li + li {
   margin-top: 0.25rem;
 }
-.reference {
-  display: inline-block;
-  color: var(--muted);
-  font-size: 0.8125rem;
-  margin-bottom: 1rem;
-}
 .previousResult {
   display: flex;
   flex-wrap: wrap;

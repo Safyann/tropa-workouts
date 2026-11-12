@@ -1,0 +1,30 @@
+.demo {
+  display: grid;
+  justify-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem 0.625rem;
+  border-radius: 0.625rem;
+  background: var(--scene-background);
+}
+.demo img {
+  display: block;
+  width: min(100%, 20rem);
+  height: auto;
+}
+.demo button {
+  color: #fff7e9;
+  background: #364e3d;
+  border: 1px solid #7a907c;
+  border-radius: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8125rem;
+}
+.demo button:focus-visible {
+  outline-color: var(--ember);
+}
+.videoSearch {
+  display: inline-block;
+  justify-self: start;
+  color: var(--muted);
+  font-size: 0.875rem;
+}

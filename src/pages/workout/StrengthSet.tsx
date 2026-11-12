@@ -1,5 +1,10 @@
 import { useRef, type FormEvent, type Ref } from 'react';
-import { ExerciseInstructions, exercises } from '../../entities/program';
+import {
+  ExerciseDemonstration,
+  ExerciseInstructions,
+  exerciseDemonstration,
+  exercises,
+} from '../../entities/program';
 import {
   effortLabels,
   exerciseNote,
@@ -20,7 +25,6 @@ import {
 import { readSetFields, SetFields } from '../../features/workout/SetFields';
 import { Button, Select } from '../../shared/ui/Controls';
 import { Icon } from '../../shared/ui/Icon';
-import { Demonstration } from './Demonstration';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './Workout.module.css';
 
@@ -104,23 +108,8 @@ export function StrengthSet({
         <h2 tabIndex={-1} ref={headingRef}>
           {exercise.title}
         </h2>
-        <Demonstration exercise={exercise} />
+        <ExerciseDemonstration title={exercise.title} demo={exerciseDemonstration(id)} autoPlay />
         <ExerciseInstructions source={exercise.cues} className={styles.cues} />
-        {exercise.video && (
-          <a className={styles.reference} href={exercise.video} target="_blank" rel="noreferrer">
-            Видео техники на YouTube ↗
-          </a>
-        )}
-        {exercise.reference && (
-          <a
-            className={styles.reference}
-            href={exercise.reference}
-            target="_blank"
-            rel="noreferrer"
-          >
-            Техника подробно ↗
-          </a>
-        )}
         <form onSubmit={submit}>
           {(previousSets.length > 0 || previousNote) && (
             <div className={styles.previousResult}>

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import {
   blockActivityLabel,
   cardioTitles,
+  ExerciseDemonstration,
   exercises,
   programRoute,
   workoutBlockTitles,
@@ -129,6 +130,9 @@ export function WorkoutPage({
             {blockActivityLabel(workout.block.type, blockActivity)}
             {blockActivity === 'walking' && `. ${walkingInstructions[workout.block.type]}`}
           </p>
+          {blockActivity === 'walking' && (
+            <ExerciseDemonstration title="Лёгкая ходьба" demo="walk" />
+          )}
           {blockActivity === 'stretching' && (
             <StretchingInstructions workout={workout} type={workout.block.type} />
           )}
@@ -148,6 +152,10 @@ export function WorkoutPage({
             {cardioTitles[workout.activity]} · {workout.mainMinutes} мин
           </p>
           <div className={styles.step}>
+            <ExerciseDemonstration
+              title={cardioTitles[workout.activity]}
+              demo={workout.activity === 'walking' ? 'walk' : 'elliptical'}
+            />
             {timerView('ТАЙМЕР ЗАНЯТИЯ')}
             <Button
               variant="primary"

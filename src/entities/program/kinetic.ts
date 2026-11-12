@@ -65,8 +65,22 @@ const gearLabels: Record<string, string> = {
   'Weight Plate': 'Диск для штанги',
 };
 
+const demonstrations: Partial<Record<string, string>> = {
+  'bodyweight-squat': 'bodySquat',
+  'goblet-squat': 'gobletSquat',
+  'dumbbell-bench-press': 'press',
+  'dumbbell-floor-press': 'floorPress',
+  pushups: 'pushup',
+  'bent-over-two-dumbbell-row': 'freeRow',
+  'dumbbell-romanian-extension': 'rdl',
+  'butt-lift-bridge': 'gluteBridge',
+  'dumbbell-shoulder-press': 'shoulderPress',
+  'standing-dumbbell-press': 'standingPress',
+  'dead-bug': 'deadBug',
+};
+
 export const kineticCatalog = catalog.map((item) => {
-  const { title, hasCues, videoId } = item;
+  const { title, hasCues } = item;
   const needs = item.needs as HomeEquipment[] | null;
   const groups = item.muscles.flatMap((muscle) => groupsByMuscle[muscle] ?? []);
   return {
@@ -81,10 +95,7 @@ export const kineticCatalog = catalog.map((item) => {
         'Инвентарь не указан',
     needs,
     hasCues,
-    video:
-      videoId && /^[\w-]{11}$/.test(videoId)
-        ? `https://www.youtube.com/watch?v=${videoId}`
-        : undefined,
+    demonstration: demonstrations[item.slug],
     strength: item.strength,
     difficulty: item.difficulty,
   };
@@ -95,10 +106,6 @@ const usedEquipment = new Set<HomeEquipment>([
   ...kineticCatalog.flatMap(({ needs }) => needs ?? []),
 ]);
 export const selectableEquipment = homeEquipment.filter((item) => usedEquipment.has(item));
-
-export function kineticVideo(slug: string) {
-  return kineticCatalog.find((exercise) => exercise.slug === slug)?.video;
-}
 
 export async function loadKineticCues(id: KineticExerciseId): Promise<readonly string[]> {
   const { default: cues } = await import('./kinetic.cues.ru.json');
@@ -127,7 +134,7 @@ export const kineticStrengthExercises = kineticCatalog.flatMap((item) => {
       needs: item.needs,
       weighted: item.needs.some((equipment) => weightedEquipment.includes(equipment)),
       cues: item.id,
-      video: item.video,
+      demonstration: item.demonstration,
       difficulty: item.difficulty,
     } satisfies Exercise & { id: KineticExerciseId; difficulty: string | null },
   ];

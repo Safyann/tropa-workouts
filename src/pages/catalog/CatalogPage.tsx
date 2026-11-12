@@ -1,7 +1,11 @@
 import { useState } from 'react';
-import { muscleGroups, searchKineticExercises, type HomeEquipment } from '../../entities/program';
+import {
+  ExerciseDemonstration,
+  muscleGroups,
+  searchKineticExercises,
+  type HomeEquipment,
+} from '../../entities/program';
 import { CatalogTechnique } from './CatalogTechnique';
-import { ButtonLink } from '../../shared/ui/NavigationLinks';
 import { PageTitle } from '../../shared/ui/PageTitle';
 import { Button, Checkbox, Input, Select } from '../../shared/ui/Controls';
 import ui from '../../shared/ui/Common.module.css';
@@ -72,16 +76,7 @@ export function CatalogPage({ equipment }: { equipment: readonly HomeEquipment[]
                 <strong>{item.title}</strong>
                 <small>{[...item.groups, item.gear].join(' · ')}</small>
               </div>
-              {item.video && (
-                <ButtonLink
-                  href={item.video}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label={`Видео техники: ${item.title}`}
-                >
-                  Видео ↗
-                </ButtonLink>
-              )}
+              <ExerciseDemonstration title={item.title} demo={item.demonstration} />
               {item.hasCues && <CatalogTechnique id={item.id} />}
             </li>
           ))}

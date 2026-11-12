@@ -1,6 +1,7 @@
 export {
   availableExercisesByGroup,
   exerciseAlternatives,
+  exerciseDemonstration,
   dumbbellProgramTitle,
   dumbbellWeeklyGoal,
   exercises,
@@ -46,3 +47,4 @@ export type {
   WorkoutLevel,
   WorkoutPreferences,
 } from './preferences';
+export { ExerciseDemonstration } from './ExerciseDemonstration';

@@ -10,10 +10,7 @@ import {
   type ProgramId,
   type WorkoutPreferences,
 } from './preferences';
-import { kineticStrengthExercises, kineticVideo, type KineticExerciseId } from './kinetic';
-
-type Point = [number, number];
-type Pose = Point[];
+import { kineticStrengthExercises, type KineticExerciseId } from './kinetic';
 
 export interface Exercise {
   title: string;
@@ -23,11 +20,7 @@ export interface Exercise {
   weighted: boolean;
   perSide?: boolean;
   cues: readonly string[] | KineticExerciseId;
-  equipment?: string;
-  poses?: [Pose, Pose];
-  video?: string;
-  support?: string;
-  reference?: string;
+  demonstration?: string;
 }
 
 type RouteExerciseId =
@@ -58,33 +51,9 @@ const routeExercises: Record<RouteExerciseId, Exercise> = {
     group: 'Ноги и ягодицы',
     gear: 'Скамья · гантель по желанию',
     weighted: true,
-    reference: 'https://www.nhs.uk/live-well/exercise/strength-exercises/',
     cues: [
       'Встань перед устойчивой скамьёй. Стопы полностью на полу.',
       'Отведи таз назад, слегка коснись скамьи и встань. Можно начать без веса.',
-    ],
-    equipment: 'M49 103h54m-46 0v36m38-36v36',
-    poses: [
-      [
-        [118, 33],
-        [116, 51],
-        [115, 83],
-        [123, 111],
-        [125, 137],
-        [122, 62],
-        [118, 73],
-        [115, 73],
-      ],
-      [
-        [132, 56],
-        [123, 73],
-        [103, 102],
-        [130, 109],
-        [125, 137],
-        [127, 84],
-        [135, 89],
-        [132, 88],
-      ],
     ],
   },
   press: {
@@ -93,34 +62,9 @@ const routeExercises: Record<RouteExerciseId, Exercise> = {
     group: 'Грудь и трицепсы',
     gear: 'Скамья · гантели',
     weighted: true,
-    reference:
-      'https://www.mayoclinic.org/healthy-lifestyle/fitness/multimedia/chest-press/vid-20084677',
     cues: [
       'Ляг на устойчивую скамью и поставь стопы на пол.',
       'Поднимай гантели над грудью. Опускай их плавно, сохраняя контроль.',
-    ],
-    equipment: 'M49 101h110m-100 0v38m89-38v38',
-    poses: [
-      [
-        [65, 83],
-        [80, 90],
-        [142, 92],
-        [159, 112],
-        [170, 137],
-        [96, 93],
-        [119, 103],
-        [119, 82],
-      ],
-      [
-        [65, 83],
-        [80, 90],
-        [142, 92],
-        [159, 112],
-        [170, 137],
-        [103, 82],
-        [107, 58],
-        [107, 40],
-      ],
     ],
   },
   row: {
@@ -130,67 +74,35 @@ const routeExercises: Record<RouteExerciseId, Exercise> = {
     gear: 'Скамья · гантель',
     weighted: true,
     perSide: true,
-    reference: 'https://www.acefitness.org/resources/everyone/exercise-library/126/single-arm-row/',
     cues: [
       'Обопрись свободной рукой на устойчивую скамью. Держи корпус неподвижно.',
       'Веди локоть к поясу, затем плавно опускай гантель. Повтори другой рукой.',
     ],
-    equipment: 'M140 105h56m-50 0v34m43-34v34',
-    poses: [
-      [
-        [146, 43],
-        [131, 56],
-        [90, 78],
-        [83, 110],
-        [80, 137],
-        [131, 72],
-        [129, 99],
-        [129, 125],
-      ],
-      [
-        [146, 43],
-        [131, 56],
-        [90, 78],
-        [83, 110],
-        [80, 137],
-        [129, 67],
-        [100, 62],
-        [101, 88],
-      ],
-    ],
-    support: 'M130 61l24 22 9 20',
   },
   bodySquat: {
     title: 'Присед без скамьи',
     group: 'Ноги и ягодицы',
     gear: 'Без инвентаря',
     weighted: false,
-    reference:
-      'https://www.acefitness.org/resources/everyone/exercise-library/135/bodyweight-squat/',
     cues: [
       'Упрись всей стопой в пол и отведи таз назад.',
       'Плавно опустись на удобную глубину, затем выпрямись.',
     ],
   },
   gobletSquat: {
-    video: kineticVideo('goblet-squat'),
     needs: ['dumbbells'],
     title: 'Присед с гантелью у груди',
     group: 'Ноги и ягодицы',
     gear: 'Одна гантель',
     weighted: true,
-    reference: 'https://www.acefitness.org/resources/everyone/exercise-library/362/goblet-squat/',
     cues: ['Держи гантель двумя руками перед грудью.', 'Опускайся плавно и держи стопы на полу.'],
   },
   floorPress: {
-    video: kineticVideo('dumbbell-floor-press'),
     needs: ['dumbbells'],
     title: 'Жим гантелей на полу',
     group: 'Грудь и трицепсы',
     gear: 'Гантели',
     weighted: true,
-    reference:
-      'https://www.mayoclinic.org/healthy-lifestyle/fitness/multimedia/chest-press/vid-20084677',
     cues: [
       'Ляг на спину, согни колени и поставь стопы на пол.',
       'Плавно опускай гантели, пока верхняя часть рук мягко не коснётся пола.',
@@ -201,26 +113,22 @@ const routeExercises: Record<RouteExerciseId, Exercise> = {
     group: 'Грудь и трицепсы',
     gear: 'Устойчивая стена',
     weighted: false,
-    reference: 'https://www.nhs.uk/live-well/exercise/strength-exercises/',
     cues: [
       'Поставь ладони на стену примерно на уровне груди.',
       'Согни руки и приблизь корпус к стене, затем плавно оттолкнись.',
     ],
   },
   pushup: {
-    video: kineticVideo('pushups'),
     title: 'Отжимания от пола',
     group: 'Грудь и трицепсы',
     gear: 'Без инвентаря',
     weighted: false,
-    reference: 'https://www.acefitness.org/resources/everyone/exercise-library/41/push-up/',
     cues: [
       'Упрись ладонями в пол и удерживай корпус ровно.',
       'Плавно согни руки, затем оттолкнись от пола.',
     ],
   },
   freeRow: {
-    video: kineticVideo('bent-over-two-dumbbell-row'),
     needs: ['dumbbells'],
     title: 'Тяга двух гантелей в наклоне',
     group: 'Спина',
@@ -248,15 +156,12 @@ const routeExercises: Record<RouteExerciseId, Exercise> = {
     group: 'Спина',
     gear: 'Без инвентаря',
     weighted: false,
-    reference:
-      'https://www.acefitness.org/resources/everyone/exercise-library/249/prone-scapular-shoulder-stabilization-series-i-y-t-w-o-formation/',
     cues: [
       'Ляг на живот и согни руки так, чтобы они образовали букву W.',
       'Слегка приподними руки, мягко сведи лопатки и плавно опусти руки.',
     ],
   },
   rdl: {
-    video: kineticVideo('dumbbell-romanian-extension'),
     needs: ['dumbbells'],
     title: 'Румынская тяга с гантелями',
     group: 'Задняя поверхность бедра и ягодицы',
@@ -268,7 +173,6 @@ const routeExercises: Record<RouteExerciseId, Exercise> = {
     ],
   },
   gluteBridge: {
-    video: kineticVideo('butt-lift-bridge'),
     title: 'Ягодичный мост на полу',
     group: 'Задняя поверхность бедра и ягодицы',
     gear: 'Без инвентаря',
@@ -279,7 +183,6 @@ const routeExercises: Record<RouteExerciseId, Exercise> = {
     ],
   },
   shoulderPress: {
-    video: kineticVideo('dumbbell-shoulder-press'),
     needs: ['dumbbells'],
     title: 'Жим гантелей сидя',
     group: 'Плечи',
@@ -302,7 +205,6 @@ const routeExercises: Record<RouteExerciseId, Exercise> = {
     ],
   },
   deadBug: {
-    video: kineticVideo('dead-bug'),
     title: 'Мёртвый жук',
     group: 'Мышцы корпуса',
     gear: 'Без инвентаря',
@@ -319,7 +221,6 @@ const routeExercises: Record<RouteExerciseId, Exercise> = {
     gear: 'Без инвентаря',
     weighted: false,
     perSide: true,
-    reference: 'https://www.acefitness.org/resources/everyone/exercise-library/14/bird-dog/',
     cues: [
       'Встань на четвереньки, ладони под плечами, колени под тазом.',
       'Плавно вытяни противоположные руку и ногу, затем вернись и поменяй стороны.',
@@ -331,6 +232,10 @@ const routeExerciseIds = Object.keys(routeExercises) as RouteExerciseId[];
 const kineticById = Object.fromEntries(kineticStrengthExercises.map((item) => [item.id, item]));
 
 export const exercises: Record<ExerciseId, Exercise> = { ...routeExercises, ...kineticById };
+
+export function exerciseDemonstration(id: ExerciseId) {
+  return Object.hasOwn(routeExercises, id) ? id : exercises[id].demonstration;
+}
 
 function hasEquipment(id: ExerciseId, equipment: readonly HomeEquipment[]) {
   return exercises[id].needs?.every((item) => equipment.includes(item)) ?? true;

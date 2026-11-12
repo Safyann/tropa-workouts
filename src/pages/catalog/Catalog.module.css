@@ -31,7 +31,6 @@
   composes: surface from '../../shared/ui/Common.module.css';
   padding: 0.75rem;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 0.5rem;
 }
@@ -40,7 +39,6 @@
   display: block;
 }
 .catalogTechnique {
-  grid-column: 1 / -1;
   font-size: 0.875rem;
 }
 .catalogTechnique summary {

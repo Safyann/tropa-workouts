@@ -44,10 +44,10 @@
 .primary {
   background: var(--forest);
   border: 1px solid var(--forest);
-  color: #fffdf3;
+  color: var(--on-forest);
 }
 .primary:hover {
-  background: #385843;
+  background: var(--forest-hover);
 }
 .secondary {
   background: transparent;

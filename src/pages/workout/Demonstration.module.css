@@ -2,7 +2,7 @@
   position: relative;
   display: grid;
   place-items: center;
-  background: var(--forest);
+  background: var(--scene-background);
   border-radius: 0.625rem;
   margin-top: 0.75rem;
   min-height: 10rem;

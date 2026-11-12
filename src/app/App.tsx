@@ -51,6 +51,7 @@ import { resolveRoute } from './route';
 import { Button } from '../shared/ui/Controls';
 import { localDay } from '../shared/lib/calendarDates';
 import { useAppUpdate } from './useAppUpdate';
+import { useTheme } from './useTheme';
 import './styles/global.css';
 import ui from '../shared/ui/Common.module.css';
 import styles from './App.module.css';
@@ -63,6 +64,7 @@ const navigation = [
 ] as const;
 
 export function App() {
+  const { theme, changeTheme } = useTheme();
   const [hash, setHash] = useState(() => location.hash);
   const [progress, setProgress] = useState(readProgress);
   const [draft, setDraft] = useState<WorkoutDraftState>(() => ({
@@ -424,6 +426,8 @@ export function App() {
       case 'settings':
         return (
           <SettingsPage
+            theme={theme}
+            changeTheme={changeTheme}
             preferences={progress.preferences ?? defaultPreferences}
             change={changePreferences}
             progress={progress}

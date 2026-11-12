@@ -13,7 +13,7 @@
   gap: 0.375rem;
 }
 .stepper input {
-  background: #fffdf7;
+  background: var(--input-surface);
   font-size: 1rem;
 }
 .stepper button {

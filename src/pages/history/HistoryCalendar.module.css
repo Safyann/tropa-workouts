@@ -79,7 +79,7 @@
   content: '';
 }
 .workoutDay[data-completed][aria-pressed='true']::after {
-  background: var(--ember);
+  background: var(--selected-day-marker);
 }
 .workoutDay[data-planned]::before,
 .plannedDot {

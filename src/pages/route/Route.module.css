@@ -54,7 +54,7 @@
   margin: 0;
 }
 .map {
-  background: var(--forest);
+  background: var(--scene-background);
   color: #f4f1df;
   border-radius: 1rem;
   min-width: 0;

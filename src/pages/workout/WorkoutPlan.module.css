@@ -8,13 +8,13 @@
   padding: 0.5rem 0.75rem;
 }
 .planItem[data-selected] {
-  border-color: #8ea58b;
-  background: #e8ecdd;
+  border-color: var(--selected-border);
+  background: var(--selected-surface);
 }
 .planItem[data-dragging] {
   position: relative;
   z-index: 1;
-  box-shadow: 0 0.25rem 1rem #263d3033;
+  box-shadow: 0 0.25rem 1rem var(--drag-shadow);
 }
 .planLine {
   display: flex;

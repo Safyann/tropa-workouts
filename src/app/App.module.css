@@ -43,8 +43,8 @@
   color: var(--ink);
 }
 .notice {
-  color: #783a16;
-  background: #f8e5cd;
+  color: var(--notice-ink);
+  background: var(--notice-surface);
   padding: 0.75rem;
   margin-bottom: 1rem;
   border-radius: 0.5rem;

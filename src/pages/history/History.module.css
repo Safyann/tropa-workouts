@@ -1,3 +1,10 @@
+.calendarDetails {
+  composes: panel from '../../shared/ui/Common.module.css';
+}
+.calendarDetails > summary {
+  cursor: pointer;
+  font-weight: 700;
+}
 .historyList {
   display: grid;
   gap: 0.625rem;

@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   cardioTitles,
   exercises,
@@ -54,6 +54,11 @@ export function HistoryPage({
   const [selectedExercise, setSelectedExercise] = useState<ExerciseId>();
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const progressHeading = useRef<HTMLHeadingElement>(null);
+  const calendar = useRef<HTMLDetailsElement>(null);
+  const dateHeading = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    if (selectedDay !== null) dateHeading.current?.focus();
+  }, [selectedDay]);
   const stop = stopIndex === undefined ? undefined : programRoute(program)[stopIndex];
   const entries = useMemo(
     () =>
@@ -65,8 +70,9 @@ export function HistoryPage({
     [sessions, stopIndex, program],
   );
   const entriesByExercise = useMemo(() => exerciseProgress(entries), [entries]);
-  const visibleEntries =
-    selectedDay === null ? entries : entries.filter(({ date }) => localDay(date) === selectedDay);
+  const visibleEntries = entries
+    .filter(({ date }) => selectedDay === null || localDay(date) === selectedDay)
+    .sort((first, second) => second.date - first.date);
   const applicablePlans =
     stopIndex === undefined
       ? planned
@@ -107,22 +113,30 @@ export function HistoryPage({
       <p className={ui.subtitle}>
         {stop ? `Занятий на этой остановке: ${entries.length}` : 'Занятия, которые ты прошёл.'}
       </p>
-      <HistoryCalendar
-        sessions={entries}
-        planned={applicablePlans}
-        selectedDay={selectedDay}
-        selectDay={setSelectedDay}
-      />
-      {selectedDay === null && progressView}
+      <details className={styles.calendarDetails} ref={calendar}>
+        <summary>Календарь тренировок</summary>
+        <HistoryCalendar
+          sessions={entries}
+          planned={applicablePlans}
+          selectedDay={selectedDay}
+          selectDay={(day) => {
+            setSelectedDay(day);
+            if (day !== null && calendar.current) calendar.current.open = false;
+          }}
+        />
+      </details>
       <div id="history-sessions" className={styles.historyList}>
         {selectedDay !== null && (
           <div className={styles.dayFilter}>
-            <h2 aria-live="polite">Занятия за {selectedDateFormat.format(selectedDay)}</h2>
+            <h2 ref={dateHeading} tabIndex={-1}>
+              Занятия за {selectedDateFormat.format(selectedDay)}
+            </h2>
             <Button type="button" onClick={() => setSelectedDay(null)}>
               Все занятия
             </Button>
           </div>
         )}
+        {selectedDay === null && visibleEntries.length > 0 && <h2>Последние занятия</h2>}
         {selectedPlans.map(({ stop, program }) => (
           <p className={styles.plannedWorkout} key={stop}>
             Запланировано · {programRoute(program)[stop].title}
@@ -137,7 +151,7 @@ export function HistoryPage({
             <ButtonLink href="#map">К карте</ButtonLink>
           </div>
         ) : (
-          [...visibleEntries].reverse().map((entry, index) => {
+          visibleEntries.map((entry, index) => {
             const entryStop = programRoute(entry.program)[entry.stop];
             const calories = estimatedCalories(entry);
             const activity = entry.cardioActivity
@@ -271,7 +285,7 @@ export function HistoryPage({
           })
         )}
       </div>
-      {selectedDay !== null && progressView}
+      {progressView}
     </section>
   );
 }

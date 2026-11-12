@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
 import type { PlannedWorkout, Session } from '../../entities/progress';
 import { Button } from '../../shared/ui/Controls';
-import ui from '../../shared/ui/Common.module.css';
 import { calendarWeeks, localDay, monthStart } from '../../shared/lib/calendarDates';
 import styles from './HistoryCalendar.module.css';
 
@@ -55,8 +54,7 @@ export function HistoryCalendar({
   }
 
   return (
-    <section className={ui.panel} aria-labelledby="history-calendar-heading">
-      <h2 id="history-calendar-heading">Календарь тренировок</h2>
+    <>
       <div className={styles.toolbar}>
         <Button type="button" aria-label="Предыдущий месяц" onClick={() => changeMonth(-1)}>
           ←
@@ -134,6 +132,6 @@ export function HistoryCalendar({
         )}
         {!hasWorkouts && !hasPlanned && <p className={styles.legend}>В этом месяце занятий нет.</p>}
       </div>
-    </section>
+    </>
   );
 }

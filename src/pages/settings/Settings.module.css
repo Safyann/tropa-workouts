@@ -1,4 +1,15 @@
-.profileSettings .levelGuide {
+.settingsMenu {
+  display: grid;
+  gap: 0.5rem;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.settingsLink {
+  width: 100%;
+  justify-content: flex-start;
+}
+.workoutSettings .levelGuide {
   margin-top: 1rem;
 }
 .homeEquipment {

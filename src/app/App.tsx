@@ -89,10 +89,12 @@ export function App() {
     const next = navigation[tabIndex + offset];
     if (next) location.hash = next[0];
   });
-  const screenKey =
+  const historyScreenKey =
     screen.page === 'history' && screen.stopIndex !== undefined
       ? `history/${screen.program ?? 'home'}/${screen.stopIndex + 1}`
       : screen.page;
+  const screenKey =
+    screen.page === 'settings' && screen.section ? `settings/${screen.section}` : historyScreenKey;
 
   useEffect(() => {
     const onHash = () => setHash(location.hash);
@@ -432,6 +434,7 @@ export function App() {
       case 'settings':
         return (
           <SettingsPage
+            section={screen.section}
             theme={theme}
             changeTheme={changeTheme}
             preferences={progress.preferences ?? defaultPreferences}

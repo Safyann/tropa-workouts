@@ -31,7 +31,6 @@ import { DayPreview } from './DayPreview';
 import { MuscleGroupPicker } from './MuscleGroupPicker';
 import { NextWorkoutDate } from './NextWorkoutDate';
 import { RouteMap } from './RouteMap';
-import { WorkoutSettings } from './WorkoutSettings';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './Route.module.css';
 
@@ -108,7 +107,7 @@ export function RoutePage({
             ))}
           </span>
           <a className={styles.weekSettings} href="#settings">
-            Настройки профиля
+            Настройки
           </a>
         </div>
       </div>
@@ -151,13 +150,14 @@ export function RoutePage({
                   {inWorkout ? 'Продолжить занятие' : 'Начать занятие'} <Icon name="arrow" />
                 </Button>
                 {!inWorkout && <Button onClick={() => start(true)}>Короткий вариант</Button>}
+                {!inWorkout && <ButtonLink href="#settings/workout">Настройки занятия</ButtonLink>}
               </div>
               {!inWorkout && (
                 <>
                   {!program && !progress.sessions.length && !preferences.equipment && (
                     <div className={styles.equipmentIntro}>
                       <p className={ui.hint}>Подбери план под свой домашний инвентарь.</p>
-                      <ButtonLink href="#settings">Выбрать инвентарь</ButtonLink>
+                      <ButtonLink href="#settings/equipment">Выбрать инвентарь</ButtonLink>
                       <Button
                         type="button"
                         onClick={() => changePreferences({ ...preferences, equipment: [] })}
@@ -166,7 +166,6 @@ export function RoutePage({
                       </Button>
                     </div>
                   )}
-                  <WorkoutSettings preferences={preferences} change={changePreferences} />
                   <DayPreview key={next} stop={stop} preferences={preferences} />
                 </>
               )}
@@ -183,7 +182,7 @@ export function RoutePage({
                 <Button variant="primary" onClick={restart}>
                   Новый круг <Icon name="arrow" />
                 </Button>
-                <ButtonLink href="#settings">Настройки частоты и расписания</ButtonLink>
+                <ButtonLink href="#settings/schedule">Настройки частоты и расписания</ButtonLink>
               </div>
             </>
           )}
@@ -222,7 +221,7 @@ export function RoutePage({
           {inWorkout ? (
             <p className={ui.hint}>Заверши начатое занятие, чтобы сменить программу.</p>
           ) : !program && !hasDumbbells ? (
-            <ButtonLink href="#settings">Отметить гантели в настройках</ButtonLink>
+            <ButtonLink href="#settings/equipment">Отметить гантели в настройках</ButtonLink>
           ) : (
             <Button type="button" onClick={() => chooseProgram(program ? undefined : 'dumbbell')}>
               {program

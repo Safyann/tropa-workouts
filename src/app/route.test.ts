@@ -20,6 +20,14 @@ it('opens the public roadmap with or without an active workout', () => {
   expect(resolveRoute('#roadmap', createWorkout(0, 0, false), 4)).toEqual({ page: 'roadmap' });
 });
 
+it('opens each settings section and recovers an unknown section at the settings menu', () => {
+  for (const section of ['workout', 'schedule', 'equipment', 'profile', 'data']) {
+    expect(resolveRoute(`#settings/${section}`, null, 4)).toEqual({ page: 'settings', section });
+  }
+  expect(resolveRoute('#settings', null, 4)).toEqual({ page: 'settings' });
+  expect(resolveRoute('#settings/unknown', null, 4)).toEqual({ page: 'settings' });
+});
+
 it('opens free workout results and dumbbell stop history by their own links', () => {
   const freeId = '00000000-0000-4000-8000-000000000001';
   expect(resolveRoute('#free', null, 28)).toEqual({ page: 'free' });

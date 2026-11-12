@@ -1,9 +1,11 @@
 import type { Workout } from '../features/workout';
 import { isFreeSessionId } from '../entities/progress';
 import { programRoute, type ProgramId } from '../entities/program';
+import { isSettingsSection, type SettingsSection } from '../pages/settings/sections';
 
 export type AppRoute =
-  | { page: 'map' | 'catalog' | 'roadmap' | 'settings' | 'free' }
+  | { page: 'map' | 'catalog' | 'roadmap' | 'free' }
+  | { page: 'settings'; section?: SettingsSection }
   | { page: 'workout'; workout: Workout }
   | { page: 'result'; round: number; stopIndex: number }
   | { page: 'free-result'; freeId: string }
@@ -17,10 +19,14 @@ export function resolveRoute(hash: string, workout: Workout | null, stopCount: n
       return workout ? { page: 'workout', workout } : { page: 'map' };
     case 'catalog':
     case 'roadmap':
-    case 'settings':
     case 'free':
     case 'history':
       return { page: path };
+  }
+
+  if (path === 'settings' || path.startsWith('settings/')) {
+    const section = path.slice('settings/'.length);
+    return isSettingsSection(section) ? { page: 'settings', section } : { page: 'settings' };
   }
 
   if (path.startsWith('result/free/')) {

@@ -47,8 +47,7 @@ export function WorkoutPlan({
   }
 
   return (
-    <section className={styles.dayPlan} aria-label="План занятия">
-      <h2>План на сегодня</h2>
+    <div className={styles.dayPlan}>
       <p className={ui.hint}>
         Нажми название, чтобы выбрать упражнение, или перетащи за ручку, чтобы изменить порядок.
       </p>
@@ -94,6 +93,6 @@ export function WorkoutPlan({
         equipment={workout.equipment}
         add={(exercise) => update(addExercise(workout, exercise))}
       />
-    </section>
+    </div>
   );
 }

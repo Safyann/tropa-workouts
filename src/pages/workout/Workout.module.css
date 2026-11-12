@@ -45,6 +45,22 @@
 .setFields {
   display: grid;
   gap: 0.625rem;
+  margin-block: 0.75rem;
+}
+.setFields input {
+  font-size: 1.125rem;
+  font-variant-numeric: tabular-nums;
+}
+.step form > .previousResult {
+  margin-top: 0.75rem;
+}
+.workoutDetails {
+  margin-top: 0.875rem;
+}
+.workoutDetails > summary {
+  cursor: pointer;
+  font-weight: 700;
+  padding-block: 0.625rem;
 }
 .weightStep {
   display: grid;

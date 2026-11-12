@@ -108,29 +108,7 @@ export function StrengthSet({
         <h2 tabIndex={-1} ref={headingRef}>
           {exercise.title}
         </h2>
-        <ExerciseDemonstration title={exercise.title} demo={exerciseDemonstration(id)} autoPlay />
-        <ExerciseInstructions source={exercise.cues} className={styles.cues} />
         <form onSubmit={submit}>
-          {(previousSets.length > 0 || previousNote) && (
-            <div className={styles.previousResult}>
-              <div>
-                <strong>В прошлый раз</strong>
-                {previousSets.length > 0 && <p>{previousSets.map(formatSet).join(' / ')}</p>}
-                {previousNote && (
-                  <p className={styles.noteText}>Последняя заметка · {previousNote}</p>
-                )}
-                {previous?.effort && <p>Тренировка далась · {effortLabels[previous.effort]}</p>}
-                {exercise.perSide && previousSets.some(({ reps }) => reps !== null) && (
-                  <p>Повторы на сторону</p>
-                )}
-              </div>
-              {canAddWeight && previousWeight != null && (
-                <Button type="button" onClick={() => applyPreviousWeight(previousWeight)}>
-                  Подставить {formatWeight(previousWeight)}
-                </Button>
-              )}
-            </div>
-          )}
           <div className={styles.setFields}>
             <SetFields
               exercise={exercise}
@@ -156,6 +134,29 @@ export function StrengthSet({
               }
             />
           </div>
+          <Button variant="primary" className={styles.stepAction} type="submit">
+            {finalSet ? endLabel : 'Записать подход'} <Icon name="check" />
+          </Button>
+          {(previousSets.length > 0 || previousNote) && (
+            <div className={styles.previousResult}>
+              <div>
+                <strong>В прошлый раз</strong>
+                {previousSets.length > 0 && <p>{previousSets.map(formatSet).join(' / ')}</p>}
+                {previousNote && (
+                  <p className={styles.noteText}>Последняя заметка · {previousNote}</p>
+                )}
+                {previous?.effort && <p>Тренировка далась · {effortLabels[previous.effort]}</p>}
+                {exercise.perSide && previousSets.some(({ reps }) => reps !== null) && (
+                  <p>Повторы на сторону</p>
+                )}
+              </div>
+              {canAddWeight && previousWeight != null && (
+                <Button type="button" onClick={() => applyPreviousWeight(previousWeight)}>
+                  Подставить {formatWeight(previousWeight)}
+                </Button>
+              )}
+            </div>
+          )}
           {repeat && (
             <Button className={styles.repeatSet} type="button" onClick={repeatSet}>
               Повторить подход · {formatSet(repeat)}
@@ -177,10 +178,12 @@ export function StrengthSet({
             Ориентир — {targetReps} повторов. Можно записать фактический результат или оставить поля
             пустыми.
           </p>
-          <Button variant="primary" className={styles.stepAction} type="submit">
-            {finalSet ? endLabel : 'Записать подход'} <Icon name="check" />
-          </Button>
         </form>
+        <details className={styles.workoutDetails}>
+          <summary>Техника выполнения</summary>
+          <ExerciseDemonstration title={exercise.title} demo={exerciseDemonstration(id)} />
+          <ExerciseInstructions source={exercise.cues} className={styles.cues} />
+        </details>
       </div>
     </>
   );

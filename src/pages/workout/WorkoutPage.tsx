@@ -171,7 +171,6 @@ export function WorkoutPage({
       ) : (
         <>
           <p className={ui.subtitle}>Основная часть · ориентир {workout.mainMinutes} мин</p>
-          <WorkoutPlan workout={workout} update={update} choose={choose} />
           {workout.timer ? (
             <div className={styles.step}>
               {nextSet && (
@@ -247,6 +246,13 @@ export function WorkoutPage({
               </div>
             )
           )}
+          <details
+            className={styles.workoutDetails}
+            open={workout.selected === null && !workout.timer && workout.plan.some(isPending)}
+          >
+            <summary>План занятия</summary>
+            <WorkoutPlan workout={workout} update={update} choose={choose} />
+          </details>
         </>
       )}
       <div className={styles.workoutExit}>

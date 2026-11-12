@@ -14,6 +14,7 @@ export {
   summarize,
   toggleSkip,
   toggleTimer,
+  undoLastSet,
 } from './model';
 export type { PlanExercise, StrengthWorkout, Workout } from './model';
 export { stretchingPlan } from './stretching';

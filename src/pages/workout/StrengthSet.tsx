@@ -134,6 +134,7 @@ export function StrengthSet({
           <div className={styles.setFields}>
             <SetFields
               exercise={exercise}
+              values={workout.setCorrection?.values}
               adjustments={{
                 weight: { ref: weightInput, step: weightStep, fallback: prior?.weight ?? 0 },
                 reps: { ref: repsInput, step: 1, fallback: targetReps },

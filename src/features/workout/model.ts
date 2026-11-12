@@ -59,6 +59,7 @@ export type StrengthWorkout = WorkoutInfo & {
   plan: PlanExercise[];
   selected: number | null;
   sets: SetRecord[];
+  setCorrection?: { planId: number; values?: SetRecord };
   notes?: ExerciseNote[];
   timer: Timer | null;
   restSeconds: number;
@@ -132,7 +133,7 @@ export function startCooldown(workout: Workout, now = Date.now()): Workout | nul
   if (workout.kind === 'cardio') {
     return { ...workout, block, timer: { remaining: remaining(workout.timer, now), end: null } };
   }
-  return { ...workout, block, timer: null };
+  return { ...workout, block, timer: null, setCorrection: undefined };
 }
 
 export function remaining(timer: Timer, now: number) {
@@ -187,8 +188,12 @@ export function isLastSet(workout: StrengthWorkout): boolean {
 }
 
 export function selectExercise(workout: StrengthWorkout, index: number): StrengthWorkout {
-  if (!workout.plan[index] || !isPending(workout.plan[index])) return workout;
-  return { ...workout, selected: index, timer: null };
+  const item = workout.plan[index];
+  if (!item || !isPending(item)) return workout;
+  const correction = workout.setCorrection;
+  const setCorrection =
+    correction?.values && correction.planId === item.id ? correction : undefined;
+  return { ...workout, selected: index, timer: null, setCorrection };
 }
 
 export function moveExercise(workout: StrengthWorkout, from: number, to: number): StrengthWorkout {
@@ -233,16 +238,24 @@ export function replaceExercise(
     !exerciseAlternatives(item.exercise, workout.equipment).includes(alternative)
   )
     return workout;
-  return { ...workout, plan: updateExercise(workout, index, { ...item, exercise: alternative }) };
+  const correction = workout.setCorrection;
+  const setCorrection =
+    correction?.values && correction.planId === item.id ? undefined : correction;
+  return {
+    ...workout,
+    plan: updateExercise(workout, index, { ...item, exercise: alternative }),
+    setCorrection,
+  };
 }
 
 export function toggleSkip(workout: StrengthWorkout, index: number): StrengthWorkout {
   const item = workout.plan[index];
   if (!item || item.completed === item.target) return workout;
   const plan = updateExercise(workout, index, { ...item, skipped: !item.skipped });
-  if (!plan.some(isPending)) return { ...workout, plan, selected: null, timer: null };
+  if (!plan.some(isPending))
+    return { ...workout, plan, selected: null, timer: null, setCorrection: undefined };
   if (workout.selected !== index) return { ...workout, plan };
-  return { ...workout, plan, selected: null, timer: null };
+  return { ...workout, plan, selected: null, timer: null, setCorrection: undefined };
 }
 
 export function recordSet(
@@ -267,8 +280,32 @@ export function recordSet(
     plan,
     selected,
     sets: [...workout.sets, { ...values, exercise: item.exercise }],
+    setCorrection: timer ? { planId: item.id } : undefined,
     ...(notes?.length ? { notes } : workout.notes && { notes: undefined }),
     timer,
+  };
+}
+
+export function undoLastSet(workout: StrengthWorkout): StrengthWorkout {
+  const { setCorrection, timer, block, sets } = workout;
+  if (!timer || block || !setCorrection) return workout;
+  const index = workout.plan.findIndex((item) => item.id === setCorrection.planId);
+  const item = workout.plan[index];
+  const values = sets.at(-1);
+  if (!values || !item?.completed) return workout;
+
+  return {
+    ...workout,
+    plan: updateExercise(workout, index, {
+      ...item,
+      exercise: values.exercise,
+      completed: item.completed - 1,
+      skipped: false,
+    }),
+    selected: index,
+    sets: sets.slice(0, -1),
+    timer: null,
+    setCorrection: { planId: item.id, values },
   };
 }
 

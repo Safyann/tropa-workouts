@@ -18,6 +18,7 @@ import {
   selectExercise,
   startCooldown,
   toggleTimer,
+  undoLastSet,
   type Workout,
 } from '../../features/workout';
 import { BackLink } from '../../shared/ui/NavigationLinks';
@@ -192,6 +193,17 @@ export function WorkoutPage({
               >
                 +15 сек
               </Button>
+              {workout.setCorrection && (
+                <Button
+                  type="button"
+                  onClick={() => {
+                    focusExercise.current = true;
+                    update(undoLastSet(workout));
+                  }}
+                >
+                  Отменить последний подход
+                </Button>
+              )}
               <Button
                 variant="primary"
                 className={styles.stepAction}

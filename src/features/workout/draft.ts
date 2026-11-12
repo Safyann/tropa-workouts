@@ -165,7 +165,7 @@ function isWorkoutDraft(value: unknown): value is Workout {
   }
   if (stop?.icon !== 'strength' || value.kind !== 'strength') return false;
 
-  const { plan, selected, sets, notes, timer, restSeconds, equipment } = value;
+  const { plan, selected, sets, notes, timer, restSeconds, equipment, setCorrection } = value;
   if (
     !Array.isArray(plan) ||
     !plan.length ||
@@ -177,6 +177,10 @@ function isWorkoutDraft(value: unknown): value is Workout {
     !isCount(restSeconds) ||
     !Array.isArray(equipment) ||
     !equipment.every((item) => homeEquipment.some((known) => known === item)) ||
+    (setCorrection !== undefined &&
+      (!isRecord(setCorrection) ||
+        !isCount(setCorrection.planId) ||
+        (setCorrection.values !== undefined && !isSetRecord(setCorrection.values)))) ||
     (timer !== null && !isTimer(timer))
   )
     return false;

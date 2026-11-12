@@ -19,6 +19,7 @@ import {
   selectExercise,
   startCooldown,
   summarize,
+  undoLastSet,
 } from './model';
 
 const progress: Progress = { version: 1, round: 0, sessions: [] };
@@ -33,6 +34,35 @@ beforeEach(() => {
 });
 
 afterEach(() => vi.unstubAllGlobals());
+
+it('corrects the last set after reordering and keeps the correction through reloads', () => {
+  const workout = createWorkout(0, 0, false);
+  if (workout.kind !== 'strength') throw new Error('Expected a strength workout');
+  const original = workout.plan[0];
+  const first = recordSet(workout, { weight: 5, reps: 8 });
+  const second = recordSet(selectExercise(first, 1), { weight: null, reps: 10 });
+  const reordered = moveExercise(second, 1, 0);
+  saveWorkoutDraft(reordered);
+
+  const resumed = readWorkoutDraft(progress);
+  if (resumed?.kind !== 'strength') throw new Error('Expected a saved strength workout');
+  const correction = undoLastSet(resumed);
+  expect(correction.timer).toBeNull();
+  expect(correction.selected).toBe(0);
+  expect(correction.plan[0]).toMatchObject({ id: second.plan[1].id, completed: 0 });
+  expect(correction.plan[1]).toMatchObject({ id: original.id, completed: 1 });
+  expect(correction.sets).toEqual(first.sets);
+  expect(undoLastSet(correction)).toBe(correction);
+  saveWorkoutDraft(correction);
+
+  const reopened = readWorkoutDraft(progress);
+  if (reopened?.kind !== 'strength') throw new Error('Expected an editable strength workout');
+  expect(reopened.setCorrection?.values).toMatchObject({ weight: null, reps: 10 });
+  expect(recordSet(reopened, { weight: 7.5, reps: 9 }).sets).toEqual([
+    ...first.sets,
+    { exercise: second.plan[1].exercise, weight: 7.5, reps: 9 },
+  ]);
+});
 
 const freeDraft = {
   id: '7cb4ba2b-88dd-4e05-8d7b-df310d61e0d1',

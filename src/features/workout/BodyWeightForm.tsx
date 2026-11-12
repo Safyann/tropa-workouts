@@ -21,7 +21,7 @@ export function BodyWeightForm({
   }
 
   return (
-    <form className={styles.fields} onSubmit={submit}>
+    <form className={`${styles.fields} ${styles.weightForm}`} onSubmit={submit}>
       <label>
         Вес тела, кг
         <Input
@@ -33,7 +33,9 @@ export function BodyWeightForm({
           defaultValue={value}
         />
       </label>
-      <Button type="submit">Сохранить вес</Button>
+      <Button variant="primary" type="submit">
+        Сохранить вес
+      </Button>
     </form>
   );
 }

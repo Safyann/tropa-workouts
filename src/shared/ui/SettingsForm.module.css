@@ -32,3 +32,10 @@
 .fields .toggle input:focus-visible {
   outline-offset: 0;
 }
+.fields.weightForm {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+}
+.weightForm > button {
+  min-height: 2.75rem;
+}

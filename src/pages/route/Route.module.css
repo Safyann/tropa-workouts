@@ -37,12 +37,11 @@
 .weekDots .filled {
   background: var(--accent);
 }
-.weekSettings {
-  color: var(--muted);
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 0.25rem 0;
-  text-underline-offset: 0.2em;
+.routeSettings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
 }
 
 .dashboard {
@@ -310,10 +309,6 @@
   }
   .week .weekLabel {
     grid-column: 1 / -1;
-  }
-  .weekSettings {
-    grid-column: 1 / -1;
-    justify-self: start;
   }
   .markerDot {
     width: 2.5rem;

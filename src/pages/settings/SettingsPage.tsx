@@ -6,6 +6,7 @@ import { Button } from '../../shared/ui/Controls';
 import { PageTitle } from '../../shared/ui/PageTitle';
 import { BackupSettings } from './BackupSettings';
 import { EquipmentPicker } from './EquipmentPicker';
+import { LevelSettings } from './LevelSettings';
 import { ProfileSettings } from './ProfileSettings';
 import { RouteSettings } from './RouteSettings';
 import { WorkoutSettings } from './WorkoutSettings';
@@ -34,6 +35,13 @@ export function SettingsPage({
 }) {
   function renderSection() {
     switch (section) {
+      case 'level':
+        return (
+          <LevelSettings
+            selected={preferences.level}
+            change={(level) => change({ ...preferences, level })}
+          />
+        );
       case 'workout':
         return <WorkoutSettings preferences={preferences} change={change} />;
       case 'schedule':

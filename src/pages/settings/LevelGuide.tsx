@@ -1,13 +1,19 @@
-import { useState, type FormEvent } from 'react';
+import { useRef, useState, type FormEvent } from 'react';
 import { levels, recommendLevel, type WorkoutLevel } from '../../entities/program';
-import { levelOptions } from './levelOptions';
 import { Button, Checkbox, Input } from '../../shared/ui/Controls';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './Settings.module.css';
 import formStyles from '../../shared/ui/SettingsForm.module.css';
 
-export function LevelGuide({ apply }: { apply: (level: WorkoutLevel) => void }) {
+export function LevelGuide({
+  selected,
+  apply,
+}: {
+  selected: WorkoutLevel;
+  apply: (level: WorkoutLevel) => void;
+}) {
   const [suggestion, setSuggestion] = useState<WorkoutLevel | null>(null);
+  const result = useRef<HTMLParagraphElement>(null);
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -18,23 +24,13 @@ export function LevelGuide({ apply }: { apply: (level: WorkoutLevel) => void }) 
       data.has('regular'),
     );
     setSuggestion(level);
-    apply(level);
   }
 
   return (
     <details className={styles.levelGuide}>
-      <summary>Как выбрать уровень</summary>
-      <dl>
-        {levelOptions.map((level) => (
-          <div key={level}>
-            <dt>{levels[level].title}</dt>
-            <dd>{levels[level].description}</dd>
-          </div>
-        ))}
-      </dl>
+      <summary>Помочь выбрать уровень</summary>
       <p className={ui.hint}>
-        Оцени обычную неделю за последний месяц. Ходьбу и кардио сюда не включай. Это подсказка для
-        настройки плана.
+        Вспомни обычную неделю за последний месяц. Если силовых не было, укажи 0 в обоих полях.
       </p>
       <form className={formStyles.fields} onSubmit={submit}>
         <label>
@@ -42,7 +38,7 @@ export function LevelGuide({ apply }: { apply: (level: WorkoutLevel) => void }) 
           <Input name="days" type="number" inputMode="numeric" min="0" max="7" required />
         </label>
         <label>
-          Минут силовых в неделю
+          Всего минут силовых в неделю
           <Input name="minutes" type="number" inputMode="numeric" min="0" max="10080" required />
         </label>
         <label className={formStyles.toggle}>
@@ -52,11 +48,27 @@ export function LevelGuide({ apply }: { apply: (level: WorkoutLevel) => void }) 
           Подобрать уровень
         </Button>
       </form>
-      {suggestion && (
-        <p role="status" className={ui.hint}>
-          Подсказка — «{levels[suggestion].title}». Уровень можно поменять вручную.
+      <div className={styles.levelRecommendation}>
+        <p role="status" tabIndex={-1} ref={result}>
+          {suggestion && (
+            <>
+              Рекомендация — «{levels[suggestion].title}».
+              {selected === suggestion && ' Этот уровень выбран.'}
+            </>
+          )}
         </p>
-      )}
+        {suggestion && selected !== suggestion && (
+          <Button
+            variant="primary"
+            onClick={() => {
+              apply(suggestion);
+              result.current?.focus();
+            }}
+          >
+            Выбрать «{levels[suggestion].title}»
+          </Button>
+        )}
+      </div>
     </details>
   );
 }

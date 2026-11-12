@@ -1,5 +1,6 @@
 export const settingsSectionTitles = {
-  workout: 'Тренировка',
+  level: 'Уровень нагрузки',
+  workout: 'Параметры занятия',
   schedule: 'Маршрут и расписание',
   equipment: 'Инвентарь',
   profile: 'Профиль',

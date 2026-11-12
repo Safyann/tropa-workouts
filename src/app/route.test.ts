@@ -21,7 +21,7 @@ it('opens the public roadmap with or without an active workout', () => {
 });
 
 it('opens each settings section and recovers an unknown section at the settings menu', () => {
-  for (const section of ['workout', 'schedule', 'equipment', 'profile', 'data']) {
+  for (const section of ['level', 'workout', 'schedule', 'equipment', 'profile', 'data']) {
     expect(resolveRoute(`#settings/${section}`, null, 4)).toEqual({ page: 'settings', section });
   }
   expect(resolveRoute('#settings', null, 4)).toEqual({ page: 'settings' });

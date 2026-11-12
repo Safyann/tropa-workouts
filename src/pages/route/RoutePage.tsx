@@ -94,6 +94,12 @@ export function RoutePage({
               ? 'Две силовые в неделю. Чередуй тренировки А и Б.'
               : 'Чередуй силовые и кардио в своём темпе.'}
           </p>
+          <nav className={styles.routeSettings} aria-label="Настройки маршрута">
+            <ButtonLink href="#settings">Настройки</ButtonLink>
+            <ButtonLink href="#settings/level">
+              Уровень · {levels[preferences.level].title}
+            </ButtonLink>
+          </nav>
         </div>
         <div className={styles.week}>
           <p className={styles.weekLabel}>ЦЕЛЬ НЕДЕЛИ</p>
@@ -106,9 +112,6 @@ export function RoutePage({
               <i key={index} className={count > index ? styles.filled : undefined} />
             ))}
           </span>
-          <a className={styles.weekSettings} href="#settings">
-            Настройки
-          </a>
         </div>
       </div>
       <div className={styles.dashboard}>
@@ -137,9 +140,7 @@ export function RoutePage({
                       ? cardioTitles[cardioActivity(preferences.equipment)]
                       : stop.type}
                   </p>
-                  <p className={styles.sessionDetail}>
-                    {workoutDetail(stop, false, preferences)} · {levels[preferences.level].title}
-                  </p>
+                  <p className={styles.sessionDetail}>{workoutDetail(stop, false, preferences)}</p>
                 </>
               )}
               {!program && !inWorkout && stop.icon === 'strength' && (

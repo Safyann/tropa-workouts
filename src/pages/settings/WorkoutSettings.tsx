@@ -1,7 +1,6 @@
 import {
   blockActivityLabel,
   durations,
-  levels,
   optionalBlockMinutes,
   workoutBlockTitles,
   type WorkoutPreferences,
@@ -9,8 +8,6 @@ import {
 import { Checkbox, Select } from '../../shared/ui/Controls';
 import ui from '../../shared/ui/Common.module.css';
 import styles from './Settings.module.css';
-import { LevelGuide } from './LevelGuide';
-import { levelOptions } from './levelOptions';
 import formStyles from '../../shared/ui/SettingsForm.module.css';
 
 export function WorkoutSettings({
@@ -21,24 +18,8 @@ export function WorkoutSettings({
   change: (preferences: WorkoutPreferences) => void;
 }) {
   return (
-    <section className={`${ui.panel} ${styles.workoutSettings}`}>
+    <section className={ui.panel}>
       <div className={formStyles.fields}>
-        <label className={formStyles.wide}>
-          Уровень
-          <Select
-            value={preferences.level}
-            onChange={(event) => {
-              const level = levelOptions.find((value) => value === event.target.value);
-              if (level) change({ ...preferences, level });
-            }}
-          >
-            {levelOptions.map((level) => (
-              <option key={level} value={level}>
-                {levels[level].title}
-              </option>
-            ))}
-          </Select>
-        </label>
         <label className={formStyles.wide}>
           Длительность
           <Select
@@ -91,7 +72,6 @@ export function WorkoutSettings({
         />
         Звук окончания отдыха между подходами
       </label>
-      <LevelGuide apply={(level) => change({ ...preferences, level })} />
     </section>
   );
 }

@@ -51,6 +51,7 @@ import { resolveRoute } from './route';
 import { Button } from '../shared/ui/Controls';
 import { localDay } from '../shared/lib/calendarDates';
 import { useAppUpdate } from './useAppUpdate';
+import { useTabSwipe } from './useTabSwipe';
 import { useTheme } from './useTheme';
 import './styles/global.css';
 import ui from '../shared/ui/Common.module.css';
@@ -83,6 +84,11 @@ export function App() {
   const activeTab = ['workout', 'result', 'free', 'free-result'].includes(screen.page)
     ? 'map'
     : screen.page;
+  const tabIndex = navigation.findIndex(([id]) => id === screen.page);
+  const tabSwipe = useTabSwipe(tabIndex >= 0, (offset) => {
+    const next = navigation[tabIndex + offset];
+    if (next) location.hash = next[0];
+  });
   const screenKey =
     screen.page === 'history' && screen.stopIndex !== undefined
       ? `history/${screen.program ?? 'home'}/${screen.stopIndex + 1}`
@@ -469,7 +475,7 @@ export function App() {
           </nav>
         </div>
       </header>
-      <main className={ui.page} ref={screenElement}>
+      <main className={ui.page} ref={screenElement} {...tabSwipe}>
         {(progressSaveFailed || draft.saveFailed) && (
           <p role="status" className={styles.notice}>
             Браузер не сохранил изменения. Прогресс доступен до закрытия страницы.

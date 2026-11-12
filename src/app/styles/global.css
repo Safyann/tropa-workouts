@@ -2,6 +2,7 @@
 
 :root {
   color-scheme: light;
+  overscroll-behavior-x: none;
   font-family: system-ui, sans-serif;
   color: var(--ink);
   background: var(--paper);

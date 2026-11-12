@@ -57,6 +57,7 @@ export function RouteMap({
       <div
         ref={track}
         className={styles.mapTrack}
+        data-tab-swipe-ignore={scrollable ? '' : undefined}
         tabIndex={scrollable ? 0 : undefined}
         role={scrollable ? 'region' : undefined}
         aria-label={scrollable ? 'Карта остановок с горизонтальной прокруткой' : undefined}

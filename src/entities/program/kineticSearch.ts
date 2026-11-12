@@ -51,6 +51,7 @@ const russianTerms: [RegExp, RegExp][] = [
 const searchableCatalog = kineticCatalog.map((exercise) => ({
   // Нормализуем каталог заранее, чтобы при вводе запроса только фильтровать записи.
   exercise,
+  titles: [exercise.title, exercise.searchLabels[0]].map(normalizeSearchText),
   text: normalizeSearchText(
     [
       exercise.title,
@@ -70,20 +71,26 @@ export function searchKineticExercises(
   group = '',
   equipment?: readonly HomeEquipment[],
 ) {
-  const normalizedQuery = normalizeSearchText(query);
+  const normalizedQuery = normalizeSearchText(query).trim().replace(/\s+/g, ' ');
   const bodyweightOnly = bodyweightPhrase.test(normalizedQuery);
   const words = normalizedQuery.replace(bodyweightPhrase, ' ').match(/[\p{L}\p{N}]+/gu) ?? [];
   const terms = words
     .filter((word) => !prepositions.has(word) && !word.startsWith('упражнен'))
     .map((word) => ({ word, alias: russianTerms.find(([pattern]) => pattern.test(word))?.[1] }));
 
-  return searchableCatalog
-    .filter(
-      ({ exercise, text }) =>
-        (!group || exercise.groups.some((value) => value === group)) &&
-        (!bodyweightOnly || exercise.needs?.length === 0) &&
-        (!equipment || exercise.needs?.every((item) => equipment.includes(item))) &&
-        terms.every(({ word, alias }) => text.includes(word) || alias?.test(text)),
-    )
-    .map(({ exercise }) => exercise);
+  const matches = searchableCatalog.filter(
+    ({ exercise, text }) =>
+      (!group || exercise.groups.some((value) => value === group)) &&
+      (!bodyweightOnly || exercise.needs?.length === 0) &&
+      (!equipment || exercise.needs?.every((item) => equipment.includes(item))) &&
+      terms.every(({ word, alias }) => text.includes(word) || alias?.test(text)),
+  );
+  if (normalizedQuery) {
+    matches.sort(
+      (first, second) =>
+        Number(second.titles.includes(normalizedQuery)) -
+        Number(first.titles.includes(normalizedQuery)),
+    );
+  }
+  return matches.map(({ exercise }) => exercise);
 }

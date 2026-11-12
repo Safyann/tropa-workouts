@@ -9,8 +9,8 @@ import {
 import { searchKineticExercises } from './kineticSearch';
 
 it('finds Kinetic exercises with Russian movement and equipment terms', () => {
-  const presses = searchKineticExercises('жим гантелей лёжа', 'Грудь и трицепсы');
-  expect(presses.map(({ title }) => title)).toContain('Жим гантелей лёжа');
+  const presses = searchKineticExercises('ЖИМ  ГАНТЕЛЕЙ ЛЕЖА', 'Грудь и трицепсы');
+  expect(presses[0]?.title).toBe('Жим гантелей лёжа');
   expect(presses.map(({ slug }) => slug)).not.toContain('barbell-bench-press');
   expect(searchKineticExercises('мёртвый жук').map(({ title }) => title)).toContain('Мёртвый жук');
   const pushups = searchKineticExercises('отжимания без инвентаря').map(({ slug }) => slug);

@@ -18,7 +18,12 @@ export function CatalogPage({ equipment }: { equipment: readonly HomeEquipment[]
   const [group, setGroup] = useState('');
   const [limit, setLimit] = useState(pageSize);
   const [ownEquipmentOnly, setOwnEquipmentOnly] = useState(false);
-  const matches = searchKineticExercises(query, group, ownEquipmentOnly ? equipment : undefined);
+  const [gifOnly, setGifOnly] = useState(false);
+  const matches = searchKineticExercises(
+    query,
+    group,
+    ownEquipmentOnly ? equipment : undefined,
+  ).filter((item) => !gifOnly || item.demonstration);
 
   return (
     <section className={ui.narrow}>
@@ -54,16 +59,28 @@ export function CatalogPage({ equipment }: { equipment: readonly HomeEquipment[]
             ))}
           </Select>
         </label>
-        <label className={styles.equipmentFilter}>
-          <Checkbox
-            checked={ownEquipmentOnly}
-            onChange={(event) => {
-              setOwnEquipmentOnly(event.target.checked);
-              setLimit(pageSize);
-            }}
-          />
-          Мой инвентарь
-        </label>
+        <div className={styles.catalogToggles}>
+          <label>
+            <Checkbox
+              checked={ownEquipmentOnly}
+              onChange={(event) => {
+                setOwnEquipmentOnly(event.target.checked);
+                setLimit(pageSize);
+              }}
+            />
+            Мой инвентарь
+          </label>
+          <label>
+            <Checkbox
+              checked={gifOnly}
+              onChange={(event) => {
+                setGifOnly(event.target.checked);
+                setLimit(pageSize);
+              }}
+            />
+            С GIF
+          </label>
+        </div>
       </div>
       <p aria-live="polite" className={styles.catalogStatus}>
         {matches.length ? `Найдено упражнений: ${matches.length}` : 'Упражнения не найдены.'}

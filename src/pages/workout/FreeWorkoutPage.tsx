@@ -175,7 +175,7 @@ export function FreeWorkoutPage({
               <ExercisePicker choice={choice} />
               {selected && exercise && (
                 <ExerciseDemonstration
-                  key={selected}
+                  key={`demo-${selected}`}
                   title={exercise.title}
                   demo={exerciseDemonstration(selected)}
                 />

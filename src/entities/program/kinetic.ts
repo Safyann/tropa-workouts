@@ -66,7 +66,20 @@ const gearLabels: Record<string, string> = {
 };
 
 const demonstrations: Partial<Record<string, string>> = {
+  'arm-circles': 'armCircles',
+  'barbell-bench-press': 'barbellBenchPress',
+  'barbell-deadlift': 'barbellDeadlift',
+  'barbell-squat': 'barbellSquat',
   'bodyweight-squat': 'bodySquat',
+  'chin-up': 'chinUp',
+  'dips-triceps-version': 'tricepsDips',
+  'dumbbell-bicep-curl': 'dumbbellCurl',
+  'elliptical-trainer': 'elliptical',
+  'kneeling-cable-crunch-with-alternating-oblique-twists': 'obliqueCableCrunch',
+  'muscle-up': 'ringMuscleUp',
+  plank: 'plank',
+  pullups: 'pullups',
+  'side-lateral-raise': 'lateralRaise',
   'goblet-squat': 'gobletSquat',
   'dumbbell-bench-press': 'press',
   'dumbbell-floor-press': 'floorPress',

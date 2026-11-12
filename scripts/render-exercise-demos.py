@@ -94,12 +94,54 @@ ROW_BENCH = (((145, 106), (192, 106)), ((151, 106), (151, 141)), ((185, 106), (1
 SEAT = (((94, 104), (137, 104)), ((99, 104), (99, 141)), ((132, 104), (132, 141)))
 WALL = (((175, 19), (175, 141)),)
 ELLIPTICAL = (((72, 142), (181, 142), (171, 75), (154, 70)),)
+PULL_UP_BAR = (((67, 25), (172, 25)),)
+RING_ANCHOR = (((79, 5), (162, 5)),)
+CABLE_TOWER = (((186, 29), (186, 142)), ((178, 30), (186, 30)))
+DIP_BARS = (((72, 90), (135, 90)), ((96, 96), (162, 96)), ((83, 90), (83, 142)),
+            ((151, 96), (151, 142)))
 
 elliptical_start = pose(122, 33, 118, 50, 109, 88, 139, 70, 160, 62, 132, 106, 138, 125,
                         134, 66, 148, 52, 101, 108, 84, 134)
 elliptical_end = adjust(elliptical_start, elbow=(134, 66), hand=(148, 52), knee=(101, 108),
                         ankle=(84, 134), far_elbow=(139, 70), far_hand=(160, 62),
                         far_knee=(132, 106), far_ankle=(138, 125))
+deadlift_start = adjust(squat, head=(143, 60), shoulder=(134, 78), hip=(92, 94),
+                        elbow=(139, 104), hand=(146, 130), far_elbow=(133, 102),
+                        far_hand=(139, 128))
+squat_bar = adjust(stand, elbow=(96, 74), hand=(102, 52), far_elbow=(134, 69), far_hand=(128, 50))
+squat_bar_low = adjust(squat, elbow=(102, 94), hand=(108, 74), far_elbow=(140, 90),
+                       far_hand=(134, 75))
+bar_press_top = adjust(bench_press, elbow=(93, 75), hand=(96, 53), far_elbow=(111, 76),
+                       far_hand=(113, 53))
+bar_press_bottom = adjust(bench_press, hand=(101, 86), far_elbow=(83, 109), far_hand=(85, 86))
+hang = pose(119, 63, 117, 78, 115, 110, 136, 50, 148, 25, 113, 126, 114, 141,
+            101, 49, 90, 25, 106, 126, 107, 139)
+pulled_up = adjust(hang, head=(119, 14), shoulder=(119, 33), hip=(111, 71),
+                   elbow=(143, 51), far_elbow=(96, 49), knee=(111, 96), ankle=(118, 117),
+                   far_knee=(105, 94), far_ankle=(113, 114))
+ring_hang = adjust(hang, hand=(140, 76), far_hand=(102, 75), head=(120, 103),
+                   shoulder=(119, 118), hip=(119, 156), elbow=(131, 94), far_elbow=(109, 94),
+                   knee=(117, 180), far_knee=(111, 180), ankle=(120, 201), far_ankle=(114, 200))
+ring_pull = adjust(ring_hang, head=(121, 57), shoulder=(120, 73), hip=(117, 109),
+                   elbow=(143, 98), far_elbow=(100, 97), knee=(116, 137), far_knee=(110, 135),
+                   ankle=(118, 163), far_ankle=(112, 161))
+ring_dip_low = adjust(ring_pull, head=(130, 39), shoulder=(121, 56), hip=(109, 94),
+                      elbow=(120, 79), far_elbow=(98, 65), knee=(112, 123), far_knee=(106, 122),
+                      ankle=(116, 146), far_ankle=(109, 146))
+ring_dip_top = adjust(ring_dip_low, head=(121, 17), shoulder=(121, 32), hip=(121, 70),
+                      elbow=(130, 54), far_elbow=(111, 53), knee=(121, 99), far_knee=(115, 98),
+                      ankle=(125, 125), far_ankle=(117, 124))
+cable_kneel = pose(124, 53, 118, 69, 108, 107, 141, 75, 129, 58, 121, 138, 97, 139,
+                    134, 73, 124, 56, 114, 137, 90, 137)
+cable_crunch = adjust(cable_kneel, head=(146, 102), shoulder=(134, 96), elbow=(138, 122),
+                      hand=(144, 102), far_elbow=(133, 113), far_hand=(141, 98))
+dip = pose(116, 25, 113, 43, 116, 86, 112, 67, 114, 96, 123, 112, 107, 135,
+           99, 66, 101, 90, 116, 110, 100, 133)
+plank_kneeling = pose(163, 100, 147, 108, 97, 119, 146, 137, 169, 140, 78, 138, 57, 139)
+plank_hold = adjust(plank_kneeling, hip=(100, 120), knee=(75, 125), ankle=(48, 133),
+                    far_knee=(69, 123), far_ankle=(45, 132))
+lateral_raise = pose(119, 34, 119, 51, 119, 91, 143, 72, 151, 92, 130, 115, 133, 139,
+                     96, 72, 88, 92, 107, 115, 105, 139)
 
 # Motion, fixed equipment paths and hands holding weights.
 DEMOS = {
@@ -138,6 +180,28 @@ DEMOS = {
                                   knee=(64, 96), ankle=(34, 94)), bird_dog), (), ()),
     "walk": ((walk_left, walk_center, walk_right, walk_center, walk_left), (), ()),
     "elliptical": (rep(elliptical_start, elliptical_end), ELLIPTICAL, ()),
+    "barbellDeadlift": (rep(deadlift_start, adjust(stand, hand=(128, 95), far_hand=(120, 95))),
+                        (), "barbell"),
+    "barbellSquat": (rep(squat_bar, squat_bar_low), (), "barbell"),
+    "barbellBenchPress": (rep(bar_press_top, bar_press_bottom), BENCH, "barbell"),
+    "pullups": (rep(hang, pulled_up), PULL_UP_BAR, ()),
+    "chinUp": (rep(adjust(hang, hand=(132, 25), far_hand=(106, 25), elbow=(128, 49),
+                          far_elbow=(110, 49)),
+                   adjust(pulled_up, hand=(132, 25), far_hand=(106, 25), elbow=(133, 58),
+                          far_elbow=(105, 58), hip=(119, 71))), PULL_UP_BAR, ()),
+    "ringMuscleUp": ((ring_hang, ring_pull, ring_dip_low, ring_dip_top, ring_dip_low,
+                      ring_pull, ring_hang), RING_ANCHOR, ()),
+    "obliqueCableCrunch": ((cable_kneel, cable_crunch, cable_kneel,
+                             adjust(cable_crunch, elbow=(131, 114), far_elbow=(141, 122)),
+                             cable_kneel), CABLE_TOWER, ()),
+    "tricepsDips": (rep(dip, adjust(dip, head=(120, 47), shoulder=(114, 65), hip=(116, 106),
+                                   elbow=(96, 75), far_elbow=(88, 73), knee=(122, 133),
+                                   ankle=(99, 136), far_knee=(115, 131), far_ankle=(92, 134))),
+                     DIP_BARS, ()),
+    "plank": ((plank_kneeling, plank_hold, plank_hold, plank_hold, plank_kneeling), (), ()),
+    "dumbbellCurl": (rep(stand, adjust(stand, hand=(128, 53), far_hand=(120, 50))), (), (4, 8)),
+    "lateralRaise": (rep(lateral_raise, adjust(lateral_raise, elbow=(158, 54), hand=(181, 50),
+                                              far_elbow=(80, 54), far_hand=(57, 50))), (), (4, 8)),
     "bodyRow": (rep(bent_row, bent_row_top), (), ()),
     "hipHinge": (rep(stand, hinge_end), (), ()),
     "shallowSquat": (rep(stand, pose(126, 47, 120, 62, 104, 98, 136, 71, 154, 69,
@@ -212,9 +276,18 @@ def render(joints, equipment, weights, frame):
         for joint in points:
             dot(joint, width / 2, color)
 
-    line(((center_x - 93 / zoom, 143), (center_x + 93 / zoom, 143)), "#506956", 2)
+    if equipment != RING_ANCHOR:
+        line(((center_x - 93 / zoom, 143), (center_x + 93 / zoom, 143)), "#506956", 2)
     for path in equipment:
         line(path, EQUIPMENT, 3)
+    if equipment == RING_ANCHOR:
+        for hand in (8, 4):
+            hand_x, hand_y = joints[hand]
+            line(((hand_x, 5), (hand_x, hand_y - 5)), EQUIPMENT, 2)
+            dot((hand_x, hand_y), 6, EQUIPMENT)
+            dot((hand_x, hand_y), 4, BACKGROUND)
+    if equipment == CABLE_TOWER:
+        line(((179, 30), joints[4]), EQUIPMENT, 2)
     if equipment == ELLIPTICAL:
         for hand, ankle in ((8, 10), (4, 6)):
             hand_x, hand_y = joints[hand]
@@ -224,7 +297,7 @@ def render(joints, equipment, weights, frame):
     for knee, ankle, color in ((9, 10, FAR), (5, 6, NEAR)):
         knee_x, _ = joints[knee]
         ankle_x, ankle_y = joints[ankle]
-        toe_y = 141 if ankle_y >= 126 else ankle_y + 2
+        toe_y = 141 if equipment != RING_ANCHOR and 126 <= ankle_y <= 141 else ankle_y + 2
         toe_x = ankle_x + (9 if knee_x >= ankle_x - 3 else -9)
         line(((ankle_x, ankle_y), (toe_x, toe_y)), color, 4)
     for indices, color in (
@@ -234,6 +307,16 @@ def render(joints, equipment, weights, frame):
         line(tuple(joints[index] for index in indices), color, 5 if color == FAR else 6)
     line((joints[0], joints[1]), NEAR, 5)
     dot(joints[0], 9, ACCENT)
+    if weights == "barbell":
+        x, y = joints[4]
+        far_x, far_y = joints[8]
+        left = min(x, far_x) - 10
+        right = max(x, far_x) + 10
+        bar_height = (y + far_y) / 2
+        line(((left - 4, bar_height), (right + 4, bar_height)), ACCENT, 2)
+        for end in (left, right):
+            dot((end, bar_height), 5, ACCENT)
+        return image.resize(SIZE, Image.Resampling.LANCZOS)
     for index in weights:
         x, y = joints[index]
         line(((x - 7, y), (x + 7, y)), ACCENT, 3)

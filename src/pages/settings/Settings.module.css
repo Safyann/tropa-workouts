@@ -37,6 +37,47 @@
   composes: hint from '../../shared/ui/Common.module.css';
   margin: 0;
 }
+.equipmentGroups {
+  display: grid;
+  gap: 0.5rem;
+}
+.equipmentGroups:not(:empty) {
+  margin-top: 0.75rem;
+}
+.equipmentGroup {
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+}
+.equipmentGroup summary,
+.equipmentGroup h2 {
+  padding: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: normal;
+}
+.equipmentGroup summary {
+  cursor: pointer;
+}
+.equipmentGroup small {
+  color: var(--muted);
+  font-weight: 550;
+}
+.equipmentChoices {
+  margin: 0;
+  padding: 0 0.75rem 0.375rem;
+  list-style: none;
+}
+.equipmentChoices label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding-block: 0.25rem;
+}
+.equipmentChoices input {
+  flex-shrink: 0;
+}
 .guideSubmit {
   grid-column: 1 / -1;
 }

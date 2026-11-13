@@ -96,8 +96,10 @@
 .noteText {
   white-space: pre-wrap;
 }
-.extendRest {
-  margin-bottom: 0.625rem;
+.restActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.625rem;
 }
 .effort {
   display: flex;

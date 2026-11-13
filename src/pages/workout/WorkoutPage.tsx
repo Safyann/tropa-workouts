@@ -180,37 +180,38 @@ export function WorkoutPage({
                 </p>
               )}
               {timerView('ОТДЫХ МЕЖДУ ПОДХОДАМИ')}
-              <Button
-                className={styles.extendRest}
-                type="button"
-                onClick={() => {
-                  if (soundForTimer) prepareRestSound();
-                  const timestamp = Date.now();
-                  setNow(timestamp);
-                  update(extendRest(workout, timestamp));
-                }}
-              >
-                +15 сек
-              </Button>
-              {workout.setCorrection && (
+              <div className={styles.restActions}>
                 <Button
                   type="button"
                   onClick={() => {
-                    focusExercise.current = true;
-                    update(undoLastSet(workout));
+                    if (soundForTimer) prepareRestSound();
+                    const timestamp = Date.now();
+                    setNow(timestamp);
+                    update(extendRest(workout, timestamp));
                   }}
                 >
-                  Отменить последний подход
+                  +15 сек
                 </Button>
-              )}
-              <Button
-                variant="primary"
-                className={styles.stepAction}
-                onClick={() => choose(nextSetIndex)}
-                disabled={!nextSet}
-              >
-                Начать подход <Icon name="arrow" />
-              </Button>
+                {workout.setCorrection && (
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      focusExercise.current = true;
+                      update(undoLastSet(workout));
+                    }}
+                  >
+                    Отменить последний подход
+                  </Button>
+                )}
+                <Button
+                  variant="primary"
+                  className={styles.stepAction}
+                  onClick={() => choose(nextSetIndex)}
+                  disabled={!nextSet}
+                >
+                  Начать подход <Icon name="arrow" />
+                </Button>
+              </div>
             </div>
           ) : workout.selected !== null ? (
             <StrengthSet

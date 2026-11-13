@@ -15,9 +15,9 @@ interface Stretch {
 const stretches: Record<MuscleGroup, Record<WorkoutBlockType, Stretch>> = {
   'Ноги и ягодицы': {
     warmup: {
-      title: 'Неглубокие приседы',
-      demo: 'shallowSquat',
-      cue: 'Отводи таз назад, держи стопы на полу. Плавно вставай. Сделай 6–10 повторов.',
+      title: 'Динамическая растяжка передней поверхности бедра',
+      demo: 'quadStretch',
+      cue: 'Держась за стену, плавно приближай пятку к ягодице и опускай стопу. Чередуй ноги, по 6 раз на каждую.',
     },
     cooldown: {
       title: 'Растяжка передней поверхности бедра',
@@ -27,9 +27,9 @@ const stretches: Record<MuscleGroup, Record<WorkoutBlockType, Stretch>> = {
   },
   'Грудь и трицепсы': {
     warmup: {
-      title: 'Лёгкие отжимания от стены',
-      demo: 'wallPress',
-      cue: 'Поставь ладони чуть шире плеч. Плавно согни руки, приблизь грудь к стене и оттолкнись. Сделай 6–10 повторов.',
+      title: 'Динамическая растяжка груди и трицепсов',
+      demo: 'chestTricepsStretch',
+      cue: 'С опорой предплечья на стену плавно поворачивай грудь от стены и обратно. Затем поднимай локоть и опускай ладонь за голову. Повтори с другой стороны.',
     },
     cooldown: {
       title: 'Растяжка груди и трицепсов',
@@ -39,9 +39,9 @@ const stretches: Record<MuscleGroup, Record<WorkoutBlockType, Stretch>> = {
   },
   Спина: {
     warmup: {
-      title: 'Тяга без веса',
-      demo: 'bodyRow',
-      cue: 'Слегка наклонись от таза с ровной спиной. Веди локти к поясу и плавно опускай руки. Сделай 8–10 повторов.',
+      title: 'Динамическая растяжка спины у стены',
+      demo: 'wallBackStretch',
+      cue: 'Поставь ладони на стену. Мягко отводи таз назад и возвращайся в исходное положение. Сделай 6–8 повторов.',
     },
     cooldown: {
       title: 'Растяжка спины у стены',
@@ -75,9 +75,9 @@ const stretches: Record<MuscleGroup, Record<WorkoutBlockType, Stretch>> = {
   },
   Бицепс: {
     warmup: {
-      title: 'Сгибания рук без веса',
-      demo: 'armCurl',
-      cue: 'Поверни ладони вперёд и держи локти у корпуса. Плавно сгибай и разгибай руки. Сделай 8–12 повторов.',
+      title: 'Динамическая растяжка бицепса у стены',
+      demo: 'wallBicepsStretch',
+      cue: 'Положи ладонь на стену сбоку чуть ниже плеча. Мягко повернись от стены и вернись обратно. Повтори по 6 раз на каждую руку.',
     },
     cooldown: {
       title: 'Растяжка бицепса у стены',
@@ -99,9 +99,9 @@ const stretches: Record<MuscleGroup, Record<WorkoutBlockType, Stretch>> = {
   },
   Икры: {
     warmup: {
-      title: 'Подъёмы на носки',
-      demo: 'calfRaise',
-      cue: 'Держась за стену, плавно поднимай пятки и опускай их на пол. Сделай 8–12 повторов.',
+      title: 'Динамическая растяжка икр у стены',
+      demo: 'wallCalfStretch',
+      cue: 'Упрись ладонями в стену и отставь ногу назад. Плавно переноси вес вперёд и обратно, удерживая заднюю пятку на полу. По 6 раз на ногу.',
     },
     cooldown: {
       title: 'Растяжка икр у стены',
@@ -128,7 +128,13 @@ const cardioGroups: readonly MuscleGroup[] = [
   'Икры',
   'Задняя поверхность бедра и ягодицы',
 ];
-const maxStretchMinutes = 3;
+const generalGroups: readonly MuscleGroup[] = [
+  'Мышцы корпуса',
+  'Плечи',
+  'Ноги и ягодицы',
+  'Спина',
+  'Задняя поверхность бедра и ягодицы',
+];
 
 export function stretchingPlan(workout: Workout, type: WorkoutBlockType) {
   let groups: readonly MuscleGroup[] = cardioGroups;
@@ -138,9 +144,10 @@ export function stretchingPlan(workout: Workout, type: WorkoutBlockType) {
     groups = exercisesForBlock.map(({ exercise }) => exercises[exercise].group);
   }
 
-  const steps = [...new Set(groups)].slice(0, maxStretchMinutes).map((group) => ({
-    group,
-    ...stretches[group][type],
-  }));
-  return { steps, walkingMinutes: optionalBlockMinutes - steps.length };
+  return [...new Set([...groups, ...generalGroups])]
+    .slice(0, optionalBlockMinutes)
+    .map((group) => ({
+      group,
+      ...stretches[group][type],
+    }));
 }

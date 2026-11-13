@@ -141,6 +141,31 @@ it('resumes a Kinetic plan with stretching options and recorded sets', () => {
   ]);
 });
 
+it('resumes walking from an older draft and keeps the remaining time', () => {
+  const workout = createWorkout(0, 0, false, {
+    ...defaultPreferences,
+    warmup: true,
+    cooldown: true,
+  });
+  localStorage.setItem(
+    workoutDraftKey,
+    JSON.stringify({
+      ...workout,
+      cooldownMinutes: 5,
+      block: { type: 'warmup', activity: 'walking', timer: { remaining: 240, end: null } },
+    }),
+  );
+  expect(readWorkoutDraft(progress)).toMatchObject({
+    cooldownMinutes: 5,
+    block: {
+      type: 'warmup',
+      activity: 'walking',
+      seconds: 300,
+      timer: { remaining: 240, end: null },
+    },
+  });
+});
+
 it('restores recorded sets, timer, order and exercise replacement after reload', () => {
   const workout = createWorkout(0, 0, false);
   if (workout.kind !== 'strength') throw new Error('Expected a strength workout');

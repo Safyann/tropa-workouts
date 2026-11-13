@@ -2,6 +2,7 @@ import {
   cardioTitles,
   exercises,
   homeEquipment,
+  optionalBlockMinutes,
   programRoute,
   type ExerciseId,
 } from '../../entities/program';
@@ -14,7 +15,7 @@ import {
   type Progress,
   type SetRecord,
 } from '../../entities/progress';
-import { isPending, type PlanExercise, type Workout } from './model';
+import { isPending, remaining, type PlanExercise, type Workout } from './model';
 
 export const workoutDraftKey = 'tropa-workout-draft-v1';
 export const freeStrengthDraftKey = 'tropa-free-strength-draft-v1';
@@ -39,10 +40,6 @@ function isExerciseId(value: unknown): value is ExerciseId {
 
 function isTimer(value: unknown): boolean {
   return isRecord(value) && isCount(value.remaining) && (value.end === null || isCount(value.end));
-}
-
-function isOptionalBlockActivity(value: unknown) {
-  return value === undefined || value === 'walking' || value === 'stretching';
 }
 
 function isCompletedWarmup(value: unknown) {
@@ -119,7 +116,7 @@ export function clearFreeStrengthDraft(id: string) {
   }
 }
 
-function isCurrentWorkoutDraft(draft: Workout, progress: Progress): boolean {
+function isCurrentWorkoutDraft(draft: StoredWorkout, progress: Progress): boolean {
   // Пока черновик открыт, другая вкладка может завершить остановку или начать новый круг.
   return (
     isCount(draft.index) &&
@@ -129,7 +126,18 @@ function isCurrentWorkoutDraft(draft: Workout, progress: Progress): boolean {
   );
 }
 
-function isWorkoutDraft(value: unknown): value is Workout {
+type StoredWorkout<T = Workout> = T extends Workout
+  ? Omit<T, 'block'> & {
+      block:
+        | (Omit<NonNullable<Workout['block']>, 'activity' | 'seconds'> & {
+            activity?: 'walking' | 'stretching';
+            seconds?: number;
+          })
+        | null;
+    }
+  : never;
+
+function isWorkoutDraft(value: unknown): value is StoredWorkout {
   if (
     !isRecord(value) ||
     !isCount(value.index) ||
@@ -138,7 +146,9 @@ function isWorkoutDraft(value: unknown): value is Workout {
     !isCount(value.startedAt) ||
     !isCount(value.mainMinutes) ||
     !isCount(value.cooldownMinutes) ||
-    !isOptionalBlockActivity(value.cooldownActivity) ||
+    (value.cooldownActivity !== undefined &&
+      value.cooldownActivity !== 'walking' &&
+      value.cooldownActivity !== 'stretching') ||
     !isCompletedWarmup(value.completedWarmup) ||
     typeof value.short !== 'boolean'
   )
@@ -148,7 +158,10 @@ function isWorkoutDraft(value: unknown): value is Workout {
     block !== null &&
     (!isRecord(block) ||
       (block.type !== 'warmup' && block.type !== 'cooldown') ||
-      !isOptionalBlockActivity(block.activity) ||
+      (block.activity !== undefined &&
+        block.activity !== 'walking' &&
+        block.activity !== 'stretching') ||
+      (block.seconds !== undefined && !isCount(block.seconds)) ||
       !isTimer(block.timer))
   )
     return false;
@@ -191,7 +204,29 @@ function isWorkoutDraft(value: unknown): value is Workout {
 export function readWorkoutDraft(progress: Progress): Workout | null {
   try {
     const draft: unknown = JSON.parse(localStorage.getItem(workoutDraftKey) ?? 'null');
-    return isWorkoutDraft(draft) && isCurrentWorkoutDraft(draft, progress) ? draft : null;
+    if (!isWorkoutDraft(draft) || !isCurrentWorkoutDraft(draft, progress)) return null;
+    const { block } = draft;
+    const cooldownMinutes = draft.cooldownMinutes ? optionalBlockMinutes : 0;
+    if (!block) return { ...draft, block: null, cooldownMinutes };
+    const seconds = optionalBlockMinutes * 60;
+    const savedSeconds = block.seconds ?? seconds;
+    let timer = block.timer;
+    if (savedSeconds !== seconds) {
+      const now = Date.now();
+      const elapsed = Math.max(0, savedSeconds - remaining(timer, now));
+      const left = Math.max(0, seconds - elapsed);
+      timer = { remaining: left, end: timer.end === null || left === 0 ? null : now + left * 1000 };
+    }
+    return {
+      ...draft,
+      cooldownMinutes,
+      block: {
+        type: block.type,
+        activity: block.activity ?? 'walking',
+        seconds,
+        timer,
+      },
+    };
   } catch {
     return null;
   }

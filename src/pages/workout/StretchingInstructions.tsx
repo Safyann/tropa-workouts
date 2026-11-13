@@ -9,20 +9,11 @@ export function StretchingInstructions({
   workout: Workout;
   type: WorkoutBlockType;
 }) {
-  const { steps, walkingMinutes } = stretchingPlan(workout, type);
+  const steps = stretchingPlan(workout, type);
 
   return (
     <>
       <ol className={styles.stretchingPlan}>
-        <li>
-          <strong>Лёгкая ходьба · {walkingMinutes} мин</strong>
-          <p>
-            {type === 'warmup'
-              ? 'Начни с комфортного темпа. Можно идти на месте.'
-              : 'Постепенно сбавь темп. Переходи к растяжке, когда дыхание станет спокойнее.'}
-          </p>
-          <ExerciseDemonstration title="Лёгкая ходьба" demo="walk" />
-        </li>
         {steps.map(({ group, title, cue, demo }) => (
           <li key={group}>
             <strong>{title} · 1 мин</strong>
@@ -32,12 +23,9 @@ export function StretchingInstructions({
           </li>
         ))}
       </ol>
-      {steps.length > 0 && (
-        <p className={styles.stretchingHint}>
-          Двигайся плавно и без боли. Оставшееся время каждой минуты используй для отдыха и
-          перехода.
-        </p>
-      )}
+      <p className={styles.stretchingHint}>
+        Двигайся плавно и без боли. Оставшееся время каждой минуты используй для отдыха и перехода.
+      </p>
     </>
   );
 }

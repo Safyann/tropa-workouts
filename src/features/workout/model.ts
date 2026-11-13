@@ -4,7 +4,6 @@ import {
   exercises,
   exerciseAlternatives,
   defaultEquipment,
-  optionalBlockMinutes,
   programRoute,
   strengthSchedule,
   workoutTiming,
@@ -42,7 +41,8 @@ interface WorkoutInfo {
 
 interface WorkoutBlock {
   type: WorkoutBlockType;
-  activity?: WorkoutBlockActivity;
+  activity: WorkoutBlockActivity;
+  seconds: number;
   timer: Timer;
 }
 
@@ -124,7 +124,8 @@ function makeBlock(
   minutes: number,
   activity: WorkoutBlockActivity = 'walking',
 ): WorkoutBlock {
-  return { type, activity, timer: { remaining: minutes * 60, end: null } };
+  const seconds = minutes * 60;
+  return { type, activity, seconds, timer: { remaining: seconds, end: null } };
 }
 
 export function startCooldown(workout: Workout, now = Date.now()): Workout | null {
@@ -149,8 +150,8 @@ export function finishWarmup(workout: Workout, now = Date.now()): Workout {
     ...workout,
     block: null,
     completedWarmup: {
-      activity: block.activity ?? 'walking',
-      seconds: Math.max(0, optionalBlockMinutes * 60 - remaining(block.timer, now)),
+      activity: block.activity,
+      seconds: Math.max(0, block.seconds - remaining(block.timer, now)),
     },
   };
 }
@@ -325,7 +326,7 @@ export function summarize(workout: Workout, bodyWeightKg?: number): Session {
   const warmup = workout.completedWarmup;
   const cooldown = workout.block?.type === 'cooldown' ? workout.block : null;
   const cooldownSeconds = cooldown
-    ? Math.max(0, workout.cooldownMinutes * 60 - remaining(cooldown.timer, date))
+    ? Math.max(0, cooldown.seconds - remaining(cooldown.timer, date))
     : 0;
   const mainSeconds = Math.max(0, durationSeconds - (warmup?.seconds ?? 0) - cooldownSeconds);
   const strengthSeconds =

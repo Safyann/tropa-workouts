@@ -131,10 +131,9 @@ export function WorkoutPage({
             {blockActivityLabel(workout.block.type, blockActivity)}
             {blockActivity === 'walking' && `. ${walkingInstructions[workout.block.type]}`}
           </p>
-          {blockActivity === 'walking' && (
+          {blockActivity === 'walking' ? (
             <ExerciseDemonstration title="Лёгкая ходьба" demo="walk" />
-          )}
-          {blockActivity === 'stretching' && (
+          ) : (
             <StretchingInstructions workout={workout} type={workout.block.type} />
           )}
           {timerView(warmup ? 'ТАЙМЕР РАЗМИНКИ' : 'ТАЙМЕР ЗАМИНКИ')}
